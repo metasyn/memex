@@ -1,0 +1,78 @@
+/* Variables */
+:root {
+  --dark: black;
+  --light: #f0ffff;
+
+  --light-text-color: var(--dark);
+  --light-background-color: var(--light);
+
+  --text-color: var(--light);
+  --background-color: var(--dark);
+
+  --font-family: 'SourceSansPro',Palatino,Helvetica;
+}
+
+/* Font related */
+@font-face {
+  font-family:"SourceSansPro";
+  src: url("fonts/SourceSansPro-Light.ttf") format("truetype");
+}
+
+/* Standard elements */
+body {
+  background-color: var(--background-color);
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+
+footer > a > img {
+  border-radius: 5px;
+  padding: 10px;
+  width: 32px;
+  height: 32px;
+  background-color: var(--background-color);
+}
+
+/* Classes */
+
+.light {
+  background-color: var(--light-background-color);
+  color: var(--light-text-color);
+}
+
+.content {
+  max-width: 70ch;
+  padding: 2ch;
+  margin: auto;
+}
+
+/* Snowflakes */
+
+#metasyn-icon {
+  width: 100px;
+  position:
+}
+
+/* Light/Dark mode */
+
+#light-mode {
+  display: block;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 2rem;
+}
+
+#light-mode::after {
+  content: '☀';
+}
+
+
+#light-mode.dark::after {
+  content: '☪';
+}
+
+
+#light-mode:hover {
+  cursor: pointer;
+}
