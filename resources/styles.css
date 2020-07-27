@@ -35,6 +35,10 @@ footer > a > img {
 
 /* Classes */
 
+.hidden {
+  display: none;
+}
+
 .light {
   background-color: var(--light-background-color);
   color: var(--light-text-color);
@@ -60,18 +64,12 @@ footer > a > img {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 2rem;
 }
 
-#light-mode::after {
-  content: '☀';
+#light-mode > img {
+  height: 32px;
+  width: 32px;
 }
-
-
-#light-mode.dark::after {
-  content: '☪';
-}
-
 
 #light-mode:hover {
   cursor: pointer;
