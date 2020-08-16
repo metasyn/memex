@@ -16,7 +16,8 @@ const addListener = (el, event, fn) => {
 
 const toggleMode = () => {
   document.body.classList.toggle('light');
-  getById('light-mode').classList.toggle('dark');
+  getById('sun').classList.toggle('hidden');
+  getById('moon').classList.toggle('hidden');
 };
 
 /*
