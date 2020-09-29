@@ -64,6 +64,9 @@ proc convertFiles(inputDir: string, outputDir: string,
   # For keeping track of back references
   let
     templateContents = readFile(templatePath)
+    .replace("{{ index }}", convertMarkdownToHtml(
+        inputDir.joinPath("index.md")))
+  let
     references = calculateIncomingLinks(inputDir)
 
   # Second pass fore templetizing
@@ -74,9 +77,17 @@ proc convertFiles(inputDir: string, outputDir: string,
         item = itemPath.extractFileName.split(".")[0]
         backReferences = references.getOrDefault(item)
 
-      let templetized = templateContents
+      var templetized = templateContents
         .replace("{{ content }}", convertMarkdownToHtml(itemPath))
         .replace("{{ references }}", makeIncomingLinks(backreferences))
+
+      if item == "index":
+        templetized = readFile(templatePath)
+          .replace("{{ content }}", convertMarkdownToHtml(itemPath))
+          .replace("{{ references }}", "")
+          .replace("{{ index }}", "")
+          .replace("details", "div")
+
 
       let outFile = outputDir
         .joinPath(item)

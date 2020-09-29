@@ -69,7 +69,7 @@ footer > a > img {
 
 #metasyn-icon {
   width: 100px;
-  position:
+  position: block;
 }
 
 /* Light/Dark mode */
