@@ -1,5 +1,8 @@
 
 * [[now]]
 * [[metasyn]]
-* [[music]]
-* [[colors]]
+  * [[music]]
+    * [[permuta]]
+  * [[colors]]
+* projects
+  * [[learn-orca]]
