@@ -10,6 +10,7 @@
   --background-color: var(--dark);
 
   --font-family: 'SourceSansPro',Palatino,Helvetica;
+  --font-size-base: 18px;
 }
 
 /* Font related */
@@ -22,8 +23,26 @@
 body {
   background-color: var(--background-color);
   font-family: var(--font-family);
+  font-size: var(--font-size-base);
   color: var(--text-color);
+  max-width: 80ch;
+  padding: 2ch;
 }
+
+a {
+  background-color: var(--background-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--background-color);
+  background-color: var(--text-color);
+}
+
 
 footer > a > img {
   border-radius: 5px;
@@ -32,6 +51,7 @@ footer > a > img {
   height: 32px;
   background-color: var(--background-color);
 }
+
 
 /* Classes */
 
@@ -44,11 +64,6 @@ footer > a > img {
   color: var(--light-text-color);
 }
 
-.content {
-  max-width: 70ch;
-  padding: 2ch;
-  margin: auto;
-}
 
 /* Snowflakes */
 
