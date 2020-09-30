@@ -24,32 +24,18 @@ body {
   background-color: var(--background-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
+  line-height: 1.5;
   color: var(--text-color);
   max-width: 80ch;
   padding: 2ch;
 }
 
-a {
-  background-color: var(--background-color);
-  font-family: var(--font-family);
-  font-size: var(--font-size-base);
-  color: var(--text-color);
-  font-weight: bold;
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--background-color);
-  background-color: var(--text-color);
-}
-
-
-footer > a > img {
+footer img {
   border-radius: 5px;
   padding: 10px;
   width: 32px;
   height: 32px;
-  background-color: var(--background-color);
+  background-color: var(--dark);
 }
 
 
@@ -62,6 +48,22 @@ footer > a > img {
 .light {
   background-color: var(--light-background-color);
   color: var(--light-text-color);
+}
+
+.content a {
+  background-color: var(--background-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.content a:hover {
+  color: var(--background-color);
+  background-color: var(--text-color);
+  border-radius: 8px 0px;
+  padding: 1px
 }
 
 
@@ -81,7 +83,7 @@ footer > a > img {
   right: 10px;
 }
 
-#light-mode > img {
+#light-mode img {
   height: 32px;
   width: 32px;
 }
