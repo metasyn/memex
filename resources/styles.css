@@ -22,12 +22,16 @@
 /* Standard elements */
 body {
   background-color: var(--background-color);
+  color: var(--text-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   line-height: 1.5;
-  color: var(--text-color);
   max-width: 80ch;
   padding: 2ch;
+}
+
+a {
+  color: var(--text-color);
 }
 
 footer img {
@@ -50,11 +54,13 @@ footer img {
   color: var(--light-text-color);
 }
 
+.light a {
+  color: var(--light-text-color);
+}
+
 .content a {
-  background-color: var(--background-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  color: var(--text-color);
   font-weight: bold;
   text-decoration: none;
 }
@@ -64,6 +70,17 @@ footer img {
   background-color: var(--text-color);
   border-radius: 8px 0px;
   padding: 1px
+}
+
+#index {
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  width: 18ch;
+}
+
+#main {
+  display: block;
 }
 
 
