@@ -1,8 +1,8 @@
+# hello. i'm xander
 
-* [[now]]
-* [[metasyn]]
-  * [[music]]
-    * [[permuta]]
-  * [[colors]]
-* projects
-  * [[learn-orca]]
+i'm a san francisco based machine learning engineer.
+i make code, [[music]], and interact online under the name [[metasyn]].
+
+you can see what i'm up to [[now]].
+
+this is my first attempt at making a [[memex]].
