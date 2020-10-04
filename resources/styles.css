@@ -72,11 +72,28 @@ footer img {
   padding: 1px
 }
 
-#index {
-  top: 10px;
+#directory {
+  top: 12px;
   right: 10px;
   position: absolute;
-  width: 18ch;
+  min-width: 18ch;
+  max-width: 45ch;
+}
+
+#directory-contents {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--text-color);
+  border-style: solid;
+  border-width: 2px;
+  padding: 5px;
+  margin-top:10px;
+}
+
+.light #directory-contents {
+  background-color: var(--light-background-color);
+  color: var(--light-text-color);
+  border-color: var(--light-text-color);
 }
 
 #main {
