@@ -210,7 +210,7 @@ proc convertMarkdownToHtml(input: string): string =
 proc convertMarkdownFileToHtml(inputDir: string): string =
   result = readFile(inputDir)
     # Replace memex links with markdown ones
-    .replacef(linkRegularExpression, "[$1]($1.html)")
+    .replacef(linkRegularExpression, "[[$1]]($1.html)")
     .md
 
 proc convertFiles(entries: seq[Entry], directoryMarkdown: string,
