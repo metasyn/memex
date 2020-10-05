@@ -37,7 +37,8 @@ proc templ(s: string): string =
   return "{{ " & s & " }}"
 
 let
-  linkRegularExpression = re"\[\[(.+?)\]\]"
+  linkRegularExpression = re(r"\[\[(.+?)\]\]")
+  bracesRegularExpression = re(r"[\[\]]")
   directoryBlacklist = @["404"]
 
 
@@ -123,7 +124,7 @@ proc calculateIncomingLinks(entries: seq[Entry]): TableRef[string, seq[string]] 
       for outlink in links:
         # Nim has some weird content here, not really
         # giving you the subgroups as I'd expect.
-        let clean = outlink.replace(re"[\[\]]", "")
+        let clean = outlink.replace(bracesRegularExpression, "")
         if result.hasKey(clean):
           result[clean].add(entry.id)
         else:
