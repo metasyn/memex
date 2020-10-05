@@ -1,12 +1,10 @@
 SHELL=/bin/zsh
 
-.PHONY: clean build
+.PHONY: build server
 .ONESHELL:
 
-clean:
-	@echo
-	@echo "🧹 Cleaning..."
-	rm -rf ./dist
+build:
+	nimble run memex build
 
 server:
 	python3 -m http.server 8000

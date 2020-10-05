@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>metasyn</title>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link href='resources/styles.css' rel='stylesheet' type='text/css' />
+    <script async src='resources/js/main.js' type='text/javascript' ></script>
+  </head>
+  <body>
+    <a href='directory.html'>
+      <img alt='metasyn icon' id='metasyn-icon' src='resources/img/metasyn.png' />
+    </a>
+    <div id='directory'>
+      <details>
+        <summary>directory</summary>
+        <div id='directory-contents'>{{ directory }}</div>
+      </details>
+    </div>
+    <div id='light-mode'>
+      <img id='sun' alt='sun' src='resources/img/sun.png'/>
+      <img id='moon' class='hidden' alt='moon' src='resources/img/moon.png'/>
+    </div>
+
+    <div id='main'>
+      <div class='content'>
+        {{ content }}
+        <div class='references'>
+          {{ references }}
+        </div>
+        <div class='timestamp'>
+          {{ timestamp }}
+        </div>
+      </div>
+
+      <footer>
+        <hr/>
+        <a href='https://github.com/metasyn'><img alt='github octocat icon' src='resources/img/github.png' /></a>
+        <a href='https://merveilles.town/@metasyn'><img alt='mervilles.town logo' src='resources/img/merveilles.town.png' /></a>
+        <a href='https://metasyn.bandcamp.com'><img alt='bandcamp' src='resources/img/bandcamp.png' /></a>
+      </footer>
+    </div>
+
+  </body>
+</html>
