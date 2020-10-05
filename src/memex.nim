@@ -8,10 +8,6 @@ import strformat
 import tables
 import times
 
-import htmlparser
-import xmltree # To use '$' for XmlNode import strtabs  # To access XmlAttributes
-import strtabs
-
 import cligen
 import markdown
 
@@ -40,13 +36,17 @@ proc md(s: string): string =
 proc templ(s: string): string =
   return "{{ " & s & " }}"
 
-let linkRegularExpression = re"\[\[(.+?)\]\]"
+let
+  linkRegularExpression = re"\[\[(.+?)\]\]"
+  directoryBlacklist = @["404"]
+
 
 const
   contentTemplate = templ("content")
   timestampTemplate = templ("timestamp")
   referencesTemplate = templ("references")
   directoryTemplate = templ("directory")
+
 
 ############
 # Utility #
@@ -139,7 +139,7 @@ proc calculateDirectory(entries: seq[Entry], inputDir: string): string =
       .changeFileExt("")
       .replace(inputDir, "")
       .split(DirSep)
-      .filter((x) => x != "")
+      .filter((x) => x != "" and not directoryBlacklist.contains(x))
     paths.add(parts)
 
 
