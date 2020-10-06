@@ -189,7 +189,7 @@ proc binOptimize(binFile: string) =
     echo "Running 'upx --best' .."
     exec "upx --best " & binFile
 
-# nim musl foo.nim
+  # nim musl foo.nim
 task musl, "Builds an optimized static binary using musl":
   ## Usage: nim musl [-d:pcre] [-d:libressl|-d:openssl] <FILE1> <FILE2> ..
   var
