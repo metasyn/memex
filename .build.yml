@@ -7,7 +7,8 @@ packages:
 sources:
   - https://git.sr.ht/~metasyn/memex
 tasks:
-  - setup: |
+  - build: |
+      # Bootstrap nim
       curl -LO  https://nim-lang.org/choosenim/init.sh
       chmod +x init.sh
       ./init.sh -y stable
@@ -24,7 +25,9 @@ tasks:
       tar xf upx.tar.xz
       chmod +x upx-3.96-i386_linux/upx
       PATH=${PATH}:upx-3.96-i386_linux
-  - build: |
+      # Install nim dependencies
       nimble install -y
+      # Compile
       nim musl -d:pcre src/memex.nim
+      # Build wiki
       src/memex build
