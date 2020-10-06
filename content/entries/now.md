@@ -1,4 +1,12 @@
 # now
 
-* learning modular synthesis
-* working as machine learning engineer at slack
+## personal
+* learning modular & analog synthesis
+* building this [[memex]]
+
+## reading
+* [joyful militancy](https://joyfulmilitancy.com/)
+* men without women - haruki murakami
+
+## watching
+* the expanse
