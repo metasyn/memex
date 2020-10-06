@@ -6,6 +6,8 @@ packages:
   - git
 sources:
   - https://git.sr.ht/~metasyn/memex
+secrets:
+  - 46f739e5-4538-45dd-a79f-bf173b7a2ed9
 tasks:
   - build: |
       curl -LO  https://nim-lang.org/choosenim/init.sh
@@ -15,3 +17,5 @@ tasks:
       cd memex
       nimble install -y
       ./memex build
+  - deploy: |
+      scp -p 23 -r memex/dist xander@metasyn.pw:/var/www/nginx/memex
