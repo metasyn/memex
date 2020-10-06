@@ -8,30 +8,9 @@ sources:
   - https://git.sr.ht/~metasyn/memex
 tasks:
   - build: |
-      # build.sr.ht dumps you into /home/build
-      BUILD_HOME=${PWD}
-      # Bootstrap nim
       curl -LO  https://nim-lang.org/choosenim/init.sh
       chmod +x init.sh
       ./init.sh -y stable
       PATH=${PATH}:~/.nimble/bin
-      #  Add musl
-      curl -LO https://musl.libc.org/releases/musl-1.2.1.tar.gz
-      tar xf musl-1.2.1.tar.gz
-      pushd musl-1.2.1
-      ./configure --prefix=${BUILD_HOME}/musl
-      make && make install
-      PATH=${PATH}:${BUILD_HOME}/musl/bin
-      popd
-      # Intall upx
-      curl -L -o upx.tar.xz https://github.com/upx/upx/releases/download/v3.96/upx-3.96-i386_linux.tar.xz
-      tar xf upx.tar.xz
-      chmod +x upx-3.96-i386_linux/upx
-      PATH=${PATH}:upx-3.96-i386_linux
-      # Install nim dependencies
       cd memex
-      nimble install -y
-      # Compile
-      nim musl -d:pcre src/memex.nim
-      # Build wiki
-      src/memex build
+      nimble run memex build
