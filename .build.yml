@@ -8,6 +8,7 @@ sources:
   - https://git.sr.ht/~metasyn/memex
 tasks:
   - build: |
+      # build.sr.ht dumps you into /home/build
       BUILD_HOME=${PWD}
       # Bootstrap nim
       curl -LO  https://nim-lang.org/choosenim/init.sh
@@ -28,6 +29,7 @@ tasks:
       chmod +x upx-3.96-i386_linux/upx
       PATH=${PATH}:upx-3.96-i386_linux
       # Install nim dependencies
+      cd memex
       nimble install -y
       # Compile
       nim musl -d:pcre src/memex.nim
