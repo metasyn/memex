@@ -1,6 +1,6 @@
 # memex
 
-[![builds.sr.ht status](https://builds.sr.ht/~sircmpwn.svg?search=scheduled image refresh)](https://builds.sr.ht/~sircmpwn?search=scheduled+image+refresh)
+[![builds.sr.ht status](https://builds.sr.ht/~metasyn/memex.svg)](https://builds.sr.ht/~metasyn/memex?)
 
 memex is a small project for building a minimal wiki for myself. it is written primarily in [Nim](https://nim-lang.org).
 
