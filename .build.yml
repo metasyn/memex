@@ -1,4 +1,4 @@
-image: ubuntu
+image: ubuntu/focal
 packages:
   - binutils
   - curl
