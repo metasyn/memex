@@ -13,4 +13,4 @@ tasks:
       ./init.sh -y stable
       PATH=${PATH}:~/.nimble/bin
       cd memex
-      nimble run memex build
+      nimble run memex build -y
