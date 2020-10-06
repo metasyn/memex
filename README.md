@@ -1,13 +1,15 @@
 # memex
 
+[![builds.sr.ht status](https://builds.sr.ht/~metasyn.svg)](https://builds.sr.ht/~metasyn?
+
 memex is a small project for building a minimal wiki for myself. it is written primarily in [Nim](https://nim-lang.org).
 
 ## features
 
 * converts markdown files to html using [nim-markdown](https://github.com/soasme/nim-markdown).
-* creates a site that runs nearly identically without javascript
-* calculates backlinks between entries
-* builds in under 1 second
+* calculates backlinks between entries, appends edit time
+* the wiki builder binary `memex` is generally around 1MB & builds in under a second.
+* an optimized build via `upx` & `strip` gets closer to 300KB & 30ms
 
 ## license
 
