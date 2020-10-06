@@ -55,4 +55,4 @@ even if there is an easier way. like gardening, or riding your bike maybe.
 this iteration is my first attempt at sharing ideas in this manner. i spent a lot of time
 thinking about how i could plan for longevity while also keeping the writing process simple.
 i settled on just plain text (markdown) that gets rendered via a simple script in nim.
-you can see the source code of the memex [here](https://git.sr.ht:~metasyn/memex).
+you can see the source code of the memex [here](https://git.sr.ht/~metasyn/memex).
