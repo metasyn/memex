@@ -4,6 +4,8 @@
 
 memex is a small project for building a minimal wiki for myself. it is written primarily in [Nim](https://nim-lang.org).
 
+the memex itself can be seen [here](https://metasyn.pw)
+
 ## features
 
 * converts markdown files to html using [nim-markdown](https://github.com/soasme/nim-markdown).

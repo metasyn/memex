@@ -2,7 +2,6 @@
 
 metasyn has been a name i've used since around 2006.
 
-
 ## meta-
 
 denoting: position after, along with, beyond, among, behind; second
