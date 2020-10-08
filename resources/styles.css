@@ -81,15 +81,25 @@ img {
   font-size: calc(var(--font-size) - 2px);
 }
 
+.top {
+  display: absolute;
+  max-width: 80ch;
+  margin: auto;
+  padding-top: 10px;
+
+}
+
 #directory {
-  position: absolute;
+  position: relative;
+  float: right;
   right: 10px;
-  top: 55px;
+  top: 30px;
   min-width: 18ch;
   max-width: 45ch;
 }
 
 #directory-contents {
+  position: absolute;
   background-color: var(--background-color);
   color: var(--text-color);
   border-color: var(--text-color);
