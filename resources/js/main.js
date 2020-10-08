@@ -18,6 +18,7 @@ const toggleMode = () => {
   document.body.classList.toggle('light');
   getById('sun').classList.toggle('hidden');
   getById('moon').classList.toggle('hidden');
+  sssionStorage.setItem("metasyn-light", document.body.classList.contains('light'))
 };
 
 /*

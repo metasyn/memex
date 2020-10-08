@@ -12,7 +12,7 @@ or features;
 
 _from Greek meta ‘with, across, or after’._
 
-## -sync
+## -syn
 
 united; acting or considered together;
 
