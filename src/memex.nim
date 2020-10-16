@@ -11,8 +11,13 @@ import times
 
 import cligen
 import markdown
-import libfswatch
-import libfswatch/fswatch
+
+# -d:fswatch=true
+const fswatchSwitch {.booldefine, used.}: bool = true
+
+when defined(fswatchSwitch):
+  import libfswatch
+  import libfswatch/fswatch
 
 
 ##############
@@ -291,18 +296,22 @@ proc watch(
   verbose: bool = false,
   ): void =
 
-  var mon = newMonitor()
+  when defined(fswatchSwitch):
+    var mon = newMonitor()
 
-  proc callback(event: fsw_cevent, event_num: cuint) =
-    yo("Detected change...")
-    build(inputDir, outputDir, resourcesDir, templatePath, verbose)
+    proc callback(event: fsw_cevent, event_num: cuint) =
+      yo("Detected change...")
+      build(inputDir, outputDir, resourcesDir, templatePath, verbose)
 
-  mon.addPath(inputDir)
-  mon.addPath(resourcesDir)
-  mon.addPath(templatePath)
-  mon.setCallback(callback)
+    mon.addPath(inputDir)
+    mon.addPath(resourcesDir)
+    mon.addPath(templatePath)
+    mon.setCallback(callback)
 
-  mon.start()
+    mon.start()
+  else:
+    hey("fswatch not enabled for binary.")
+    quit(1)
 
 proc serve(): void =
   discard execCmd("nimhttpd -p:8000 .")

@@ -5,7 +5,6 @@ packages:
   - build-essential
   - git
   - rsync
-  - fswatch
 sources:
   - https://git.sr.ht/~metasyn/memex
 secrets:
@@ -17,7 +16,7 @@ tasks:
       ./init.sh -y stable
       PATH=${PATH}:~/.nimble/bin
       cd memex
-      nimble install -y
+      nimble build -d:fswatch=false
       ./memex build
   - deploy: |
       sshopts="ssh -o StrictHostKeyChecking=no -p 23"
