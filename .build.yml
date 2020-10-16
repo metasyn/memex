@@ -16,6 +16,7 @@ tasks:
       ./init.sh -y stable
       PATH=${PATH}:~/.nimble/bin
       cd memex
+      nimble install -y
       nimble build -d:fswatch=false
       ./memex build
   - deploy: |
