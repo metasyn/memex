@@ -47,6 +47,10 @@ img {
   max-width: calc(100% - (var(--base-padding) / 2));
 }
 
+summary {
+  text-align: end;
+}
+
 
 /* Classes */
 
@@ -122,6 +126,11 @@ img {
   padding-top: 10px;
 }
 
+#rainbow {
+  display: block;
+  height: 35px;
+  overflow: hidden;
+}
 
 /* Snowflakes */
 

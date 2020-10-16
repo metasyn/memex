@@ -1,5 +1,6 @@
 import os
 import re
+import osproc
 import terminal
 import sequtils
 import sugar
@@ -10,6 +11,8 @@ import times
 
 import cligen
 import markdown
+import libfswatch
+import libfswatch/fswatch
 
 
 ##############
@@ -58,7 +61,8 @@ type
     path: string
     id: string
 
-proc `$`(e: Entry): string =
+# Not actually used, but used when debugging
+proc `$`(e: Entry): string {.used.} =
   return fmt"{e.id}: {e.path}"
 
 func makeIncomingLinks(items: seq[string]): string =
@@ -105,7 +109,7 @@ proc indent(item: Item, depth: int): string =
   var link = item.name
   if item.terminal:
     link = "[[" & link & "]]"
-  result = " ".repeat(depth * 2) & fmt"* {link}" & "\n"
+  result = " ".repeat(depth * 1) & fmt"* {link}" & "\n"
 
 
 ###############
@@ -279,5 +283,30 @@ proc build(
   copyResources(resourcesDir, outputDir)
   hey("Done!")
 
+proc watch(
+  inputDir: string = "content/entries",
+  outputDir: string = "dist",
+  resourcesDir: string = "resources",
+  templatePath: string = "templates/base.html",
+  verbose: bool = false,
+  ): void =
+
+  var mon = newMonitor()
+
+  proc callback(event: fsw_cevent, event_num: cuint) =
+    yo("Detected change...")
+    build(inputDir, outputDir, resourcesDir, templatePath, verbose)
+
+  mon.addPath(inputDir)
+  mon.addPath(resourcesDir)
+  mon.addPath(templatePath)
+  mon.setCallback(callback)
+
+  mon.start()
+
+proc serve(): void =
+  discard execCmd("nimhttpd -p:8000 .")
+
+
 when isMainModule:
-  dispatchMulti([build])
+  dispatchMulti([build], [watch], [serve])
