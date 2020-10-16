@@ -5,6 +5,7 @@ packages:
   - build-essential
   - git
   - rsync
+  - fswatch
 sources:
   - https://git.sr.ht/~metasyn/memex
 secrets:
