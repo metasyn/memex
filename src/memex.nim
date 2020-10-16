@@ -12,10 +12,10 @@ import times
 import cligen
 import markdown
 
-# -d:fswatch=true
-const fswatchSwitch {.booldefine, used.}: bool = true
+# -d:usefswatch=true
+const usefswatch {.booldefine.} = true
 
-when defined(fswatchSwitch):
+when usefswatch:
   import libfswatch
   import libfswatch/fswatch
 
@@ -114,7 +114,7 @@ proc indent(item: Item, depth: int): string =
   var link = item.name
   if item.terminal:
     link = "[[" & link & "]]"
-  result = " ".repeat(depth * 1) & fmt"* {link}" & "\n"
+  result = " ".repeat(depth * 2) & fmt"* {link}" & "\n"
 
 
 ###############
@@ -296,11 +296,12 @@ proc watch(
   verbose: bool = false,
   ): void =
 
-  when defined(fswatchSwitch):
+  when usefswatch:
+    yo("Watching for changes...")
     var mon = newMonitor()
 
     proc callback(event: fsw_cevent, event_num: cuint) =
-      yo("Detected change...")
+      hey("Detected change...")
       build(inputDir, outputDir, resourcesDir, templatePath, verbose)
 
     mon.addPath(inputDir)
