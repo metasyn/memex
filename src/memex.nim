@@ -12,6 +12,8 @@ import times
 import cligen
 import markdown
 
+import ./rss
+
 # -d:usefswatch=true
 const usefswatch {.booldefine.} = true
 
@@ -317,6 +319,10 @@ proc watch(
 proc serve(): void =
   discard execCmd("nimhttpd -p:8000 .")
 
+proc addrss(
+  rssFilePath: string = "content/rss.xml",
+  ): void =
+  echo buildRss()
 
 when isMainModule:
-  dispatchMulti([build], [watch], [serve])
+  dispatchMulti([build], [watch], [serve], [addrss])

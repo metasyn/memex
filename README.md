@@ -14,12 +14,14 @@ the memex itself can be seen [here](https://metasyn.pw)
 ## dependencies
 
 * `nimble` & `nim` compiler, and a C compiler
-* optional: `musl-gcc`, `upx`, `strip`
+* optional for `musl` build: `musl-gcc`, `upx`, `strip`,
+* optional for `memex watch`: `fswatch`
+
+
 
 ## binary
 
-Generally
-* the wiki builder binary `memex` is generally around 1MB & builds in under a second.
+Generally * the wiki builder binary `memex` is generally around 1MB & builds in under a second.
 * a statically linked (musl), optimized build via `upx` & `strip` gets closer to 300KB & under 10ms
 
 ```shell
