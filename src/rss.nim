@@ -1,6 +1,11 @@
+import sets
 import times
-import db_sqlite
 import xmltree
+import parsecsv
+import strformat
+import oids
+
+let HEADERS = toOrderedSet(["guid", "time", "title", "path", "description"])
 
 func newNode(nodeType: string, text: string = "", attrs: varargs[tuple[key,
     val: string]] = []): XmlNode =
@@ -14,22 +19,98 @@ func addNode(parent: XmlNode, nodeType: string, text: string = "",
     attrs: varargs[tuple[key, val: string]] = []): void =
   parent.add(newNode(nodeType, text, attrs))
 
+proc rssTime(time: DateTime): string =
+  return time.utc.format("ddd, dd MMM YYYY hh:mm:ss") & " GMT"
 
-proc createTable(db: DbConn, name: string = "posts"): void =
-  db.exec(sql"""
-    CREATE TABLE IF NOT EXISTS ? (
-      title TEXT NOT NULL, 
-      link TEXT NOT NULL,
-      description TEXT NOT NULL,
-      guid INTEGER PRIMARY KEY,
-      pubDate INTEGER NOT NULL
-    )
-  """, name)
+type
+  Post = object
+    guid: string
+    title: string
+    path: string
+    time: string
+    description: string
 
+proc addPostAsItem(channel: XmlNode, post: Post): void =
+  let item = newNode("item")
+  item.addNode("guid", $post.guid, {"isPermaLink": $false})
+  item.addNode("title", post.title)
+  item.addNode("link", "https://metasyn.pw/" & post.path & ".html")
+  item.addNode("pubDate", post.time)
+  item.addNode("description", post.description)
+  channel.add(item)
 
-proc addItems(channel: XmlNode, dbFilePath: string = "posts.db"): void =
-  let db = open(dbFilePath, "", "", "")
-  db.createTable()
+proc addItems(channel: XmlNode, postsCsvPath: string): void =
+  var p: CsvParser
+  p.open(postsCsvPath)
+  p.readHeaderRow()
+
+  let foundHeaders = p.headers.toOrderedSet
+
+  if foundHeaders != HEADERS:
+    echo fmt"""
+    invalid headers in {postsCsvPath}!
+    wanted: {HEADERS}
+    got: {foundHeaders} """
+    quit(1)
+
+  while p.readRow():
+    var
+      guid: string
+      title: string
+      path: string
+      time: string
+      description: string
+
+    for col in items(p.headers):
+      let entry = p.rowEntry(col)
+      case col:
+        of "guid":
+          guid = entry
+        of "title":
+          title = entry
+        of "path":
+          path = entry
+        of "time":
+          time = entry
+        of "description":
+          description = entry
+
+    let post = Post(
+      guid: guid,
+      title: title,
+      path: path,
+      time: time,
+      description: description)
+
+    channel.addPostAsItem(post)
+
+  p.close()
+
+proc newPost(channel: XmlNode, postsCsvPath: string): void =
+  echo "Title?"
+  let title = readLine(stdin)
+  echo "Path?"
+  let path = readLine(stdin)
+  echo "Description?"
+  let description = readLine(stdin)
+
+  let time = now().rssTime
+  let guid = $genOid()
+  let post = Post(
+    guid: $genOid(),
+    title: title,
+    path: path,
+    time: time,
+    description: description)
+
+  # Write to csv
+  let csv = open(postsCsvPath, fmAppend)
+  proc q(s: string): string =
+    return "\"" & s & "\""
+
+  csv.writeLine(fmt"{$guid.q},{time.q},{title.q},{path.q},{description.q}")
+
+  channel.addPostAsItem(post)
 
 
 proc buildRss*(): string =
@@ -44,14 +125,16 @@ proc buildRss*(): string =
   # TODO: should link to a recent updated page
   channel.addNode("link", url)
   channel.addNode("description", "metasyn")
-  channel.addNode("lastBuildDate", now().utc.format("dd MMM YYYY hh:mm:ss") & " GMT")
+  channel.addNode("lastBuildDate", now().rssTime)
   channel.addNode("atom:link", attrs = {
     "href": url & "/rss.xml",
     "rel": "self",
     "type": "application/rss+xml"
   })
 
-  addItems(channel)
+  let postsCsvPath = "content/posts.csv"
+  addItems(channel, postsCsvPath)
+  newPost(channel, postsCsvPath)
 
   rss.add(channel)
   result = xmlHeader & $rss
