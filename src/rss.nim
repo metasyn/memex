@@ -5,6 +5,8 @@ import parsecsv
 import strformat
 import oids
 
+import ./common
+
 let HEADERS = toOrderedSet(["guid", "time", "title", "path", "description"])
 
 func newNode(nodeType: string, text: string = "", attrs: varargs[tuple[key,
@@ -86,22 +88,18 @@ proc addItems(channel: XmlNode, postsCsvPath: string): void =
 
   p.close()
 
-proc newPost(channel: XmlNode, postsCsvPath: string): void =
-  echo "Title?"
+proc writeNewPostCsv*(postsCsvPath: string): void =
+  hey("Title?")
   let title = readLine(stdin)
-  echo "Path?"
+
+  hey("Path?")
   let path = readLine(stdin)
-  echo "Description?"
+
+  hey("Description?")
   let description = readLine(stdin)
 
   let time = now().rssTime
   let guid = $genOid()
-  let post = Post(
-    guid: $genOid(),
-    title: title,
-    path: path,
-    time: time,
-    description: description)
 
   # Write to csv
   let csv = open(postsCsvPath, fmAppend)
@@ -109,8 +107,6 @@ proc newPost(channel: XmlNode, postsCsvPath: string): void =
     return "\"" & s & "\""
 
   csv.writeLine(fmt"{$guid.q},{time.q},{title.q},{path.q},{description.q}")
-
-  channel.addPostAsItem(post)
 
 
 proc buildRss*(): string =
@@ -122,6 +118,7 @@ proc buildRss*(): string =
   let channel = newElement("channel")
   channel.addNode("title", "metasyn.pw")
   let url = "https://metasyn.pw"
+
   # TODO: should link to a recent updated page
   channel.addNode("link", url)
   channel.addNode("description", "metasyn")
@@ -134,7 +131,6 @@ proc buildRss*(): string =
 
   let postsCsvPath = "content/posts.csv"
   addItems(channel, postsCsvPath)
-  newPost(channel, postsCsvPath)
 
   rss.add(channel)
-  result = xmlHeader & $rss
+  return xmlHeader & $rss

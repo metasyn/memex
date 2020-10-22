@@ -1,7 +1,6 @@
 import os
 import re
 import osproc
-import terminal
 import sequtils
 import sugar
 import strutils
@@ -12,7 +11,8 @@ import times
 import cligen
 import markdown
 
-import ./rss
+from ./rss import nil
+import ./common
 
 # -d:usefswatch=true
 const usefswatch {.booldefine.} = true
@@ -25,15 +25,6 @@ when usefswatch:
 ##############
 # Formatters #
 ##############
-
-proc hey(m: string): void =
-  styledWriteLine(stdout, fgCyan, "> " & m, resetStyle)
-
-proc yo(m: string): void =
-  styledWriteLine(stdout, fgGreen, ">> " & m, resetStyle)
-
-proc nope(m: string): void =
-  styledWriteLine(stdout, fgRed, ">> " & m, resetStyle)
 
 proc clean(inputDir: string, outputDir: string): void =
   hey("Cleaning...")
@@ -288,6 +279,8 @@ proc build(
 
   convertFiles(entries, directoryMarkdown, outputDir, templatePath)
   copyResources(resourcesDir, outputDir)
+  let rss = rss.buildRss()
+  writeFile(outputDir.joinPath("rss.xml"), rss)
   hey("Done!")
 
 proc watch(
@@ -305,6 +298,7 @@ proc watch(
     proc callback(event: fsw_cevent, event_num: cuint) =
       hey("Detected change...")
       build(inputDir, outputDir, resourcesDir, templatePath, verbose)
+      sleep(100)
 
     mon.addPath(inputDir)
     mon.addPath(resourcesDir)
@@ -319,10 +313,8 @@ proc watch(
 proc serve(): void =
   discard execCmd("nimhttpd -p:8000 .")
 
-proc addrss(
-  rssFilePath: string = "content/rss.xml",
-  ): void =
-  echo buildRss()
+proc new_post(postsCsv: string = "content/posts.csv"): void =
+  rss.writeNewPostCsv(postsCsv)
 
 when isMainModule:
-  dispatchMulti([build], [watch], [serve], [addrss])
+  dispatchMulti([build], [watch], [serve], [new_post])
