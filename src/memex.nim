@@ -295,7 +295,13 @@ proc watch(
     yo("Watching for changes...")
     var mon = newMonitor()
 
-    proc callback(event: fsw_cevent, event_num: cuint) =
+    proc callback(event: fsw_cevent, event_num: cuint): void =
+
+      ## I am not exactly sure why, but event_num 85 should be ignored
+      ## otherwise it goes into an infinite loop
+      if event_num == 85:
+        return
+
       hey("Detected change...")
       build(inputDir, outputDir, resourcesDir, templatePath, verbose)
       sleep(100)
@@ -316,5 +322,17 @@ proc serve(): void =
 proc new_post(postsCsv: string = "content/posts.csv"): void =
   rss.writeNewPostCsv(postsCsv)
 
+proc dev(): void =
+  let cmd = """
+		tmux new-session -d -s memex \; \
+			rename-window "memex-misc" \; \
+			split-window -h -l 10 \; \
+			send-keys './memex watch' C-m \; \
+			split-window -v -l 5 \; \
+			send-keys './memex serve' C-m \; \
+		"""
+  discard execCmd(cmd)
+
+
 when isMainModule:
-  dispatchMulti([build], [watch], [serve], [new_post])
+  dispatchMulti([build], [watch], [serve], [new_post], [dev])

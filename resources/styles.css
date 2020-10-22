@@ -82,7 +82,7 @@ summary {
 }
 
 .timestamp {
-  font-size: calc(var(--font-size) - 2px);
+  font-size: calc(var(--font-size-base) - 2px);
 }
 
 .top {
@@ -109,8 +109,10 @@ summary {
   border-color: var(--text-color);
   border-style: solid;
   border-width: 2px;
-  padding: 10px;
+  padding: 5px;
   margin-top: 5px;
+  font-size: calc(var(--font-size) - 2px);
+  width: 200px;
 }
 
 .light #directory-contents {
