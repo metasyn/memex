@@ -36,3 +36,14 @@ we share our interests, but for what? one way i like to think about writing down
 * the expanse
 * westworld
 * the mightnight gospel
+
+### games
+
+* age of empires ii: age of kings
+* pixel junk monsters
+* flower
+* hyperlight drifter
+* pixel junk eden
+* don't starve together
+* factorio
+* enter the gungeon
