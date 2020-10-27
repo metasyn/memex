@@ -1,8 +1,8 @@
 import os
 import re
 import osproc
-import sequtils
 import sugar
+import sequtils
 import strutils
 import strformat
 import tables
@@ -93,21 +93,31 @@ type
   Item = ref object
     name: string
     children: seq[Item]
-    terminal: bool
 
 # this is unused; but used for debugging
 proc `$`(i: Item): string =
-  result = i.name & "\n"
-  result = result & $i.children.len & "\n"
+  result = "\n" & "=".repeat(70) & "\n"
+  result = result & i.name
 
-  for child in i.children:
-    result = result & $child & "\n"
+  if i.children.len > 0:
+    result = result & "\nchildren:"
+    for c in i.children:
+      result = result & c.name & ", "
+    result = result & "\n"
 
-proc indent(item: Item, depth: int): string =
-  var link = item.name
-  if item.terminal:
-    link = "[[" & link & "]]"
-  result = " ".repeat(depth * 2) & fmt"* {link}" & "\n"
+proc contains(parent: Item, name: string): bool =
+  let names = collect(newSeq):
+    for i in parent.children: i.name
+
+  for candidate in names:
+    if candidate == name:
+      return true
+
+proc get(parent: Item, name: string): Item =
+  for item in parent.children:
+    if item.name == name:
+      return item
+
 
 
 ###############
@@ -133,7 +143,7 @@ proc calculateIncomingLinks(entries: seq[Entry]): TableRef[string, seq[string]] 
           result[clean] = @[entry.id]
 
 
-proc calculateDirectory(entries: seq[Entry], inputDir: string): string =
+proc calculateDirectory(entries: seq[Entry], inputDir: string): Item =
 
   # Calculate hierarchy via file paths
   var paths = newSeq[seq[string]]()
@@ -145,10 +155,9 @@ proc calculateDirectory(entries: seq[Entry], inputDir: string): string =
       .filter((x) => x != "" and not directoryBlacklist.contains(x))
     paths.add(parts)
 
-
-  var base = Item(name: "base")
+  let directoryName = "directory";
+  var base = Item(name: directoryName)
   var root: Item
-  var sections = newSeq[string]()
 
   for path in paths:
     for idx, section in path.pairs:
@@ -156,48 +165,42 @@ proc calculateDirectory(entries: seq[Entry], inputDir: string): string =
       if idx == 0:
         root = base
 
-      var child = Item(name: section)
+      # If we're at the last time, just add to the root we're on
+      if idx + 1 == paths.len:
+        root.children.add(Item(name: section))
 
-      # We assume each section (either a page or dir)
-      # is unique; so if we haven't seen it yet, add it
-      if not sections.contains(section):
-        sections.add(section)
+      # If the section doesn't exist add it
+      if not root.contains(section):
+        root.children.add(Item(name: section))
 
-      # Note if we're at the end of a file path
-      # i.e. this determines if we're a file or dir
-      if idx == path.len - 1:
-        child.terminal = true
+      # Switch root to new section
+      root = root.get(section)
 
-      # Here we check if to see if current root
-      # has a reference. If there are multiple pages
-      # that stem from the same directory, we don't
-      # want that directory to be repference twice
-      if not root.children.contains(child):
-        root.children.add(child)
+  return base
 
-      # Update the root to be the current child
-      # in order to down down the path
-      root = child
 
-  proc recurse(item: Item, sections: var seq[string], depth: int = -1): string =
-    # If we're past the root
-    if depth >= 0:
-      # Check to see if we've processed this item somehow
-      if sections.contains(item.name):
-        # If we have, delete it so only happens once
-        # this stops directories from being listed twice
-        sections.delete(sections.find(item.name))
-        # Recurse
-        result = result & indent(item, depth)
+proc createNavigationDirectoryMarkdown(base: Item): string =
+  proc recurse(item: Item, depth: int): string =
 
-    # check if we're at the bottom of a branch
-    if item.children.len >= 1:
-      for child in item.children:
-        result = result & recurse(child, sections, depth + 1)
+    # If we're at a terminal node, new line an indent item
+    if item.children.len == 0:
+      result = result & "\n" & fmt"* [[{item.name}]]"
     else:
-      return result
 
-  result = recurse(base, sections)
+      # Begin new block
+      result = result & fmt"""
+
+<details style="--depth: {depth}"><summary>{item.name}</summary>
+"""
+
+      for child in item.children:
+        result = result & recurse(child, depth + 1)
+
+      # End the last block
+      result = result & "\n" & "</details>"
+
+  result = recurse(base, 0)
+
 
 ##############
 # Converters #
@@ -216,7 +219,20 @@ proc convertMarkdownFileToHtml(inputDir: string): string =
     .replacef(linkRegularExpression, "[[$1]]($1.html)")
     .md
 
-proc convertFiles(entries: seq[Entry], directoryMarkdown: string,
+proc createDirectoryIndexMarkdown(base: Item): string =
+  proc recurse(item: Item, depth: int): string =
+    let padding = "  ".repeat(depth)
+
+    if item.children.len == 0:
+      result = result & "\n" & fmt"{padding}* [[{item.name}]]"
+    else:
+      result = result & "\n" & fmt"{padding}* {item.name}"
+      for child in item.children:
+        result = result & recurse(child, depth + 1)
+  result = recurse(base, 0)
+  result = result.convertMarkdownToHtml
+
+proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
     outputDir: string, templatePath: string): void =
 
   hey("Building html files...")
@@ -239,10 +255,10 @@ proc convertFiles(entries: seq[Entry], directoryMarkdown: string,
       # Directory is a special case
       if entry.id == "directory":
         templetized = readFile(templatePath)
-          .replace(contentTemplate, convertMarkdownToHtml(directoryMarkdown))
+          .replace(contentTemplate, createDirectoryIndexMarkdown(base))
           .replace(referencesTemplate, makeIncomingLinks(backreferences))
           .replace(timestampTemplate, getModificationTime(entry.path))
-          .replace("id='directory'", "style='display: none'")
+          .replace(directoryTemplate, "")
 
       else:
         templetized = templateContents
@@ -274,10 +290,10 @@ proc build(
   let entries = collectEntries(inputDir)
   hey(fmt"Processing {inputDir.len} entries...")
 
-  let directoryMarkdown = calculateDirectory(entries, inputDir)
-  echo directoryMarkdown
+  let base = calculateDirectory(entries, inputDir)
+  let directoryMarkdown = createNavigationDirectoryMarkdown(base)
 
-  convertFiles(entries, directoryMarkdown, outputDir, templatePath)
+  convertFiles(entries, base, directoryMarkdown, outputDir, templatePath)
   copyResources(resourcesDir, outputDir)
   let rss = rss.buildRss()
   writeFile(outputDir.joinPath("rss.xml"), rss)

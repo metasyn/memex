@@ -13,6 +13,7 @@
   --font-size-base: 18px;
 
   --base-padding: 5px;
+  --depth: 0;
 }
 
 /* Font related */
@@ -47,8 +48,13 @@ img {
   max-width: calc(100% - (var(--base-padding) / 2));
 }
 
-summary {
-  text-align: end;
+details {
+  padding-left: calc( 10px * var(--depth) - (5px * (var(--depth) - 2)))
+}
+
+details ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 
@@ -102,20 +108,24 @@ summary {
   max-width: 45ch;
 }
 
-#directory-contents {
-  position: absolute;
-  background-color: var(--background-color);
-  color: var(--text-color);
+#directory-content > details[open] {
   border-color: var(--text-color);
   border-style: solid;
   border-width: 2px;
+}
+
+#directory-content {
+  position: absolute;
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding: 5px;
   margin-top: 5px;
   font-size: calc(var(--font-size) - 2px);
-  width: 200px;
+  max-width: inherit;
+  min-width: inherit;
 }
 
-.light #directory-contents {
+.light #directory-content {
   background-color: var(--light-background-color);
   color: var(--light-text-color);
   border-color: var(--light-text-color);
@@ -156,4 +166,9 @@ summary {
 
 #light-mode:hover {
   cursor: pointer;
+}
+
+
+#summary {
+  text-align: end ;
 }
