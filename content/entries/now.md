@@ -1,7 +1,7 @@
 # now
 
 ## personal
-* learning modular & analog synthesis
+* learning modular & analog synthesis - see [[gear]]
 * building this [[memex]]
 
 ## reading
@@ -9,4 +9,5 @@
 * men without women - haruki murakami
 
 ## watching
-* the expanse
+* ~the expanse~
+* ~stranger things s3~

@@ -84,7 +84,7 @@ proc getModificationTime(file: string): string =
 
   # Try to take from git, if we can
   let outputAndCode = execCmdEx(fmt"""git log -1 --pretty="format:%ci" {file}""")
-  if outputAndCode[1] == 0:
+  if outputAndCode[1] == 0 and outputAndCode[0].len > 9:
     time = outputAndCode[0].string[0 .. 9]
 
   result = "last edited: " & time.replace("-", ".")
