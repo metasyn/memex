@@ -1,7 +1,6 @@
 # collections
 
-we share our interests, but for what? one way i like to think about writing down your inspirations is that it forces us to think more about both what brings us joy and inspiration, but also, what we want to encourage others to seek inspiration from. below are some lists of things i find joy, inspiration, or beauty in.
-
+below are some of my favorites.
 
 ### film
 
@@ -21,7 +20,8 @@ we share our interests, but for what? one way i like to think about writing down
 * society of the spectacle - guy debord
 * the book of tea - okakura kazuko
 * for the fighting spirit of the walnut - takahashi hiraide
-* xenofeminism - laboria cuboniks inventing the future - srnicek & williams
+* xenofeminism - laboria cuboniks
+* inventing the future - srnicek & williams
 * disassembly required - geoff mann
 * passwords - baudrillard
 * creating language - christiansen & chater
