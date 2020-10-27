@@ -80,7 +80,13 @@ proc collectEntries(inputDir: string, ext = ".md"): seq[Entry] =
     result.add(entry)
 
 proc getModificationTime(file: string): string =
-  let time = file.getLastModificationTime.utc.format("YYYY-MM-dd")
+  var time = file.getLastModificationTime.utc.format("YYYY-MM-dd")
+
+  # Try to take from git, if we can
+  let outputAndCode = execCmdEx(fmt"""git log -1 --pretty="format:%ci" {file}""")
+  if outputAndCode[1] == 0:
+    time = outputAndCode[0].string[0 .. 9]
+
   result = "last edited: " & time.replace("-", ".")
 
 proc copyResources(resourcesDir: string,
