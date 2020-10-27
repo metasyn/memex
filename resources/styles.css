@@ -115,10 +115,10 @@ details ul {
 }
 
 #directory-content {
-  position: absolute;
+  position: relative;
+  bottom: 5px;
   background-color: var(--background-color);
   color: var(--text-color);
-  padding: 5px;
   margin-top: 5px;
   font-size: calc(var(--font-size) - 2px);
   max-width: inherit;
