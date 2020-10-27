@@ -57,6 +57,9 @@ details ul {
   margin-bottom: 0px;
 }
 
+*:focus {
+  outline: none;
+}
 
 /* Classes */
 
