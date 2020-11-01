@@ -7,7 +7,8 @@
 ## reading
 * [joyful militancy](https://joyfulmilitancy.com/)
 * men without women - haruki murakami
+* neuromancer - william gibson
 
-## watching
-* ~the expanse~
-* ~stranger things s3~
+## playing
+* gonner 2
+* shenzen i/o
