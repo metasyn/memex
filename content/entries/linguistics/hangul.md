@@ -9,9 +9,9 @@ should be updated or is incorrect.
 
 below are my notes on hangul, the korean alphabet, and some korean linguistics.
 mostly, i'm taking notes to solidify my understanding . there are already lots
-of resources online for learning korea- and you should use those - however,
-these were patterns that i found helpful to note and write down while i
-learned.  maybe they will help someone else, too ^__^
+of resources online for learning korean and hangul and you should use those -
+however, these were patterns that i found helpful to note and write down while
+i learned.  maybe they will help someone else, too ^__^
 
 ---
 
