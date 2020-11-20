@@ -138,7 +138,7 @@ we get three variants: plain, aspirated, and tense
 
 |character|IPA|name|romanized name|
 |-|-|-|-|
-| ㄷ| ct | 디귿     | digeut |
+| ㄷ| t | 디귿     | digeut |
 | ㄸ| tʰ | 쌍디귿   | ssangdigeut |
 | ㅌ| t͈  | 티읕     | tieut |
 
