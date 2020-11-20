@@ -92,9 +92,9 @@ phonological rule, for example:
 in contrast, korean uses aspiration as a *contrastive* difference. this
 contrastive difference, as expected, is also represented orthographically. in
 the [IPA](https://en.wikipedia.org/wiki/international_phonetic_alphabet) above
-(and below) - aspiration is marked by a superscript _h_ like pʰ. in korean,
-this is represented by a duplicate character: ㄱ (plain k sound) becomes ㄲ
-(aspirated k sound).
+(and below) - aspiration is marked by a superscript _h_ like pʰ.  generally, we just see the
+character getting an extra stroke: ㄱ (plain k sound) becomes ㅋ (aspirated k
+sound).
 
 
 ### tenseness
@@ -106,10 +106,8 @@ pronouncing these, from pretending you are in a pressure chamber, pretending
 the consonant is hard to produce, or just tightening your glottis and vocal
 folds while pronouncing them. in IPA, tenseness is denoted by two small marks
 under the consonant like this: k͈. like aspiration, tenseness is represented as
-a distinct character variant orthographically. generally, we just see the
-character getting an extra stroke: ㄱ (plain k sound) becomes ㅋ (tense k
-sound).
-
+a distinct character orthographically: in korean, this is represented by a
+duplicate character: ㄱ (plain k sound) becomes ㄲ (tense k sound).
 
 # consonants
 
@@ -127,9 +125,9 @@ we get three variants: plain, aspirated, and tense
 
 |character|IPA|name|romanized name|
 |-|-|-|-|
-| ㄱ | k  | 기역    | giyeok |
-| ㄲ | kʰ | 쌍기역  | ssanggiyeok |
-| ㅋ | k͈  | 키읔    | kieuk |
+| ㄱ | k | 기역    | giyeok |
+| ㄲ | k͈ | 쌍기역  | ssanggiyeok |
+| ㅋ | kʰ| 키읔    | kieuk |
 
 ## alveolars
 
@@ -139,8 +137,8 @@ we get three variants: plain, aspirated, and tense
 |character|IPA|name|romanized name|
 |-|-|-|-|
 | ㄷ| t | 디귿     | digeut |
-| ㄸ| tʰ | 쌍디귿   | ssangdigeut |
-| ㅌ| t͈  | 티읕     | tieut |
+| ㄸ| t͈ | 쌍디귿   | ssangdigeut |
+| ㅌ| tʰ| 티읕     | tieut |
 
 after that, we have a new manner of articulation in the same location.
 these are all [alveolar](https://en.wikipedia.org/wiki/alveolar_consonant) [siblants](https://en.wikipedia.org/wiki/sibilant):
@@ -148,7 +146,7 @@ these are all [alveolar](https://en.wikipedia.org/wiki/alveolar_consonant) [sibl
 |character|IPA|name|romanized name|
 |-|-|-|-|
 | ㅅ | s  | 시옷    | siot |
-| ㅆ | sʰ | 쌍시옷  | ssangsiot |
+| ㅆ | s͈  | 쌍시옷  | ssangsiot |
 | ㅈ | tɕ | 지읒    | jieut |
 | ㅊ | tɕ | 치읓    | chieut |
 | ㅉ | t͈ɕ | 쌍지읒  | ssangjieut |
@@ -174,8 +172,8 @@ we get three variants: plain, aspirated, and tense, as well as a voiced bilabial
 |character|IPA|name|romanized name|
 |-|-|-|-|
 | ㅂ | b  | 비읍    | bieup |
-| ㅍ | pʰ | 피읖    | pieup |
 | ㅃ | p͈  |	쌍비읍  | ssangbieup |
+| ㅍ | pʰ | 피읖    | pieup |
 | ㅁ | m  |	미음    | mieum |
 
 
