@@ -1,13 +1,26 @@
-# korean
+# hangul
 
-below are my notes on korean linguistics, mostly as notes i'm taking while
-learning to read and write in hangul, the korean alphabet. there are already
-lots of resources online for learning korean - and you should use those -
-however, these were patterns that i found helpful to note and write down while
-i learned.  maybe they will help someone else, too ^__^
+**disclaimer**: i **don't know korean** and just started learning, so lots of
+this could be incorrect. however most of the information i found is stuff i found
+around the web that i think is true. regardless, please [[contact]] me if something
+should be updated or is incorrect.
 
+---
 
-[wikipedia](https://en.wikipedia.org/wiki/hangul) tells us that modern hangul orthography uses
+below are my notes on hangul, the korean alphabet, and some korean linguistics.
+mostly, i'm taking notes to solidify my understanding . there are already lots
+of resources online for learning korea- and you should use those - however,
+these were patterns that i found helpful to note and write down while i
+learned.  maybe they will help someone else, too ^__^
+
+---
+
+hangul was created in 1443 by king sejong the great. it was created in order to
+*specifically combat* illteracy and make reading and writing easier for the
+korean people. i think its a beautiful script.
+
+[wikipedia](https://en.wikipedia.org/wiki/hangul) tells us that modern hangul
+orthography uses:
 
 * 24 basic letters:
   * 14 consonant letters (ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㅇ ㅈ ㅊ ㅋ ㅌ ㅍ ㅎ)
@@ -78,7 +91,7 @@ phonological rule, for example:
 
 in contrast, korean uses aspiration as a *contrastive* difference. this
 contrastive difference, as expected, is also represented orthographically. in
-the [ipa](https://en.wikipedia.org/wiki/international_phonetic_alphabet) above
+the [IPA](https://en.wikipedia.org/wiki/international_phonetic_alphabet) above
 (and below) - aspiration is marked by a superscript _h_ like pʰ. in korean,
 this is represented by a duplicate character: ㄱ (plain k sound) becomes ㄲ
 (aspirated k sound).
@@ -91,7 +104,7 @@ hard for english speakers because we do not have the concept of tenseness in
 our phonological inventory. i've read various things about how to imagine
 pronouncing these, from pretending you are in a pressure chamber, pretending
 the consonant is hard to produce, or just tightening your glottis and vocal
-folds while pronouncing them. in ipa, tenseness is denoted by two small marks
+folds while pronouncing them. in IPA, tenseness is denoted by two small marks
 under the consonant like this: k͈. like aspiration, tenseness is represented as
 a distinct character variant orthographically. generally, we just see the
 character getting an extra stroke: ㄱ (plain k sound) becomes ㅋ (tense k
@@ -112,7 +125,7 @@ to be easy to learn.
 these are all [velar](https://en.wikipedia.org/wiki/velar_consonant) [stops](https://en.wikipedia.org/wiki/plosive).
 we get three variants: plain, aspirated, and tense
 
-|character|ipa|name|romanized name|
+|character|IPA|name|romanized name|
 |-|-|-|-|
 | ㄱ | k  | 기역    | giyeok |
 | ㄲ | kʰ | 쌍기역  | ssanggiyeok |
@@ -123,7 +136,7 @@ we get three variants: plain, aspirated, and tense
 these are all [alveolar](https://en.wikipedia.org/wiki/alveolar_consonant) [stops](https://en.wikipedia.org/wiki/plosive).
 we get three variants: plain, aspirated, and tense
 
-|character|ipa|name|romanized name|
+|character|IPA|name|romanized name|
 |-|-|-|-|
 | ㄷ| ct | 디귿     | digeut |
 | ㄸ| tʰ | 쌍디귿   | ssangdigeut |
@@ -132,7 +145,7 @@ we get three variants: plain, aspirated, and tense
 after that, we have a new manner of articulation in the same location.
 these are all [alveolar](https://en.wikipedia.org/wiki/alveolar_consonant) [siblants](https://en.wikipedia.org/wiki/sibilant):
 
-|character|ipa|name|romanized name|
+|character|IPA|name|romanized name|
 |-|-|-|-|
 | ㅅ | s  | 시옷    | siot |
 | ㅆ | sʰ | 쌍시옷  | ssangsiot |
@@ -158,7 +171,7 @@ means:
 these are all [alveolar](https://en.wikipedia.org/wiki/labial_consonant) [stops](https://en.wikipedia.org/wiki/plosive).
 we get three variants: plain, aspirated, and tense, as well as a voiced bilabial stop (m).
 
-|character|ipa|name|romanized name|
+|character|IPA|name|romanized name|
 |-|-|-|-|
 | ㅂ | b  | 비읍    | bieup |
 | ㅍ | pʰ | 피읖    | pieup |
@@ -170,7 +183,7 @@ we get three variants: plain, aspirated, and tense, as well as a voiced bilabial
 
 these are all [dorsal](https://en.wikipedia.org/wiki/dorsal_consonant) consonants.
 
-|character|ipa|name|romanized name|
+|character|IPA|name|romanized name|
 |-|-|-|-|
 ㄹ | ɾ  | 리을   | rieul |
 ㄴ | n  | 니은   | nieun |
@@ -211,7 +224,7 @@ there are basic vowels
 
 ## monopthongs
 
-|character|ipa|romanization|english word with vowel|
+|character|IPA|romanization|english word with vowel|
 |-|-|-|-|
 | ㅡ | ɯ | eu | ~goose
 | ㅗ | o | o  | hoe
@@ -227,7 +240,7 @@ re-used:
 * ㅓ + ㅣ= ㅔ
 * ㅏ + ㅣ =  ㅐ
 
-|character|ipa|romanization|english word with vowel|
+|character|IPA|romanization|english word with vowel|
 |-|-|-|-|
 | ㅔ | e | e  | may
 | ㅐ | ɛ | ae | head
@@ -243,7 +256,7 @@ one group of diphthongs are all ways of turning one vowel into a y- variant
 vowels all you need to do is add the extra line next to the existing one that
 is protruding, and now its a y sound.
 
-|character|ipa|romanization|
+|character|IPA|romanization|
 |-|-|-|-|
 | ㅑ | ja | ya  |
 | ㅕ | jʌ | yeo |
@@ -262,7 +275,7 @@ the simpler vowels we already learned. for example:
 
 and so on.
 
-|character|ipa|romanization|
+|character|IPA|romanization|
 |-|-|-|-|
 | ㅟ | ɥi | wi  |
 | ㅞ | we | we  |
