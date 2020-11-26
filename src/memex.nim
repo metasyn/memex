@@ -48,6 +48,7 @@ const
   timestampTemplate = templ("timestamp")
   referencesTemplate = templ("references")
   directoryTemplate = templ("directory")
+  tableOfContentsTemplate = templ("toc")
 
 
 ############
@@ -57,6 +58,7 @@ const
 type
   Entry = object
     path: string
+    content: string
     id: string
 
 # Not actually used, but used when debugging
@@ -73,7 +75,7 @@ iterator allFilePaths(inputDir: string, ext = ".md"): Entry =
   for path in walkDirRec(inputDir):
     let (_, id, extension) = path.splitFile
     if extension == ext:
-      yield Entry(path: path, id: id)
+      yield Entry(path: path, id: id, content: readFile(path))
 
 proc collectEntries(inputDir: string, ext = ".md"): seq[Entry] =
   for entry in allFilePaths(inputDir, ext):
@@ -130,14 +132,26 @@ proc get(parent: Item, name: string): Item =
 # Calculators #
 ###############
 
+proc calculateOutline(entry: Entry): string =
+  for line in entry.content.split("\n"):
+    if line.startsWith("#"):
+      # Get the indentation
+      let indent = "  ".repeat(line.count("#"))
+      # Replace the anchors
+      let replacement = line.replacef(re"[#]+\s+", "")
+      # Get the anchor link
+      let link = "#" & replacement
+      let item = indent & fmt"* <a href='{link}'>{replacement}</a>" & "\n"
+      result = result & item
+  result = result.md
+
+
 proc calculateIncomingLinks(entries: seq[Entry]): TableRef[string, seq[string]] =
   result = newTable[string, seq[string]]()
   # First pass for backlinks
   for entry in entries:
     if fileExists(entry.path):
-      let
-        content = readFile(entry.path)
-        links = findall(content, linkRegularExpression)
+      let links = findall(entry.content, linkRegularExpression)
 
       for outlink in links:
         # Nim has some weird content here, not really
@@ -219,11 +233,13 @@ proc convertMarkdownToHtml(input: string): string =
     .replacef(linkRegularExpression, "[$1]($1.html)")
     .md
 
-proc convertMarkdownFileToHtml(inputDir: string): string =
-  result = readFile(inputDir)
+proc convertMarkdownFileToHtml(entry: Entry): string =
+  result = entry.content
     # Replace memex links with markdown ones
     .replacef(linkRegularExpression, "[[$1]]($1.html)")
+    .replacef(re"(#+\s+)(.*)", "$1 <a name='$2'>$2</a>")
     .md
+
 
 proc createDirectoryIndexMarkdown(base: Item): string =
   proc recurse(item: Item, depth: int): string =
@@ -268,7 +284,8 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
 
       else:
         templetized = templateContents
-          .replace(contentTemplate, convertMarkdownFileToHtml(entry.path))
+          .replace(tableOfContentsTemplate, calculateOutline(entry))
+          .replace(contentTemplate, convertMarkdownFileToHtml(entry))
           .replace(referencesTemplate, makeIncomingLinks(backreferences))
           .replace(timestampTemplate, getModificationTime(entry.path))
 
