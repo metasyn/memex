@@ -1,5 +1,5 @@
 import os
-import re
+import nre
 import osproc
 import sugar
 import sequtils
@@ -40,6 +40,7 @@ proc templ(s: string): string =
 let
   linkRegularExpression = re(r"\[\[(.+?)\]\]")
   bracesRegularExpression = re(r"[\[\]]")
+  headerRegularExpression = re(r"#{1,6}\s+.*")
   directoryBlacklist = @["404"]
 
 
@@ -132,18 +133,25 @@ proc get(parent: Item, name: string): Item =
 # Calculators #
 ###############
 
+proc sanitizeOutlineLink(text: string): string =
+  return text.replace(" ", "").replace(re"\W", "")
+
+
 proc calculateOutline(entry: Entry): string =
-  for line in entry.content.split("\n"):
-    if line.startsWith("#"):
-      # Get the indentation
-      let indent = "  ".repeat(line.count("#"))
-      # Replace the anchors
-      let replacement = line.replacef(re"[#]+\s+", "")
-      # Get the anchor link
-      let link = "#" & replacement
-      let item = indent & fmt"* <a href='{link}'>{replacement}</a>" & "\n"
-      result = result & item
-  result = result.md
+  let matches = entry.content.findAll(headerRegularExpression)
+  if matches.len > 1:
+    for line in entry.content.split("\n"):
+      if line.startsWith("#"):
+        # Get the indentation
+        let indent = "  ".repeat(line.count("#"))
+        # Replace the anchors
+        let replacement = line.replace(re"[#]+\s+", "")
+        # Get the anchor link
+        let link = "#" & replacement.sanitizeOutlineLink
+        let item = indent & fmt"* <a class='header' href=" & "\"" & link &
+            "\"" & fmt">{replacement}</a>" & "\n"
+        result = result & item
+    result = result.md
 
 
 proc calculateIncomingLinks(entries: seq[Entry]): TableRef[string, seq[string]] =
@@ -230,14 +238,20 @@ proc convertMarkdownToHtml(input: string): string =
   # Replace memex links with markdown ones
   result = input
     # note this is in markdown link style
-    .replacef(linkRegularExpression, "[$1]($1.html)")
+    .replace(linkRegularExpression, "[$1]($1.html)")
     .md
+
+proc convertHeaderToLink(match: RegexMatch): string =
+  let heading = match.captures[1]
+  let sanitized = heading.sanitizeOutlineLink
+  return match.captures[0] & fmt"<a name='{sanitized}'>{heading}</a>"
 
 proc convertMarkdownFileToHtml(entry: Entry): string =
   result = entry.content
     # Replace memex links with markdown ones
-    .replacef(linkRegularExpression, "[[$1]]($1.html)")
-    .replacef(re"(#+\s+)(.*)", "$1 <a name='$2'>$2</a>")
+    .replace(linkRegularExpression, "[[$1]]($1.html)")
+    # Add in links for all headers
+    .replace(re"(?<prefix>#+\s+)(?<heading>.*)", convertHeaderToLink)
     .md
 
 
@@ -263,8 +277,8 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
 
   # For keeping track of back references
   let
-    templateContents = readFile(templatePath)
-      .replace(directoryTemplate, convertMarkdownToHtml(directoryMarkdown))
+    templateRaw = readFile(templatePath)
+    templateWithDirectory = readFile(templatePath)
     references = calculateIncomingLinks(entries)
 
   # Second pass fore templetizing
@@ -276,18 +290,19 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
 
       # Directory is a special case
       if entry.id == "directory":
-        templetized = readFile(templatePath)
+        templetized = templateRaw
           .replace(contentTemplate, createDirectoryIndexMarkdown(base))
-          .replace(referencesTemplate, makeIncomingLinks(backreferences))
-          .replace(timestampTemplate, getModificationTime(entry.path))
           .replace(directoryTemplate, "")
 
       else:
-        templetized = templateContents
-          .replace(tableOfContentsTemplate, calculateOutline(entry))
+        templetized = templateWithDirectory
           .replace(contentTemplate, convertMarkdownFileToHtml(entry))
-          .replace(referencesTemplate, makeIncomingLinks(backreferences))
-          .replace(timestampTemplate, getModificationTime(entry.path))
+          .replace(directoryTemplate, convertMarkdownToHtml(directoryMarkdown))
+
+      templetized = templetized
+        .replace(tableOfContentsTemplate, calculateOutline(entry))
+        .replace(referencesTemplate, makeIncomingLinks(backreferences))
+        .replace(timestampTemplate, getModificationTime(entry.path))
 
       let outFile = outputDir
         .joinPath(entry.id)
