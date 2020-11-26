@@ -158,19 +158,6 @@ th {
   border-color: var(--light-text-color);
 }
 
-#toc {
-  position: fixed;
-  max-width: 200px;
-  margin-left: -210px;
-}
-
-@media only screen and (max-width: calc(80ch + 420px)) {
-  #toc {
-    display: none;
-  }
-}
-
-
 #main {
   display: block;
   max-width: 80ch;
