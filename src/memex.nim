@@ -5,8 +5,11 @@ import sugar
 import sequtils
 import strutils
 import strformat
+import threadpool
 import tables
 import times
+
+# import nimprof
 
 import cligen
 import markdown
@@ -37,12 +40,13 @@ proc md(s: string): string =
 proc templ(s: string): string =
   return "{{ " & s & " }}"
 
-let
-  linkRegularExpression = re(r"\[\[(.+?)\]\]")
-  bracesRegularExpression = re(r"[\[\]]")
-  headerRegularExpression = re(r"#{1,6}\s+.*")
-  directoryBlacklist = @["404"]
+let directoryBlacklist = @["404"]
 
+const
+  bracesRegularExpression = r"[\[\]]"
+  linkRegularExpression = r"\[\[(.+?)\]\]"
+  headerRegularExpression = r"#{1,6}\s+.*"
+  anchorRegularExpression = r"[#]+\s+"
 
 const
   contentTemplate = templ("content")
@@ -61,6 +65,8 @@ type
     path: string
     content: string
     id: string
+
+type References = TableRef[string, seq[string]]
 
 # Not actually used, but used when debugging
 proc `$`(e: Entry): string {.used.} =
@@ -138,14 +144,15 @@ proc sanitizeOutlineLink(text: string): string =
 
 
 proc calculateOutline(entry: Entry): string =
-  let matches = entry.content.findAll(headerRegularExpression)
+  let matches = entry.content.findAll(headerRegularExpression.re)
+  let anchorRegex = anchorRegularExpression.re
   if matches.len > 1:
     for line in entry.content.split("\n"):
       if line.startsWith("#"):
         # Get the indentation
         let indent = "  ".repeat(line.count("#"))
         # Replace the anchors
-        let replacement = line.replace(re"[#]+\s+", "")
+        let replacement = line.replace(anchorRegex, "")
         # Get the anchor link
         let link = "#" & replacement.sanitizeOutlineLink
         let item = indent & fmt"* <a class='header' href=" & "\"" & link &
@@ -154,17 +161,22 @@ proc calculateOutline(entry: Entry): string =
     result = result.md
 
 
-proc calculateIncomingLinks(entries: seq[Entry]): TableRef[string, seq[string]] =
+proc calculateIncomingLinks(entries: seq[Entry]): References =
+  let
+    linkRegex = linkRegularExpression.re
+    bracesRegex = bracesRegularExpression.re
+
   result = newTable[string, seq[string]]()
+
   # First pass for backlinks
   for entry in entries:
     if fileExists(entry.path):
-      let links = findall(entry.content, linkRegularExpression)
+      let links = findall(entry.content, linkRegex)
 
       for outlink in links:
         # Nim has some weird content here, not really
         # giving you the subgroups as I'd expect.
-        let clean = outlink.replace(bracesRegularExpression, "")
+        let clean = outlink.replace(bracesRegex, "")
         if result.hasKey(clean):
           result[clean].add(entry.id)
         else:
@@ -238,7 +250,7 @@ proc convertMarkdownToHtml(input: string): string =
   # Replace memex links with markdown ones
   result = input
     # note this is in markdown link style
-    .replace(linkRegularExpression, "[$1]($1.html)")
+    .replace(linkRegularExpression.re, "[$1]($1.html)")
     .md
 
 proc convertHeaderToLink(match: RegexMatch): string =
@@ -249,7 +261,7 @@ proc convertHeaderToLink(match: RegexMatch): string =
 proc convertMarkdownFileToHtml(entry: Entry): string =
   result = entry.content
     # Replace memex links with markdown ones
-    .replace(linkRegularExpression, "[[$1]]($1.html)")
+    .replace(linkRegularExpression.re, "[[$1]]($1.html)")
     # Add in links for all headers
     .replace(re"(?<prefix>#+\s+)(?<heading>.*)", convertHeaderToLink)
     .md
@@ -268,6 +280,37 @@ proc createDirectoryIndexMarkdown(base: Item): string =
   result = recurse(base, 0)
   result = result.convertMarkdownToHtml
 
+proc process(entry: Entry, base: Item, templateRaw: string,
+             directoryMarkdown: string, templateWithDirectory: string,
+                 outputDir: string, references: References): void =
+  if fileExists(entry.path):
+
+    let backReferences = references.getOrDefault(entry.id)
+    var templetized: string
+
+    # Directory is a special case
+    if entry.id == "directory":
+      templetized = templateRaw
+        .replace(contentTemplate, createDirectoryIndexMarkdown(base))
+        .replace(directoryTemplate, "")
+
+    else:
+      templetized = templateWithDirectory
+        .replace(contentTemplate, convertMarkdownFileToHtml(entry))
+        .replace(directoryTemplate, convertMarkdownToHtml(directoryMarkdown))
+
+    templetized = templetized
+      .replace(tableOfContentsTemplate, calculateOutline(entry))
+      .replace(referencesTemplate, makeIncomingLinks(backreferences))
+      .replace(timestampTemplate, getModificationTime(entry.path))
+
+    let outFile = outputDir
+      .joinPath(entry.id)
+      .changeFileExt(".html")
+
+    yo(fmt"{entry.id} => {outFile}")
+    writeFile(outFile, templetized)
+
 proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
     outputDir: string, templatePath: string): void =
 
@@ -283,33 +326,9 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
 
   # Second pass fore templetizing
   for entry in entries:
-    if fileExists(entry.path):
-
-      let backReferences = references.getOrDefault(entry.id)
-      var templetized: string
-
-      # Directory is a special case
-      if entry.id == "directory":
-        templetized = templateRaw
-          .replace(contentTemplate, createDirectoryIndexMarkdown(base))
-          .replace(directoryTemplate, "")
-
-      else:
-        templetized = templateWithDirectory
-          .replace(contentTemplate, convertMarkdownFileToHtml(entry))
-          .replace(directoryTemplate, convertMarkdownToHtml(directoryMarkdown))
-
-      templetized = templetized
-        .replace(tableOfContentsTemplate, calculateOutline(entry))
-        .replace(referencesTemplate, makeIncomingLinks(backreferences))
-        .replace(timestampTemplate, getModificationTime(entry.path))
-
-      let outFile = outputDir
-        .joinPath(entry.id)
-        .changeFileExt(".html")
-
-      yo(fmt"{entry.id} => {outFile}")
-      writeFile(outFile, templetized)
+    spawn entry.process(base, templateRaw, directoryMarkdown,
+        templateWithDirectory, outputDir, references)
+  sync()
 
 #########
 # Mains #
@@ -333,8 +352,8 @@ proc build(
 
   convertFiles(entries, base, directoryMarkdown, outputDir, templatePath)
   copyResources(resourcesDir, outputDir)
-  let rss = rss.buildRss()
-  writeFile(outputDir.joinPath("rss.xml"), rss)
+  rss.buildRss(outputDir.joinPath("rss.xml"))
+
   hey("Done!")
 
 proc watch(

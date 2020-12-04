@@ -7,7 +7,6 @@ import oids
 
 import ./common
 
-let HEADERS = toOrderedSet(["guid", "time", "title", "path", "description"])
 
 func newNode(nodeType: string, text: string = "", attrs: varargs[tuple[key,
     val: string]] = []): XmlNode =
@@ -47,6 +46,7 @@ proc addItems(channel: XmlNode, postsCsvPath: string): void =
   p.readHeaderRow()
 
   let foundHeaders = p.headers.toOrderedSet
+  let HEADERS = toOrderedSet(["guid", "time", "title", "path", "description"])
 
   if foundHeaders != HEADERS:
     echo fmt"""
@@ -109,7 +109,7 @@ proc writeNewPostCsv*(postsCsvPath: string): void =
   csv.writeLine(fmt"{$guid.q},{time.q},{title.q},{path.q},{description.q}")
 
 
-proc buildRss*(): string =
+proc buildRss*(outfile: string) =
   let rss = newNode("rss", attrs = {
     "version": "2.0",
      "xmlns:atom": "http://www.w3.org/2005/Atom"
@@ -133,4 +133,5 @@ proc buildRss*(): string =
   addItems(channel, postsCsvPath)
 
   rss.add(channel)
-  return xmlHeader & $rss
+  let output = xmlHeader & $rss
+  writeFile(outfile, output)
