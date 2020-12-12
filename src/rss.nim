@@ -92,10 +92,10 @@ proc writeNewPostCsv*(postsCsvPath: string): void =
   hey("Title?")
   let title = readLine(stdin)
 
-  hey("Path?")
+  hey("Path? (post name: no suffix)")
   let path = readLine(stdin)
 
-  hey("Description?")
+  hey("Description? (Don't use double quotes; breaks the csv)")
   let description = readLine(stdin)
 
   let time = now().rssTime
