@@ -1,6 +1,6 @@
 # hanafuda
 
-<img src="resources/img/hanafuda.jpg" style="border: 2px solid white"></img>
+<img src="resources/img/hanafuda.png" style="border: 2px solid white"></img>
 
 hanafuda is a japanese card deck. various games can be played with them.
 
