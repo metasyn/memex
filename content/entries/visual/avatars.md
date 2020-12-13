@@ -1,21 +1,23 @@
 # avatars
 
+<style>
+img.avatar { background-color: white }
+</style>
+
 ## seedling's bacterium
 
 * for [[seedling]]
 
-<div style="background-color: white">
-  <img src="resources/img/seedling.png" />
-</div>
+<img class="avatar" src="resources/img/seedling.png" />
 
 ## umbra's llama
 
 * for [[umbra]]
 
-<img src="resources/img/umbra.png" />
+<img class="avatar" src="resources/img/umbra.png" />
 
 ## permuta's diamond
 
 * for [[permuta]]
 
-< img src="resouces/img/permuta.png />
+<img class="avatar" src="resources/img/permuta.png" />
