@@ -16,4 +16,6 @@
 
 ## permuta's diamond
 
+* for [[permuta]]
+
 < img src="resouces/img/permuta.png />
