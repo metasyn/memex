@@ -2,9 +2,10 @@ import os
 import nre
 import osproc
 import sugar
-import sequtils
+import algorithm
 import strutils
 import strformat
+import sequtils
 import threadpool
 import tables
 import times
@@ -54,6 +55,7 @@ const
   referencesTemplate = templ("references")
   directoryTemplate = templ("directory")
   tableOfContentsTemplate = templ("toc")
+  recentEntriesTemplate = templ("recent")
 
 
 ############
@@ -65,6 +67,7 @@ type
     path: string
     content: string
     id: string
+    modificationTime: DateTime
 
 type References = TableRef[string, seq[string]]
 
@@ -78,25 +81,26 @@ func makeIncomingLinks(items: seq[string]): string =
     for item in items:
       result = result & " " & fmt"<a href='{item}.html'>{item}</a>"
 
+proc getModificationTime(file: string): DateTime =
+  let outputAndCode = execCmdEx(fmt"""git log -1 --pretty="format:%ci" {file}""")
+  if outputAndCode[1] == 0 and outputAndCode[0].len > 9:
+    let timeStr = outputAndCode[0].string[0 .. 9]
+    return parse(timeStr, "yyyy-MM-dd")
+
 iterator allFilePaths(inputDir: string, ext = ".md"): Entry =
   for path in walkDirRec(inputDir):
     let (_, id, extension) = path.splitFile
     if extension == ext:
-      yield Entry(path: path, id: id, content: readFile(path))
+      yield Entry(path: path, id: id, content: readFile(path),
+          modificationTime: path.getModificationTime)
 
 proc collectEntries(inputDir: string, ext = ".md"): seq[Entry] =
   for entry in allFilePaths(inputDir, ext):
     result.add(entry)
 
-proc getModificationTime(file: string): string =
-  var time = file.getLastModificationTime.utc.format("YYYY-MM-dd")
-
-  # Try to take from git, if we can
-  let outputAndCode = execCmdEx(fmt"""git log -1 --pretty="format:%ci" {file}""")
-  if outputAndCode[1] == 0 and outputAndCode[0].len > 9:
-    time = outputAndCode[0].string[0 .. 9]
-
-  result = "last edited: " & time.replace("-", ".")
+proc getModificationTimeString(entry: Entry): string =
+  result = entry.modificationTime.format(
+      "yyyy-MM-dd").replace("-", ".")
 
 proc copyResources(resourcesDir: string,
     outputDir: string): void =
@@ -160,6 +164,29 @@ proc calculateOutline(entry: Entry): string =
         result = result & item
     result = result.md
 
+proc newer(a, b: Entry): int =
+  let x = a.modificationTime
+  let y = b.modificationTime
+  if x > y:
+    return -1
+  if x == y:
+    return 0
+  else:
+    return 1
+
+proc calculateRecentEntries(entries: seq[Entry],
+    limit: int = 10): seq[Entry] =
+  var willSort = entries
+  willSort.sort(newer)
+  let top = min(entries.len, limit)
+  return willSort[0 ..< top]
+
+proc calculateRecentEntriesMarkdown(entries: seq[Entry],
+    limit: int = 10): string =
+
+  for entry in entries.calculateRecentEntries:
+    let dt = entry.getModificationTimeString
+    result = result & fmt"* {dt}: [[{entry.id}]]" & "\n"
 
 proc calculateIncomingLinks(entries: seq[Entry]): References =
   let
@@ -282,7 +309,8 @@ proc createDirectoryIndexMarkdown(base: Item): string =
 
 proc process(entry: Entry, base: Item, templateRaw: string,
              directoryMarkdown: string, templateWithDirectory: string,
-                 outputDir: string, references: References): void =
+             recentEntriesMarkdown: string, outputDir: string,
+             references: References): void =
   if fileExists(entry.path):
 
     let backReferences = references.getOrDefault(entry.id)
@@ -297,12 +325,14 @@ proc process(entry: Entry, base: Item, templateRaw: string,
     else:
       templetized = templateWithDirectory
         .replace(contentTemplate, convertMarkdownFileToHtml(entry))
+        .replace(recentEntriesTemplate, convertMarkdownToHtml(recentEntriesMarkdown))
         .replace(directoryTemplate, convertMarkdownToHtml(directoryMarkdown))
 
     templetized = templetized
       .replace(tableOfContentsTemplate, calculateOutline(entry))
       .replace(referencesTemplate, makeIncomingLinks(backreferences))
-      .replace(timestampTemplate, getModificationTime(entry.path))
+      .replace(timestampTemplate, "last edited: " & getModificationTimeString(entry))
+
 
     let outFile = outputDir
       .joinPath(entry.id)
@@ -323,11 +353,12 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
     templateRaw = readFile(templatePath)
     templateWithDirectory = readFile(templatePath)
     references = calculateIncomingLinks(entries)
+    recentEntriesMarkdown = calculateRecentEntriesMarkdown(entries)
 
   # Second pass fore templetizing
   for entry in entries:
     spawn entry.process(base, templateRaw, directoryMarkdown,
-        templateWithDirectory, outputDir, references)
+        templateWithDirectory, recentEntriesMarkdown, outputDir, references)
   sync()
 
 #########

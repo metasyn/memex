@@ -10,5 +10,4 @@
 * neuromancer - william gibson
 
 ## playing
-* gonner 2
-* shenzen i/o
+* ni no kuni
