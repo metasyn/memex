@@ -16,20 +16,20 @@ the memex itself can be seen [here](https://metasyn.pw)
 * `nimble` & `nim` compiler, and a C compiler
 * optional for `musl` build: `musl-gcc`, `upx`, `strip`,
 * optional for `memex watch`: `fswatch`
-
+* optional for `memex downscale`: `ImageMagick` (7.0.10)
 
 
 ## binary
 
-Generally * the wiki builder binary `memex` is generally around 1MB & builds in under a second.
-* a statically linked (musl), optimized build via `upx` & `strip` gets closer to 300KB & under 10ms
+The binary comes in at a few megabytes, however, if you want a small binary you can use musl to get a static, portable
+binary size - just over 300kb.
 
 ```shell
 # use nimble for a simple build
 nimble build memex
 
 # use musl for an optimized build
-nimble musl -d:pcre src/memex.nim
+nim musl -d:useimagemagick=false -d:pcre src/memex.nim
 ```
 
 ## license

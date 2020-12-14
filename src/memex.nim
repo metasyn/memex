@@ -394,10 +394,10 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
 
 when useimagemagick:
   const
-    libs = gorgeEx("MagickWand-config --libs").output
-    flags = gorgeEx("MagickWand-config --cflags").output
+    libs = gorgeEx("pkg-config --libs MagickWand").output
+    flags = gorgeEx("pkg-config --cflags MagickWand").output
 
-  {.passL: libs.}
+  {.passL: libs & " -fopenmp".}
   {.passC: flags.}
 
   proc convert(output_paht: cstring, prefix: cstring, fileCount: cint,

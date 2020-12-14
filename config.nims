@@ -78,6 +78,8 @@ task installPcre, "Installs PCRE using musl-gcc":
       echo "PCRE lib source dir " & pcreSourceDir & " already exists"
     withDir pcreSourceDir:
       putEnv("CC", "musl-gcc -static")
+      putEnv("CFLAGS", "-fPIC")
+      putEnv("CXXFLAGS", "-fPIC")
       exec(pcreConfigureCmd.mapconcat())
       exec("make -j8")
       exec("make install")
