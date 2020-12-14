@@ -71,9 +71,10 @@ type
 
 type References = TableRef[string, seq[string]]
 
-# Not actually used, but used when debugging
+
 proc `$`(e: Entry): string {.used.} =
   return fmt"{e.id}: {e.path}"
+
 
 func makeIncomingLinks(items: seq[string]): string =
   if items.len > 0:
@@ -81,11 +82,13 @@ func makeIncomingLinks(items: seq[string]): string =
     for item in items:
       result = result & " " & fmt"<a href='{item}.html'>{item}</a>"
 
+
 proc getModificationTime(file: string): DateTime =
   let outputAndCode = execCmdEx(fmt"""git log -1 --pretty="format:%ci" {file}""")
   if outputAndCode[1] == 0 and outputAndCode[0].len > 9:
     let timeStr = outputAndCode[0].string[0 .. 9]
     return parse(timeStr, "yyyy-MM-dd")
+
 
 iterator allFilePaths(inputDir: string, ext = ".md"): Entry =
   for path in walkDirRec(inputDir):
@@ -94,18 +97,22 @@ iterator allFilePaths(inputDir: string, ext = ".md"): Entry =
       yield Entry(path: path, id: id, content: readFile(path),
           modificationTime: path.getModificationTime)
 
+
 proc collectEntries(inputDir: string, ext = ".md"): seq[Entry] =
   for entry in allFilePaths(inputDir, ext):
     result.add(entry)
+
 
 proc getModificationTimeString(entry: Entry): string =
   result = entry.modificationTime.format(
       "yyyy-MM-dd").replace("-", ".")
 
+
 proc copyResources(resourcesDir: string,
     outputDir: string): void =
   hey("Copying resources...")
   copyDir(resourcesDir, outputDir.joinPath(resourcesDir))
+
 
 # this type is used when building the directory
 type
@@ -113,8 +120,8 @@ type
     name: string
     children: seq[Item]
 
-# this is unused; but used for debugging
-proc `$`(i: Item): string =
+
+proc `$`(i: Item): string {.used.} =
   result = "\n" & "=".repeat(70) & "\n"
   result = result & i.name
 
@@ -124,6 +131,7 @@ proc `$`(i: Item): string =
       result = result & c.name & ", "
     result = result & "\n"
 
+
 proc contains(parent: Item, name: string): bool =
   let names = collect(newSeq):
     for i in parent.children: i.name
@@ -132,11 +140,11 @@ proc contains(parent: Item, name: string): bool =
     if candidate == name:
       return true
 
+
 proc get(parent: Item, name: string): Item =
   for item in parent.children:
     if item.name == name:
       return item
-
 
 
 ###############
@@ -164,6 +172,7 @@ proc calculateOutline(entry: Entry): string =
         result = result & item
     result = result.md
 
+
 proc newer(a, b: Entry): int =
   let x = a.modificationTime
   let y = b.modificationTime
@@ -174,6 +183,7 @@ proc newer(a, b: Entry): int =
   else:
     return 1
 
+
 proc calculateRecentEntries(entries: seq[Entry],
     limit: int = 10): seq[Entry] =
   var willSort = entries
@@ -181,12 +191,14 @@ proc calculateRecentEntries(entries: seq[Entry],
   let top = min(entries.len, limit)
   return willSort[0 ..< top]
 
+
 proc calculateRecentEntriesMarkdown(entries: seq[Entry],
     limit: int = 10): string =
 
   for entry in entries.calculateRecentEntries:
     let dt = entry.getModificationTimeString
     result = result & fmt"* {dt}: [[{entry.id}]]" & "\n"
+
 
 proc calculateIncomingLinks(entries: seq[Entry]): References =
   let
@@ -280,10 +292,21 @@ proc convertMarkdownToHtml(input: string): string =
     .replace(linkRegularExpression.re, "[$1]($1.html)")
     .md
 
+
 proc convertHeaderToLink(match: RegexMatch): string =
   let heading = match.captures[1]
   let sanitized = heading.sanitizeOutlineLink
   return match.captures[0] & fmt"<a name='{sanitized}'>{heading}</a>"
+
+
+proc wrapImgInAnchor(match: RegexMatch): string =
+  let img = match.captures[0]
+  let maybeMatch = img.match(re".*resources/img/dithered_(.+?)\.")
+  if maybeMatch.isSome:
+    let fileName = maybeMatch.get.captures[0]
+    result = "<a class='img' href=\"resources/img/" & fileName & ".png\">" &
+        img & "</a>"
+
 
 proc convertMarkdownFileToHtml(entry: Entry): string =
   result = entry.content
@@ -291,6 +314,8 @@ proc convertMarkdownFileToHtml(entry: Entry): string =
     .replace(linkRegularExpression.re, "[[$1]]($1.html)")
     # Add in links for all headers
     .replace(re"(?<prefix>#+\s+)(?<heading>.*)", convertHeaderToLink)
+    # Wrap images. Only works if we use self closing tags
+    .replace(re"(<img.+?>)", wrapImgInAnchor)
     .md
 
 
@@ -306,6 +331,7 @@ proc createDirectoryIndexMarkdown(base: Item): string =
         result = result & recurse(child, depth + 1)
   result = recurse(base, 0)
   result = result.convertMarkdownToHtml
+
 
 proc process(entry: Entry, base: Item, templateRaw: string,
              directoryMarkdown: string, templateWithDirectory: string,
@@ -340,6 +366,7 @@ proc process(entry: Entry, base: Item, templateRaw: string,
 
     yo(fmt"{entry.id} => {outFile}")
     writeFile(outFile, templetized)
+
 
 proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
     outputDir: string, templatePath: string): void =
@@ -378,12 +405,15 @@ when useimagemagick:
       header: "wand.c".}
 
   proc addDownscaledImages(imagesDir: string, imagesOutputDir: string): void =
+    let prefix = "dithered_"
     var filePaths = newSeq[string]()
     for path in walkPattern(imagesDir.joinPath("*.png")):
-      filePaths.add(path)
+      let filename = path.extractFilename
+      if not filename.startswith(prefix):
+        filePaths.add(path)
 
     let cfiles = allocCStringArray(filePaths)
-    convert(imagesOutputDir, "dithered_", filePaths.len.cint, cfiles)
+    convert(imagesOutputDir, prefix, filePaths.len.cint, cfiles)
 
 
 #########
@@ -411,6 +441,7 @@ proc build(
   rss.buildRss(outputDir.joinPath("rss.xml"))
 
   hey("Done!")
+
 
 proc watch(
   inputDir: string = "content/entries",
@@ -445,11 +476,14 @@ proc watch(
     hey("fswatch not enabled for binary.")
     quit(1)
 
+
 proc serve(): void =
   discard execCmd("nimhttpd -p:8000 .")
 
+
 proc new_post(postsCsv: string = "content/posts.csv"): void =
   rss.writeNewPostCsv(postsCsv)
+
 
 proc dev(): void =
   let cmd = """
@@ -462,13 +496,13 @@ proc dev(): void =
     """
   discard execCmd(cmd)
 
+
 proc downscale(resourcesDir: string = "resources",
     outputDir: string = "dist"): void =
   when useimagemagick:
-    let
-      imagesDir = resourcesDir.joinPath("img")
-      imagesOutputDir = outputDir.joinPath(imagesDir)
-    addDownscaledImages(imagesDir, imagesOutputDir)
+    let imagesDir = resourcesDir.joinPath("img")
+    # Outputdir is the same as input dir for now.
+    addDownscaledImages(imagesDir, imagesDir)
 
 
 when isMainModule:

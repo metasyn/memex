@@ -16,24 +16,10 @@
   exit(-1); \
 }
 
-MagickWand* setup() {
-  MagickWand *magick_wand;
-  MagickWandGenesis();
-  return NewMagickWand();
-}
-
-
-void
-cleanup(MagickWand *magick_wand) {
-  DestroyMagickWand(magick_wand);
-  MagickWandTerminus();
-}
-
 void
 check(MagickWand *magick_wand, MagickBooleanType status) {
   if (status == MagickFalse) ThrowWandException(magick_wand);
 }
-
 
 
 /*
@@ -50,8 +36,12 @@ convert $1 \
 
  */
 void
-convertFile(MagickWand *magick_wand, char *output_path, char *prefix, char *input_file_path) {
-  // Read file, check
+convertFile(char *output_path, char *prefix, char *input_file_path) {
+
+  ///////////
+  // INPUT //
+  ///////////
+  MagickWand* magick_wand = NewMagickWand();
   MagickBooleanType status = MagickReadImage(magick_wand, input_file_path);
   check(magick_wand, status);
 
@@ -59,6 +49,7 @@ convertFile(MagickWand *magick_wand, char *output_path, char *prefix, char *inpu
   char *file_name = basename(input_file_path);
   char output_file[strlen(output_path) + 1 + strlen(prefix) + strlen(file_name) + 1];
   snprintf(output_file, sizeof output_file, "%s/%s%s", output_path, prefix, file_name);
+  printf("-> new file: %s\n", output_file);
 
   ////////////
   // RESIZE //
@@ -104,20 +95,25 @@ convertFile(MagickWand *magick_wand, char *output_path, char *prefix, char *inpu
   // Write file, check
   status = MagickWriteImages(magick_wand, output_file, MagickTrue);
   check(magick_wand, status);
+
+  ////////////
+  // FINISH //
+  ////////////
+  DestroyMagickWand(magick_wand);
 }
 
 int
 convert(char *output_path, char *prefix, int file_count, char **input_files){
   // setup
-  MagickWand *magick_wand = setup();
+  MagickWandGenesis();
 
   // loop over files
   for (int i = 0; i < file_count; i++) {
     printf("Downscaling: %s\n", input_files[i]);
-    convertFile(magick_wand, output_path, prefix, input_files[i]);
+    convertFile(output_path, prefix, input_files[i]);
   }
 
   // cleanup
-  cleanup(magick_wand);
+  MagickWandTerminus();
   return 0;
 }

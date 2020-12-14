@@ -8,16 +8,16 @@ img.avatar { background-color: white }
 
 * for [[seedling]]
 
-<img class="avatar" src="resources/img/seedling.png" />
+<img class="avatar" src="resources/img/dithered_seedling.png" />
 
 ## umbra's llama
 
 * for [[umbra]]
 
-<img class="avatar" src="resources/img/umbra.png" />
+<img class="avatar" src="resources/img/dithered_umbra.png" />
 
 ## permuta's diamond
 
 * for [[permuta]]
 
-<img class="avatar" src="resources/img/permuta.png" />
+<img class="avatar" src="resources/img/dithered_permuta.png" />

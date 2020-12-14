@@ -107,7 +107,7 @@ th {
   text-decoration: none;
 }
 
-.content a:hover {
+.content a:hover:not(.img) {
   color: var(--background-color);
   background-color: var(--text-color);
   border-radius: 8px 0px;

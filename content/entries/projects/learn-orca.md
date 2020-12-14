@@ -17,4 +17,4 @@ you can:
 * see the source of the site [here](https://github.com/metasyn/learn-orca).
 
 
-<img src="resources/img/learn-orca.png" alt="screenshot of learn-orca site" width="800"/>
+<img src="resources/img/dithered_learn-orca.png" alt="screenshot of learn-orca site" width="800"/>
