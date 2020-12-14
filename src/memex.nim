@@ -20,11 +20,11 @@ import ./common
 
 # -d:usefswatch=true
 const usefswatch {.booldefine.} = true
+const useimagemagick {.booldefine.} = true
 
 when usefswatch:
   import libfswatch
   import libfswatch/fswatch
-
 
 ##############
 # Formatters #
@@ -362,6 +362,31 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
   sync()
 
 #########
+# Image #
+#########
+
+when useimagemagick:
+  const
+    libs = gorgeEx("MagickWand-config --libs").output
+    flags = gorgeEx("MagickWand-config --cflags").output
+
+  {.passL: libs.}
+  {.passC: flags.}
+
+  proc convert(output_paht: cstring, prefix: cstring, fileCount: cint,
+      inputFiles: cstringArray): void {.importc: "convert", varargs,
+      header: "wand.c".}
+
+  proc addDownscaledImages(imagesDir: string, imagesOutputDir: string): void =
+    var filePaths = newSeq[string]()
+    for path in walkPattern(imagesDir.joinPath("*.png")):
+      filePaths.add(path)
+
+    let cfiles = allocCStringArray(filePaths)
+    convert(imagesOutputDir, "dithered_", filePaths.len.cint, cfiles)
+
+
+#########
 # Mains #
 #########
 
@@ -428,15 +453,23 @@ proc new_post(postsCsv: string = "content/posts.csv"): void =
 
 proc dev(): void =
   let cmd = """
-		tmux new-session -d -s memex \; \
-			rename-window "memex-misc" \; \
-			split-window -h -l 10 \; \
-			send-keys './memex watch' C-m \; \
-			split-window -v -l 5 \; \
-			send-keys './memex serve' C-m \; \
-		"""
+    tmux new-session -d -s memex \; \
+      rename-window "memex-misc" \; \
+      split-window -h -l 10 \; \
+      send-keys './memex watch' C-m \; \
+      split-window -v -l 5 \; \
+      send-keys './memex serve' C-m \; \
+    """
   discard execCmd(cmd)
+
+proc downscale(resourcesDir: string = "resources",
+    outputDir: string = "dist"): void =
+  when useimagemagick:
+    let
+      imagesDir = resourcesDir.joinPath("img")
+      imagesOutputDir = outputDir.joinPath(imagesDir)
+    addDownscaledImages(imagesDir, imagesOutputDir)
 
 
 when isMainModule:
-  dispatchMulti([build], [watch], [serve], [new_post], [dev])
+  dispatchMulti([build], [watch], [serve], [new_post], [dev], [downscale])
