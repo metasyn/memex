@@ -7,7 +7,8 @@
 ## reading
 * [joyful militancy](https://joyfulmilitancy.com/)
 * men without women - haruki murakami
-* neuromancer - william gibson
+* jacobin
 
 ## playing
 * ni no kuni
+* baldurs gate 3
