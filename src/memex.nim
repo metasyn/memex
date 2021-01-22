@@ -94,8 +94,12 @@ iterator allFilePaths(inputDir: string, ext = ".md"): Entry =
   for path in walkDirRec(inputDir):
     let (_, id, extension) = path.splitFile
     if extension == ext:
+      var modTime = path.getModificationTime
+      if not modTime.isInitialized:
+        nope(id & " has invalid timestamp from git.")
+        modTime = now()
       yield Entry(path: path, id: id, content: readFile(path),
-          modificationTime: path.getModificationTime)
+          modificationTime: modTime)
 
 
 proc collectEntries(inputDir: string, ext = ".md"): seq[Entry] =
