@@ -21,3 +21,9 @@ img.avatar { background-color: white }
 * for [[permuta]]
 
 <img class="avatar" src="resources/img/dithered_permuta.png" />
+
+## dlei's disc
+
+* for [[dlei]]
+
+<img class="avatar" src="resources/img/dithered_dlei.png" />
