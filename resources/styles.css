@@ -185,7 +185,7 @@ th {
   position: fixed;
   max-width: 200px;
   margin-left: -210px;
-  max-height: 75vh;
+  max-height: calc(100vh - 200px);
   overflow-y: scroll;
 
 }
