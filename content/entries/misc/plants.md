@@ -175,5 +175,12 @@ this plant is often confused with the silver pothos.
 * humidity: less sensitive
 * temperature: >50F (10C)
 
+# dieffenbachia seguine
 
-<img src="resources/img/dithered_unknown_plant_3.png" />
+<img src="resources/img/dithered_dieffenbachia_seguine.png" />
+
+* common: dumbcane
+* light: medium, partial shade
+* water: medium
+* humidity: higher is better
+* temperature: >60F (16C)
