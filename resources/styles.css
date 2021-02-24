@@ -85,6 +85,30 @@ th {
   padding-right: 25px
 }
 
+/* scroll bars */
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--light) var(--dark);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--light);
+  border-radius: 20px;
+  border: 3px solid var(--dark);
+}
+
+
 /* Classes */
 
 .hidden {
@@ -123,7 +147,6 @@ th {
   max-width: 80ch;
   margin: auto;
   padding-top: 10px;
-
 }
 
 #directory {
@@ -162,6 +185,9 @@ th {
   position: fixed;
   max-width: 200px;
   margin-left: -210px;
+  max-height: 75vh;
+  overflow-y: scroll;
+
 }
 
 @media only screen and (max-width: calc(80ch + 420px)) {

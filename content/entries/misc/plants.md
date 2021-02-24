@@ -165,8 +165,15 @@ this plant is often confused with the silver pothos.
 * humidity: higher is better
 * temperature: 65-75F (18-24C)
 
+# tradescantia albiflora 'nanouk'
 
-# needs identification!
+<img src="resources/img/dithered_tradescantia_albiflora.png" />
 
-<img src="resources/img/dithered_unknown_plant_1.png" />
+* common: fantasy venice
+* light: bright, indrect
+* water: normal
+* humidity: less sensitive
+* temperature: >50F (10C)
+
+
 <img src="resources/img/dithered_unknown_plant_3.png" />
