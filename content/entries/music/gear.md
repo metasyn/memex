@@ -28,7 +28,8 @@ My audio related gear is listed as below.
 * Keystep (Arturia)
 * Ultrapatch Pro Patchbay PX3000 (Behringer)
 * Eurorack Pro Linemixer RX1602 (Behringer)
+* KOMMANDER Infrared CV Unit (Koma)
 
 ## interface
 
-* U-PHORIA UMD404 HD 4-Channel Interface (Behringer)
+* U-PHORIA UMC1820 8-Channel Interface (Behringer)

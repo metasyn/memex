@@ -401,6 +401,9 @@ when useimagemagick:
     libs = gorgeEx("pkg-config --libs MagickWand").output
     flags = gorgeEx("pkg-config --cflags MagickWand").output
 
+  echo libs
+  echo flags
+
   {.passL: libs & " -fopenmp".}
   {.passC: flags.}
 

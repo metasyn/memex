@@ -1,6 +1,7 @@
 # 2021
-* hyperemployment: post-work, online labour and automation -  Domenico Quaranta, Janez Janša, !Mediengruppe Bitnik (Carmen Weisskopf and Domagoj Smoljo) Felix Stalder, Silvio Lorusso, Luciana Parisi
+* hyperemployment: post-work, online labour and automation - domenico quaranta, janez janša, !mediengruppe bitnik (carmen weisskopf and domagoj smoljo) felix stalder, silvio lorusso, luciana parisi
 * the communism of love - richard gilman-opalsky
+* logicomix - apostolos doxiadis and christos papadimitriou
 
 
 # 2020
