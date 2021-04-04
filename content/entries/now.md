@@ -10,8 +10,5 @@
 * jacobin
 
 ## playing
-* baldurs gate 3
-* aegis defenders
-* children of morta
-* ni no kuni
+* hades
 * hollow knight
