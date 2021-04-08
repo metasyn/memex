@@ -113,7 +113,7 @@ where the left side has a marker like a half circle
 * low voltage audio power amplifier
 * [datasheet](http://www.taydaelectronics.com/datasheets/A-206.pdf)
 
-<img src="resources/img/lm386.png" />
+<img src="resources/img/lm386.png"></img>
 
 
 ## CD4093BE
@@ -121,4 +121,4 @@ where the left side has a marker like a half circle
 * CMOS Quad 2-Input NAND Schmitt Triggers
 * [datasheet](https://www.ti.com/lit/ds/symlink/cd4093b.pdf)
 
-<img src="resources/img/cd4093be.png" />
+<img src="resources/img/cd4093be.png"></img>
