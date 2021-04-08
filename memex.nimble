@@ -11,7 +11,7 @@ bin = @["memex"]
 
 # Dependencies
 
-requires "nim >= 1.2.6"
+requires "nim >= 1.4.0"
 requires "cligen >= 1.2.2"
 requires "markdown >= 0.8.0"
 requires "nimhttpd >= 1.1.0"

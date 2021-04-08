@@ -23,8 +23,11 @@ RUN curl -LO  https://nim-lang.org/choosenim/init.sh \
     curl -L -o upx.tar.xz https://github.com/upx/upx/releases/download/v3.96/upx-3.96-i386_linux.tar.xz \
     && tar xf upx.tar.xz && cd upx-3.96-i386_linux && chmod +x upx && mv upx /usr/local/bin
 
+ADD install_imagemagick.sh .
+RUN ./install_imagemagick.sh
+
 ADD src src
 ADD config.nims .
 ADD nim.cfg .
 ADD memex.nimble .
-RUN nimble install -d -y && nim musl -d:usefswatch=false -d:useimagemagick=false -d:pcre src/memex.nim
+RUN nimble install -d -y && nim musl -d:usefswatch=false -d:useimagemagick=false -d:pcre src/memex.nim && cp src/memex /usr/local/bin/memex
