@@ -18,9 +18,9 @@ import markdown
 from ./rss import nil
 import ./common
 
-# -d:usefswatch=true
-const usefswatch {.booldefine.} = true
-const useimagemagick {.booldefine.} = true
+# -d:usefswatch or -d:useimagemagick
+const usefswatch {.booldefine.} = false
+const useimagemagick {.booldefine.} = false
 
 when usefswatch:
   import libfswatch
@@ -401,9 +401,6 @@ when useimagemagick:
     libs = gorgeEx("pkg-config --libs MagickWand").output
     flags = gorgeEx("pkg-config --cflags MagickWand").output
 
-  echo libs
-  echo flags
-
   {.passL: libs & " -fopenmp".}
   {.passC: flags.}
 
@@ -421,6 +418,16 @@ when useimagemagick:
 
     let cfiles = allocCStringArray(filePaths)
     convert(imagesOutputDir, prefix, filePaths.len.cint, cfiles)
+
+when not useimagemagick:
+
+  proc addDownscaledImages(imagesDir: string, imagesOutputDir: string): void =
+    let prefix = "dithered_"
+    var filePaths = newSeq[string]()
+    for path in walkPattern(imagesDir.joinPath("*.png")):
+      let filename = path.extractFilename
+      if not filename.startswith(prefix):
+        filePaths.add(path)
 
 
 #########
@@ -506,10 +513,9 @@ proc dev(): void =
 
 proc downscale(resourcesDir: string = "resources",
     outputDir: string = "dist"): void =
-  when useimagemagick:
-    let imagesDir = resourcesDir.joinPath("img")
-    # Outputdir is the same as input dir for now.
-    addDownscaledImages(imagesDir, imagesDir)
+  let imagesDir = resourcesDir.joinPath("img")
+  # Outputdir is the same as input dir for now.
+  addDownscaledImages(imagesDir, imagesDir)
 
 
 when isMainModule:
