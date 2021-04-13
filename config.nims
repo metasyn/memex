@@ -1,12 +1,5 @@
 from macros import error
-
-const
-  nimVersion = (major: NimMajor, minor: NimMinor, patch: NimPatch)
-
-when nimVersion <= (0, 19, 9):
-  from ospaths import `/`, splitFile
-else:
-  from os import `/`, splitFile
+from os import `/`, splitFile
 
 const
   doOptimize = true
