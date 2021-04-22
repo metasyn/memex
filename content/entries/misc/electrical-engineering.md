@@ -4,19 +4,19 @@
 
 ## ohms law
 
-ohm's law says that the voltage (volts; V) is equal to the current (amperes; I) divided by the resistance (ohms; R).
+
+I = current (amperes)
+V = voltage (volts)
+R = resistance (ohms)
 
 ```
-        I
-V  =  _____
-
-        R
+I = V / R
+V = I * R
+R = V / I
 ```
 
-all equivalent:
-V = I/R
-R = V * I
-I = V/R
+
+
 
 ## faraday's law
 
@@ -122,3 +122,9 @@ where the left side has a marker like a half circle
 * [datasheet](https://www.ti.com/lit/ds/symlink/cd4093b.pdf)
 
 <img src="resources/img/dithered_cd4093be.png" />
+
+
+# schematics
+
+within electrical engineering, we need to read schematics. they're designs that specify the components of a
+electrical circuit. reading schematics mostly involves learning a number of small icons used as a visual language to represent components. see this useful [sparkfun](https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all) guide on reading schematics.
