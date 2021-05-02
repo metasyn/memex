@@ -6,20 +6,19 @@ i have slowly been learning how to create my own synthesizer and modules from sc
 
 ## ohms law
 
-> Ohm's law states that the current through a conductor between two points is directly proportional to the voltage across the two points.
+
+I = current (amperes)
+V = voltage (volts)
+R = resistance (ohms)
 
 ```
-V = voltage
-R = resistance
-I = current
-```
-
-all equivalent:
-```
+I = V / R
 V = I * R
 R = V / I
-I = V / R
 ```
+
+
+
 
 ## faraday's law
 
@@ -125,3 +124,9 @@ where the left side has a marker like a half circle
 * [datasheet](https://www.ti.com/lit/ds/symlink/cd4093b.pdf)
 
 <img src="resources/img/dithered_cd4093be.png" />
+
+
+# schematics
+
+within electrical engineering, we need to read schematics. they're designs that specify the components of a
+electrical circuit. reading schematics mostly involves learning a number of small icons used as a visual language to represent components. see this useful [sparkfun](https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all) guide on reading schematics.
