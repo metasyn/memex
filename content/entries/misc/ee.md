@@ -1,22 +1,25 @@
 # electrical engineering notes
 
+i have slowly been learning how to create my own synthesizer and modules from scratch. however, i never studied electrical engineering, and genearlly am a complete novice. below are random notes i've been taking, while absorbing information from my classes, reading, and youtube.
+
 # laws
 
 ## ohms law
 
-ohm's law says that the voltage (volts; V) is equal to the current (amperes; I) divided by the resistance (ohms; R).
+> Ohm's law states that the current through a conductor between two points is directly proportional to the voltage across the two points.
 
 ```
-        I
-V  =  _____
-
-        R
+V = voltage
+R = resistance
+I = current
 ```
 
 all equivalent:
-V = I/R
-R = V * I
-I = V/R
+```
+V = I * R
+R = V / I
+I = V / R
+```
 
 ## faraday's law
 
