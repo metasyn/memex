@@ -1,11 +1,18 @@
 # electrical engineering notes
 
-i have slowly been learning how to create my own synthesizer and modules from scratch. however, i never studied electrical engineering, and genearlly am a complete novice. below are random notes i've been taking, while absorbing information from my classes, reading, and youtube.
+i have slowly been learning how to create my own synthesizer and modules from scratch. however, i never studied electrical engineering, and generally am a complete novice. below are random notes i've been taking and resources i'm using.
+
+# resources
+
+* Moritz Klein - Building DIY VCO, VCF, etc. [Youtube](https://www.youtube.com/channel/UCzfW6SlNEyxmAPtdr3n-_Og) - [Patreon](https://www.patreon.com/moritzklein/posts)
+* Look Mum No Computer - [Building your own modular synth](https://www.lookmumnocomputer.com/modular)
+* Niklas Ronnberg - [Synth DIY Schematics](http://familjenronnberg.se/~niklas/diy.php)
+* Natahn "Synthnerd" - [Synth DIY Schematics](https://synthnerd.wordpress.com/synth-diy/)
+
 
 # laws
 
 ## ohms law
-
 
 I = current (amperes)
 V = voltage (volts)
@@ -16,9 +23,6 @@ I = V / R
 V = I * R
 R = V / I
 ```
-
-
-
 
 ## faraday's law
 
@@ -107,6 +111,19 @@ the pins on an IC have numbers like so:
 
 where the left side has a marker like a half circle
 
+## voltage divider
+
+* passive linear circuit that reduces voltage from its input to its output
+* one way to create a voltage divider is to use a potentiometer - a resistive divider
+* If you set up two resistors - VoltageOut = Resistance2 / (Resistance1 + Resistance2) * VoltageIn
+
+
+## op-amp
+
+* op-amp is short for operational amplifier
+* it can also be used as a buffer
+* if you connect the negative out back to the post gain out it can be negative feedback
+* using this buffer, we can add resistance to the feedback loop to control the total voltage added
 
 # specific integrated circuits
 
@@ -126,7 +143,17 @@ where the left side has a marker like a half circle
 <img src="resources/img/dithered_cd4093be.png" />
 
 
+## CMOS 4000 Series
+
+* there are a lot of CMOS 4000 series ICs to do various things
+* check [wikipedia](https://en.wikipedia.org/wiki/List_of_4000-series_integrated_circuits) for datasheets and descriptions
+
+
 # schematics
 
-within electrical engineering, we need to read schematics. they're designs that specify the components of a
-electrical circuit. reading schematics mostly involves learning a number of small icons used as a visual language to represent components. see this useful [sparkfun](https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all) guide on reading schematics.
+within electrical engineering, we need to read schematics. they're designs that
+specify the components of a electrical circuit. reading schematics mostly
+involves learning a number of small icons used as a visual language to
+represent components. see this useful
+[sparkfun](https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all)
+guide on reading schematics.
