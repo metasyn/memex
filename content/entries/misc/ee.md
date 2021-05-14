@@ -157,3 +157,7 @@ involves learning a number of small icons used as a visual language to
 represent components. see this useful
 [sparkfun](https://learn.sparkfun.com/tutorials/how-to-read-a-schematic/all)
 guide on reading schematics.
+
+# bom
+
+BOM usually stands for bill of materials - a list of all the components or eletronics or pieces used in a circuit or build.
