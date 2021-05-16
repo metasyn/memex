@@ -127,21 +127,7 @@ where the left side has a marker like a half circle
 
 # specific integrated circuits
 
-## LM386
-
-* low voltage audio power amplifier
-* [datasheet](http://www.taydaelectronics.com/datasheets/A-206.pdf)
-
-<img src="resources/img/dithered_lm386.png" />
-
-
-## CD4093BE
-
-* CMOS Quad 2-Input NAND Schmitt Triggers
-* [datasheet](https://www.ti.com/lit/ds/symlink/cd4093b.pdf)
-
-<img src="resources/img/dithered_cd4093be.png" />
-
+i decided to start keeping track of specific ICs in the [[integrated-circuits]] page.
 
 ## CMOS 4000 Series
 
