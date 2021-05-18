@@ -310,6 +310,8 @@ proc wrapImgInAnchor(match: RegexMatch): string =
     let fileName = maybeMatch.get.captures[0]
     result = "<a class='img' href=\"resources/img/" & fileName & ".png\">" &
         img & "</a>"
+  else:
+    return img
 
 
 proc convertMarkdownFileToHtml(entry: Entry): string =
