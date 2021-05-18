@@ -22,6 +22,21 @@ the switch is far from being finished. but getting started is half done!
 i use firefox for 99% of my personal browsing, but often am required to use
 chrome for the occasional chrome-only website, or for work.
 
+## google drive
+
+i started a [nextcloud](nextcloud.com) server - but i still need to set up
+automatic backups.
+
+## google calendar
+
+[nextcloud](nextcloud.com) also has a contact and calendar functionality
+which i sync to phone using [davx5](https://www.davx5.com/). this has been
+surprisingly easy actually!
+
+## google authenticator
+
+i switched to using [aegis](https://getaegis.app/).
+
 ## google reader
 
 haha, google already killed this product. i use [feedly](feedly.com).
