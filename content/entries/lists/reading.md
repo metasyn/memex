@@ -2,6 +2,7 @@
 * hyperemployment: post-work, online labour and automation - domenico quaranta, janez janša, !mediengruppe bitnik (carmen weisskopf and domagoj smoljo) felix stalder, silvio lorusso, luciana parisi
 * the communism of love - richard gilman-opalsky
 * logicomix - apostolos doxiadis and christos papadimitriou
+* [stores at the mall](https://digitalcollections.wesleyan.edu/object/ir-2556) - peter blasser's thesis (2015)
 
 
 # 2020
