@@ -9,6 +9,14 @@ as i go about learning more about synthesizers and [[ee]], i continue to come ac
 
 ## CD4017BE
 
+* decade counter
+* also called a 5-stage johnson counter
+* 10 decoded ouputs
+
+## CD4040
+
+* binary divider chip
+
 ## CD4046BE
 
 ## C4015BE
