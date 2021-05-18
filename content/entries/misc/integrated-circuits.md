@@ -1,6 +1,6 @@
 # integrated circuits
 
-as i go about learning more about synthesizers and [[ee]], i continue to come across various integrated circuits that i need to keep track of. below are my notes for particular components i'm working with.
+as i go about learning more about synthesizers and [[ee]], i continue to come across various integrated circuits that i need to keep track of. below are my notes for particular components i'm working with. also see notes and more eletrical engineering terms on the [[ee]] page.
 
 # CMOS 4000 Series
 
