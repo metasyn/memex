@@ -117,6 +117,35 @@ where the left side has a marker like a half circle
 * one way to create a voltage divider is to use a potentiometer - a resistive divider
 * If you set up two resistors - VoltageOut = Resistance2 / (Resistance1 + Resistance2) * VoltageIn
 
+## BJT
+
+* biopolar junction transistor
+* uses the language of:
+  * emitter
+  * base
+  * collector
+
+## FET
+
+* field effect transistor
+* uses the language of:
+  * source
+  * gate
+  * drain
+
+## VCC VEE VDD VSS
+
+* terms for various voltage supplies on schematics
+
+* Negative Voltage Supplies
+  * VCC: Voltage Collector Collector
+  * VDD: Voltage Drain Drain
+
+* Positive Voltage Supplies
+  * VEE: Voltage Emitter Emitter
+  * VSS: Voltage Source Source
+
+Read more about the history of these names [here](https://www.etechnog.com/2019/06/vcc-vss-vdd-vee-in-electronics.html).
 
 ## op-amp
 
