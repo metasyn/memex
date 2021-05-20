@@ -1,15 +1,6 @@
 # electrical engineering notes
 
-i have slowly been learning how to create my own synthesizer and modules from scratch. however, i never studied electrical engineering, and generally am a complete novice. below are random notes i've been taking and resources i'm using. i'm also taking notes on specific [[integrated-circuits]].
-
-# resources
-
-* Dogbotic DIY Synths Virtual Workshop (10 weeks) - [Dogbotic](https://dogbotic.com/diysynths)
-* Moritz Klein - Building DIY VCO, VCF, etc. [Youtube](https://www.youtube.com/channel/UCzfW6SlNEyxmAPtdr3n-_Og) - [Patreon](https://www.patreon.com/moritzklein/posts)
-* Look Mum No Computer - [Building your own modular synth](https://www.lookmumnocomputer.com/modular)
-* Niklas Ronnberg - [Synth DIY Schematics](http://familjenronnberg.se/~niklas/diy.php)
-* Natahn "Synthnerd" - [Synth DIY Schematics](https://synthnerd.wordpress.com/synth-diy/)
-
+i never studied electrical engineering, and generally am a complete novice. below are some notes i've been taking as i learn. i'm also taking notes on specific [[integrated-circuits]] while learning about making a [[diy-synthesizer]].
 
 # laws
 
