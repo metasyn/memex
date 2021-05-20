@@ -221,7 +221,8 @@ proc calculateIncomingLinks(entries: seq[Entry]): References =
         # giving you the subgroups as I'd expect.
         let clean = outlink.replace(bracesRegex, "")
         if result.hasKey(clean):
-          result[clean].add(entry.id)
+          if not result[clean].contains(entry.id):
+            result[clean].add(entry.id)
         else:
           result[clean] = @[entry.id]
 

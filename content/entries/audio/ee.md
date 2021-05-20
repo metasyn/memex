@@ -1,6 +1,9 @@
 # electrical engineering notes
 
-i never studied electrical engineering, and generally am a complete novice. below are some notes i've been taking as i learn. i'm also taking notes on specific [[integrated-circuits]] while learning about making a [[diy-synthesizer]].
+i never studied electrical engineering, and generally am a complete novice.
+below are some notes i've been taking as i learn. i'm also taking notes on
+specific [[integrated-circuits]] while learning about making a
+[[diy-synthesizer]].
 
 # laws
 
@@ -31,6 +34,7 @@ a electromagnetic field, which is, electromagnetic induction
 * Ohm (Ω) = electrical resistance
 * Farad = capacitance of electrical potential
 * K = shorthand for 1000 Ohms often
+  * also 2K8 means 2800 for example
 
 # components
 
