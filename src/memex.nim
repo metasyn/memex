@@ -493,6 +493,19 @@ proc watch(
     hey("fswatch not enabled for binary.")
     quit(1)
 
+proc rename(
+  inputDir: string = "content/entries",
+  outputDir: string = "dist",
+  old, new: string): void =
+  let entries = collectEntries(inputDir)
+
+  yo("Replacing " & old & " with " & new)
+
+  for entry in entries:
+    let regex = r"\[\[" & old & r"\]\]"
+    let newContent = entry.content.replace(regex.re, fmt"[[{new}]]")
+    writeFile(entry.path, newContent)
+
 
 proc serve(): void =
   discard execCmd("nimhttpd -p:8000 .")
@@ -522,4 +535,4 @@ proc downscale(resourcesDir: string = "resources",
 
 
 when isMainModule:
-  dispatchMulti([build], [watch], [serve], [new_post], [dev], [downscale])
+  dispatchMulti([build], [watch], [serve], [new_post], [rename], [dev], [downscale])

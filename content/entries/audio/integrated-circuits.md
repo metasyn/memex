@@ -1,6 +1,6 @@
 # integrated circuits
 
-i'm learning how to make my own [[diy-synthesizier]]. also see my notes on [[ee]].
+i'm learning how to make my own [[diy-synthesizier]]. also see my notes on [[eletrical-engineering]].
 
 # CMOS 4000 Series
 
