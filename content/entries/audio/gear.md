@@ -8,6 +8,7 @@ My audio related gear is listed as below.
 * Mother-32 (Moog)
 * Subharmonicon (Moog)
 * Septavox (Critter & Guitari)
+* TB-03 Bass Line  (Roland)
 
 ## multipurpose
 
