@@ -211,6 +211,10 @@ proc calculateIncomingLinks(entries: seq[Entry]): References =
 
   result = newTable[string, seq[string]]()
 
+  var entryIds = newSeq[string]()
+  for entry in entries:
+    entryIds.add(entry.id)
+
   # First pass for backlinks
   for entry in entries:
     if fileExists(entry.path):
@@ -225,6 +229,13 @@ proc calculateIncomingLinks(entries: seq[Entry]): References =
             result[clean].add(entry.id)
         else:
           result[clean] = @[entry.id]
+
+        if not entryIds.contains(clean):
+          nope(fmt"entry {entry.id} has broken link to {clean}")
+
+  for item, list in result.pairs:
+    if list.len == 0:
+      nope(fmt"orphan page found: {item}")
 
 
 proc calculateDirectory(entries: seq[Entry], inputDir: string): Item =
@@ -388,6 +399,12 @@ proc convertFiles(entries: seq[Entry], base: Item, directoryMarkdown: string,
     templateWithDirectory = readFile(templatePath)
     references = calculateIncomingLinks(entries)
     recentEntriesMarkdown = calculateRecentEntriesMarkdown(entries)
+
+
+  for reference, list in references.pairs:
+    if list.len == 0:
+      nope(fmt"{reference} is an orphan!")
+
 
   # Second pass fore templetizing
   for entry in entries:
