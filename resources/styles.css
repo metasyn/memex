@@ -36,6 +36,20 @@ a {
   color: var(--text-color);
 }
 
+h1 {
+  font-size: 28px;
+}
+
+
+h2 {
+  font-size: 24px;
+}
+
+
+h3 {
+  font-size: 20px;
+}
+
 footer img {
   border-radius: 5px;
   padding: 10px;
@@ -126,7 +140,6 @@ th {
 
 .content a {
   font-family: var(--font-family);
-  font-size: var(--font-size-base);
   font-weight: bold;
   text-decoration: none;
 }

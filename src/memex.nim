@@ -317,10 +317,18 @@ proc convertHeaderToLink(match: RegexMatch): string =
 
 proc wrapImgInAnchor(match: RegexMatch): string =
   let img = match.captures[0]
-  let maybeMatch = img.match(re".*resources/img/dithered_(.+?)\.")
-  if maybeMatch.isSome:
-    let fileName = maybeMatch.get.captures[0]
-    result = "<a class='img' href=\"resources/img/" & fileName & ".png\">" &
+  var filename: string
+
+  let maybeMatchDithered = img.match(re".*resources/img/dithered_(.+?)\.")
+  if maybeMatchDithered.isSome:
+    fileName = maybeMatchDithered.get.captures[0]
+  else:
+    let maybeMatchNormal = img.match(re".*resources/img/(.+?)\.")
+    if maybeMatchNormal.isSome:
+      fileName = maybeMatchNormal.get.captures[0]
+
+  if fileName != "":
+    return "<a class='img' href=\"resources/img/" & fileName & ".png\">" &
         img & "</a>"
   else:
     return img
@@ -442,6 +450,7 @@ when useimagemagick:
 when not useimagemagick:
 
   proc addDownscaledImages(imagesDir: string, imagesOutputDir: string): void =
+    nope("no imagemagick!")
     let prefix = "dithered_"
     var filePaths = newSeq[string]()
     for path in walkPattern(imagesDir.joinPath("*.png")):

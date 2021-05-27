@@ -1,6 +1,10 @@
 # diy-synthesizer
 
-notes on making your own synthesizer from scratch.
+below are notes on building my own synthesizer from scratch.
+
+# sanfreo-euroling
+
+i attended the diy synthesizer workshop from [dogbotic](https://dogbotic.com/). the course covers an informal introduction to [[electrical-engineering]] as well as introduction to various basic circuits for building synthesizers with simple [[integrated-circuits]]. this was what i created at the end of the class! see the [[sanfreo-euroling]] page for information on what it was, looks like, and the schematic.
 
 # resources
 
