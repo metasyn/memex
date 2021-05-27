@@ -73,14 +73,14 @@ lastly, the audio out is a 1/4" (7mm) jack, and the whole thing is powered by a 
 
 ## enclosure
 
+<img src="resources/img/dithered_sanfreo_2.png"></img>
+
 i purchased an old wooden box at salvation army for $2 USD. i drilled holes in it, then painted it.
 
 ## chaos modes
 
-each switch was meant to have an OFF position when set to the middle setting. however, something about this circuit causes a lot of noise to end up being picked up. i have yet to identify how / where its triggering.
-
-
-<img src="resources/img/dithered_sanfreo_2.png"></img>
+each switch was meant to have an OFF position when set to the middle setting. however, something about this circuit causes a lot of noise to end up being picked up. i have yet to identify how / where its triggering. however, if you leave the LFOs on chaos mode and set the main clock input to be on chaos mode,
+you get a lot of unexplainable, unexpected behavior. chaos!
 
 ## naming
 
