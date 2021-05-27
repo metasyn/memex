@@ -2,12 +2,12 @@
 
 <img src="resources/img/dithered_sanfreo_3.png"></img>
 
-the sanfreo euroling is a [[diy-synthesizer]]. i made it as part of a [dogbotic](https://dogbotic.com/) course on diy synthesizers. it features:
+the sanfreo euroling is a [[diy-synthesizer]]. i made it as part of a [dogbotic](https://dogbotic.com/) course. it features:
 
 * a square oscillator
 * an internal clock
-* three low frequency ocsillators (LFOs)
-* a binary divider for creating ocatves
+* three low frequency oscillators (LFOs)
+* a binary divider for creating octaves
 * a multiplexer for creating rhythms
 * "chaos modes"
 * external clock sync
@@ -57,7 +57,7 @@ the three switches then feed into the multiplexers pins that control which "step
 
 ### interface
 
-from the sonic engine, we have 6 outputs (the 6 different octaves of the original oscillator). from the timing engine, we have 8 steps that will be triggered every so often. when they are triggered, they will let their current out through the multiplexers common output into our audio output. the 6 pitches and 8 steps are each assigned to their own cord which comes out of the top of the synthesizer. there are 6 columns of vertically connected breadboard strips. by patching different combinations of the cables, you can create different sequences and rythms.
+from the sonic engine, we have 6 outputs (the 6 different octaves of the original oscillator). from the timing engine, we have 8 steps that will be triggered every so often. when they are triggered, they will let their current out through the multiplexers common output into our audio output. the 6 pitches and 8 steps are each assigned to their own cord which comes out of the top of the synthesizer. there are 6 columns of vertically connected breadboard strips. by patching different combinations of the cables, you can create different sequences and rhythm.
 
 lastly, the audio out is a 1/4" (7mm) jack, and the whole thing is powered by a 9V battery.
 
@@ -75,12 +75,16 @@ lastly, the audio out is a 1/4" (7mm) jack, and the whole thing is powered by a 
 
 i purchased an old wooden box at salvation army for $2 USD. i drilled holes in it, then painted it.
 
+## chaos modes
+
+each switch was meant to have an OFF position when set to the middle setting. however, something about this circuit causes a lot of noise to end up being picked up. i have yet to identify how / where its triggering.
+
 
 <img src="resources/img/dithered_sanfreo_2.png"></img>
 
 ## naming
 
-> The “codename” system of naming modules and synthesizers was pervasive for a long while during the 20th century, but as when there is any pervasive system, there is also an equally perverse reaction to it. Using words to name synthesizers, as a reaction to the abstract codename, led to some quite “gonzo” names, as well as serious and profound re-contextualization of the role of the synthesizer. By naming they create a space around the new word, with specific nodes of meaning that would be implied to the reader of science fiction, but also real electronic interpolations between these nodes; a web of meaning modulations is created around the name.
+> The “codename” system of naming modules and synthesizers was pervasive for a long while during the 20th centuyy, but as when there is any pervasive system, there is also an equally perverse reaction to it. Using words to name synthesizers, as a reaction to the abstract codename, led to some quite “gonzo” names, as well as serious and profound re-contextualization of the role of the synthesizer. By naming they create a space around the new word, with specific nodes of meaning that would be implied to the reader of science fiction, but also real electronic interpolations between these nodes; a web of meaning modulations is created around the name.
 
 - Peter Blasser, [STORES AT THE MALL](http://www.synthmall.com/portDOCK/wesleyanTHESIS.pdf)
 
@@ -98,14 +102,14 @@ and so:
 
 ## learnings
 
-* tripple check before soldering an IC to a board
-* quadruple check before desoldering anything - sometimes its easier to simiply cut a wire somewhere...
+* triple check before soldering an IC to a board
+* quadruple check before desoldering anything - sometimes its easier to simply cut a wire somewhere...
 * go slow on your case / enclosure. way harder to replace than a resistor or random component!
 
-## todo
+## todo / in progress
 
 * i think i need to add another resistor maybe to the audio out. its coming out way too hot.
-* finish soldering battery hook up, add velco so it can't move around
-* add nonconductive material to any exposed leads that might touch each other
+* finish soldering battery hook up, add velcro so it can't move around
+* add non-conductive material to any exposed leads that might touch each other
 * add latch to ensure the case doesn't accidentally open
-* add rubberfeet to the bottom
+* add rubber feet to the bottom
