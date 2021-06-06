@@ -50,12 +50,20 @@ h3 {
   font-size: 20px;
 }
 
-footer img {
+footer img, svg {
   border-radius: 5px;
   padding: 10px;
   width: 32px;
   height: 32px;
   background-color: var(--dark);
+}
+
+footer svg {
+  display: inline-block;
+}
+
+footer path {
+  fill: white;
 }
 
 img {

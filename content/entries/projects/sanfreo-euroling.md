@@ -68,6 +68,8 @@ lastly, the audio out is a 1/4" (7mm) jack, and the whole thing is powered by a 
 
 <img src="resources/img/dithered_sanfreo_1.png"></img>
 
+the schematic is missing one voltage divider with a potentiometer on the audio out. this is used to decrease the volume, because before the audio signal was way too high / loud /hot.
+
 <img src="resources/img/sanfreo_euroling.png"></img>
 
 
@@ -108,8 +110,6 @@ and so:
 
 ## todo / in progress
 
-* i think i need to add another resistor maybe to the audio out. its coming out way too hot.
-* finish soldering battery hook up, add velcro so it can't move around
-* add non-conductive material to any exposed leads that might touch each other
+* add knobs!
 * add latch to ensure the case doesn't accidentally open
 * add rubber feet to the bottom
