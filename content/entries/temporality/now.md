@@ -1,11 +1,11 @@
 # now
 
 ## personal
-* synthesizers! learning how to build them. see [[electrical-engineering]] and [[integrated-circuits]]
+* synthesizers! learning how to build them.
+  * see [[electrical-engineering]] and [[integrated-circuits]]
 * trying to figure out how to [[degoogle]] some of my life
 * building this [[memex]]
 
 ## playing
-*
-* hades
-* hollow knight
+
+* children of morta
