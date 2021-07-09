@@ -4,8 +4,8 @@
 * logicomix - apostolos doxiadis and christos papadimitriou
 * [stores at the mall](https://digitalcollections.wesleyan.edu/object/ir-2556) - peter blasser's thesis (2015)
 * [the second convivialist manifesto: towards a post-neolibral world](https://online.ucpress.edu/cs/article/1/1/12721/112920/THE-SECOND-CONVIVIALIST-MANIFESTO-Towards-a-Post)
+* Ex. Mag #01: Cyberpunk (Peow)
 * carbon capture - howard j. herzog
-
 
 # 2020
 
