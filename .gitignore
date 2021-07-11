@@ -6,3 +6,8 @@ dist
 memex
 pcre*
 ImageMagick*
+
+
+# Added by cargo
+
+/target
