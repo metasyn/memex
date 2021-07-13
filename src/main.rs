@@ -57,8 +57,9 @@ fn collect_entries(content_path: &str) -> Result<Vec<PathBuf>> {
     return Ok(result);
 }
 
-// todo implement clean
+// TODO: implement clean
 
+// TODO: pass template path
 fn build(content_path: &str) -> Result<()> {
     info("building memex...");
 
@@ -76,6 +77,7 @@ fn build(content_path: &str) -> Result<()> {
             //
             for path in paths {
                 // TODO: keep track of references before doing replacements
+                // TODO: also calculate directory
                 // finish replacements
                 // write files
                 let contents = load_file(path)?;
