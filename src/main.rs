@@ -5,19 +5,24 @@ extern crate colored;
 use colored::*;
 
 use std::collections::HashSet;
-use std::io::Result;
-use std::fs;
+use std::fmt::Display;
+use std::fs::{self, File};
+use std::io::{BufReader, Read, Result};
 use std::path::{Path, PathBuf};
 
-
-fn info(msg: &str) {
+fn info<T>(msg: T)
+where
+    T: AsRef<str> + Display,
+{
     println!("{} {}", "[INFO]".bright_cyan().bold(), msg)
 }
 
-fn err(msg: &str) {
+fn err<T>(msg: T)
+where
+    T: AsRef<str> + Display,
+{
     println!("{} {}", "[ERROR]".bright_red().bold(), msg)
 }
-
 
 // recursively find all .md files in the content path
 fn collect_entries(content_path: &str) -> Result<Vec<PathBuf>> {
@@ -49,20 +54,63 @@ fn collect_entries(content_path: &str) -> Result<Vec<PathBuf>> {
         todo.extend(directories.into_iter().collect::<Vec<PathBuf>>());
         result.extend(files);
     }
-
     return Ok(result);
 }
 
+// todo implement clean
+
 fn build(content_path: &str) -> Result<()> {
     info("building memex...");
+
     match collect_entries(content_path) {
         Ok(paths) => {
-            info(format!("compiling {} entries...", paths.len().to_string().bright_yellow()).as_str())
-        },
+            info(
+                format!(
+                    "compiling {} entries...",
+                    paths.len().to_string().bright_yellow()
+                )
+                .as_str(),
+            );
+            // handle specific files here
+            let base_template = load_file("./templates/base.html")?;
+            //
+            for path in paths {
+                // TODO: keep track of references before doing replacements
+                // finish replacements
+                // write files
+                let contents = load_file(path)?;
+
+                let replacements = vec![("directory", "something"), ("content", contents.as_str())];
+                let replaced = replace_templates(base_template.clone(), replacements);
+                info(replaced);
+            }
+        }
         Err(_) => err("couldn't collect paths..."),
     }
-    err("hey");
     Ok(())
+}
+
+fn load_file<P: AsRef<Path>>(path: P) -> std::io::Result<String> {
+    let file = File::open(path)?;
+    let mut buf_reader = BufReader::new(file);
+    let mut contents = String::new();
+    buf_reader.read_to_string(&mut contents)?;
+    return Ok(contents);
+}
+
+fn make_template(item: &str) -> String {
+    return format!("{{{{ {} }}}}", item);
+}
+
+fn replace_template<'a>(body: String, item: &str, replacement: &str) -> String {
+    return body.replace(make_template(item).as_str(), replacement);
+}
+
+fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str)>) -> String {
+    for (key, value) in mapping.iter() {
+        body = replace_template(body, key, value)
+    }
+    return body;
 }
 
 fn main() -> Result<()> {
@@ -70,16 +118,19 @@ fn main() -> Result<()> {
         .version("0.2")
         .author("xander johnson xander@metasyn.pw")
         .about("personal memex")
-        .arg(Arg::with_name("v")
-             .short("v")
-             .multiple(true)
-             .help("sets the level of verbosity."))
-        .arg(Arg::with_name("content")
-             .short("c")
-             .help("sets the content folder"))
+        .arg(
+            Arg::with_name("v")
+                .short("v")
+                .multiple(true)
+                .help("sets the level of verbosity."),
+        )
+        .arg(
+            Arg::with_name("content")
+                .short("c")
+                .help("sets the content folder"),
+        )
         .subcommand(App::new("build").about("builds the memex"))
         .get_matches();
-
 
     if let Some(ref matches) = matches.subcommand_matches("build") {
         let content_path = matches.value_of("content").unwrap_or("content/entries");
@@ -87,4 +138,34 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    // import namespace above here
+    use super::*;
+
+    #[test]
+    fn test_make_template() {
+        assert_eq!(make_template("test"), "{{ test }}")
+    }
+
+    #[test]
+    fn test_replace_template() {
+        assert_eq!(
+            replace_template(String::from("{{ test }}"), "test", "fab"),
+            "fab"
+        )
+    }
+
+    #[test]
+    fn test_replace_templates() {
+        assert_eq!(
+            replace_templates(
+                String::from("{{ test }} {{ something }}"),
+                vec![("test", "fab"), ("something", "replacement")]
+            ),
+            "fab replacement"
+        )
+    }
 }
