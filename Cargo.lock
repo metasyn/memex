@@ -185,6 +185,8 @@ dependencies = [
  "clap",
  "colored",
  "comrak",
+ "lazy_static",
+ "regex",
 ]
 
 [[package]]
