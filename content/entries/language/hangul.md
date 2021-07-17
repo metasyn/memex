@@ -163,7 +163,7 @@ means:
 > contacts the roof of the mouth.  it is heavily palatalized, meaning that the
 > middle of the tongue is bowed and raised towards the hard palate.
 
-##  labials
+## labials
 
 
 these are all [alveolar](https://en.wikipedia.org/wiki/labial_consonant) [stops](https://en.wikipedia.org/wiki/plosive).

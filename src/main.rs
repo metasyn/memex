@@ -5,7 +5,7 @@ extern crate colored;
 use colored::*;
 
 use std::process::Command;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::ffi::OsString;
 use std::fmt::Display;
 use std::fs::{self, File};
@@ -14,7 +14,7 @@ use std::io::prelude::Write;
 use std::path::{Path, PathBuf};
 
 use lazy_static::lazy_static;
-use regex::Regex;
+use regex::{Captures, Regex};
 
 extern crate chrono;
 use chrono::{Local, NaiveDate};
@@ -39,8 +39,8 @@ where
 
 // TODO: implement clean
 
+// set the comrak html -> md settings
 fn comrak_options() -> comrak::ComrakOptions {
-    // i'm rendering my own content
     let mut options = comrak::ComrakOptions::default();
     options.render.unsafe_ = true;
     options.render.escape = false;
@@ -67,43 +67,58 @@ struct Entry {
     content: String,
     modification_date: String,
     links: Vec<String>,
+    references: Option<Vec<String>>,
+    path: PathBuf,
 }
 
 // Item struct is for calculating the directory
+#[derive(Debug)]
 struct DirectoryItem {
     id: String,
     children: Vec<DirectoryItem>,
 }
 
 
-trait Builder {
-    // collectors
-    fn collect_entries(paths: &str) -> Result<Vec<Entry>>;
+impl DirectoryItem {
+    fn new(id: &str) -> DirectoryItem {
+        return DirectoryItem {
+            id: String::from(id),
+            children: Vec::new(),
+        }
+    }
 
-    // calculators
-//    fn calculate_directory(entries: Vec<Entry>) -> DirectoryItem;
-//    fn calculate_recent(entries: Vec<Entry>) -> Vec<Entry>;
-//
-//    // converters
-//    fn convert_link_to_md(input: String) -> String;
-//    fn convert_wrap_img_anchor(input: String) -> String;
-//    fn convert_wrap_header_anarchor(input: String) -> String;
-//    fn convert_md_to_html(input: String) -> String;
-//
-//
-//    // render
-//    fn render_outline(entry: Entry) -> String;
-//    fn render_navigation(item: DirectoryItem) -> String;
+    fn add(&mut self, id: &str) {
+        self.children.push(DirectoryItem::new(id));
+
+    }
+
+    fn contains(&self, child: &String) -> bool {
+        return self.children
+            .iter()
+            .map(|x| &x.id)
+            .collect::<Vec<&String>>()
+            .contains(&child);
+    }
+
+    fn get(&self, id: &str) -> Option<&DirectoryItem> {
+        for child in &self.children {
+            if child.id == id {
+                return Some(&child)
+            }
+        }
+        return None;
+    }
 }
-
 
 ////////////
 // REGEX //
 ///////////
 
-lazy_static! {static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(?P<link>.+?)]]").unwrap();}
 lazy_static! {static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();}
 
+lazy_static! {static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(?P<link>.+?)]]").unwrap();}
+lazy_static! {static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();}
+lazy_static! {static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();}
 
 /////////////
 // EXTRACT //
@@ -168,17 +183,100 @@ fn extract_modification_date_from_path(path: &PathBuf) -> String {
     return dt.to_string().replace("-", ".");
 }
 
+
+fn extract_references<'a>(entries: &'a Vec<Entry>) -> HashMap<String, Vec<String>> {
+    let mut result = HashMap::<String, Vec<String>>::new();
+    for entry in entries {
+        for link in &entry.links {
+            result
+                .entry(link.clone())
+                .or_insert(Vec::new())
+                .push(entry.id.clone());
+        }
+    }
+    return result;
+}
+
+fn extract_outline_md(content: &str) -> String {
+    let mut result = String::from("");
+    if HEADER_REGEX.is_match(content) {
+       let headers = content.split("\n")
+           .filter(|x| x.starts_with("#"))
+           .collect::<Vec<&str>>();
+
+       for line in headers {
+           // calculate indent before cleaning
+           let indent = "  ".repeat(line.matches("#").count());
+           result.push_str(&indent);
+
+           // replace anything that isn't a word char
+           let header_link = make_header_link(line);
+           let heading = HEADER_REGEX
+               .captures(line)
+               .expect("invalid regex; no captures for header.")
+               .name("heading")
+               .expect("invalid regex; no capture group named heading")
+               .as_str();
+
+           let link = format!("* <a class='header' href='#{}'>{}</a>\n", header_link, heading);
+           result.push_str(&link);
+       }
+    }
+    return result;
+}
+
+
+fn extract_directory(entries: &Vec<Entry>) -> DirectoryItem {
+    let directory = DirectoryItem::new("directory");
+
+
+    let paths = entries
+        .iter()
+        .map(|x| { x
+            .path
+            .as_path()
+            .components()
+            .map(|x| x.as_os_str().to_str().unwrap().replace(".md", ""))
+            .collect::<Vec<_>>()
+        })
+        .collect::<Vec<Vec<String>>>();
+
+
+    fn update(mut item: DirectoryItem, parts: &mut Vec<String>) {
+        if parts.len() == 0 {
+            return
+        }
+
+        let part = parts.pop().unwrap();
+        let child = DirectoryItem::new(&part);
+
+        if !item.contains(&part) {
+            item.children.push(child);
+        }
+
+        if parts.len() == 1 {
+            item.add(&parts.pop().unwrap());
+            return
+        }
+
+        let child = item.get(&part).unwrap();
+        // return update(child, parts);
+    }
+
+
+    return directory;
+}
+
+
 /////////////
 // CONVERT //
 /////////////
 
-fn convert_links_to_md(content: &str) -> String {
+fn convert_internal_to_md(content: &str) -> String {
     return INTERNAL_LINK_REGEX
         .replace_all(&content, "[$link]($link.html)")
         .to_string();
 }
-
-
 
 // recursively find all .md files in the content path
 // and turn them into entries
@@ -215,6 +313,8 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
                     content: content.clone(),
                     links: extract_links_from_content(content.as_str()),
                     modification_date: extract_modification_date_from_path(path),
+                    path: path.strip_prefix(content_path).unwrap().to_path_buf(),
+                    references: None,
                 }
             )
             .collect();
@@ -222,6 +322,21 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
         todo.extend(directories.into_iter().collect::<Vec<PathBuf>>());
         result.extend(files);
     }
+
+    // now that all entries are collected, we can calculate references
+    let references = extract_references(&result);
+
+    // attach references
+    result
+        .iter_mut()
+        .for_each(|x| {
+            let opt = references.get(&x.id);
+            x.references = match &opt {
+                Some(refs) => Some(refs.to_vec()),
+                None => None,
+            };
+        });
+
     return Ok(result);
 }
 
@@ -243,20 +358,26 @@ fn build(content_path: &str) -> Result<()> {
             );
             // handle specific files here
             let base_template = load_file("./templates/base.html")?;
+            let directory = extract_directory(&entries);
+            hey(format!("{:?}", directory));
 
-            for entry in entries{
+            for entry in entries {
 
                 // get or set replacements
                 let contents = entry.content.as_str();
                 let timestamp = entry.modification_date.to_string();
+                let references = format_references(entry.references.unwrap_or(Vec::new()));
+                let outline = extract_outline_md(contents);
 
-                // TODO: calculate references
                 // TODO: calculate directory
-                // TODO: calculate TOC
-                let references = format_references(entry.links);
 
                 // make replacements
-                let replacements = vec![("content", contents), ("references", &references), ("timestamp", timestamp.as_str())];
+                let replacements = vec![
+                    ("content", contents),
+                    ("references", &references),
+                    ("timestamp", timestamp.as_str()),
+                    ("toc", &outline),
+                ];
                 let html = replace_templates(base_template.clone(), replacements);
 
                 // write replacements
@@ -293,8 +414,22 @@ fn format_references(references: Vec<String>) -> String {
 ///////////////
 
 fn md(s: &str) -> String {
-    return comrak::markdown_to_html(s, &COMRAK_OPTIONS);
 
+    // TODO: figure out why this didn't work with replace_all on the entire string
+    // it seems weird to have to split the string first, then rejoin it.
+    // whatever.
+    let prerender = s.split("\n")
+        .map(|x| {
+            HEADER_REGEX
+                .replace_all(
+                    &x,  |caps: &Captures| {
+                    format!("{} <a name='{}'>{}</a>", &caps[1], make_header_link(&caps[2]), &caps[2])
+                }).to_string()
+        })
+        .collect::<Vec<String>>()
+        .join("\n");
+
+    return comrak::markdown_to_html(&prerender, &COMRAK_OPTIONS);
 }
 
 fn make_template(item: &str) -> String {
@@ -302,7 +437,7 @@ fn make_template(item: &str) -> String {
 }
 
 fn replace_template<'a>(body: String, item: &str, replacement: &str) -> String {
-    let repl = convert_links_to_md(replacement);
+    let repl = convert_internal_to_md(replacement);
     let html = md(&repl);
     return body.replace(make_template(item).as_str(), &html);
 }
@@ -313,6 +448,20 @@ fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str)>) -> String
     }
     return String::from(body);
 
+}
+
+fn make_header_link(header: &str) -> String {
+    let temp = HEADER_REGEX
+        .replace_all(header, "$heading")
+        // these should just disappear
+        .replace("'", "")
+        .replace("\"", "");
+
+
+    // everthing else not a word becomes a dash
+   let clean = NON_WORD_REGEX
+       .replace_all(&temp.trim(), "-");
+   return String::from(clean);
 }
 
 //////////
@@ -364,7 +513,7 @@ mod tests {
     fn test_replace_template() {
         assert_eq!(
             replace_template(String::from("{{ test }}"), "test", "fab"),
-            "fab"
+            "<p>fab</p>\n"
         )
     }
 
@@ -375,7 +524,7 @@ mod tests {
                 String::from("{{ test }} {{ something }}"),
                 vec![("test", "fab"), ("something", "replacement")]
             ),
-            "fab replacement"
+            "<p>fab</p>\n <p>replacement</p>\n"
         )
     }
 
@@ -406,8 +555,8 @@ mod tests {
     }
 
     #[test]
-    fn test_convert_links_to_md() {
-        let converted = convert_links_to_md("[[test]]");
+    fn test_convert_internal_to_md() {
+        let converted = convert_internal_to_md("[[test]]");
         assert_eq!(converted, "[test](test.html)");
     }
 }
