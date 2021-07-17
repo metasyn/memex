@@ -4,29 +4,33 @@ use clap::{App, Arg};
 extern crate colored;
 use colored::*;
 
+use std::process::Command;
 use std::collections::HashSet;
 use std::ffi::OsString;
 use std::fmt::Display;
 use std::fs::{self, File};
 use std::io::{BufReader, Read, Result};
+use std::io::prelude::Write;
 use std::path::{Path, PathBuf};
 
 use lazy_static::lazy_static;
 use regex::Regex;
 
+extern crate chrono;
+use chrono::{Local, NaiveDate};
 
 ///////////
 // UTILS //
 ///////////
 
-fn info<T>(msg: T)
+fn hey<T>(msg: T)
 where
     T: AsRef<str> + Display,
 {
     println!("{} {}", "[INFO]".bright_cyan().bold(), msg)
 }
 
-fn err<T>(msg: T)
+fn nope<T>(msg: T)
 where
     T: AsRef<str> + Display,
 {
@@ -35,32 +39,81 @@ where
 
 // TODO: implement clean
 
+fn comrak_options() -> comrak::ComrakOptions {
+    // i'm rendering my own content
+    let mut options = comrak::ComrakOptions::default();
+    options.render.unsafe_ = true;
+    options.render.escape = false;
+
+    options.parse.smart = true;
+
+    options.extension.table = true;
+    options.extension.autolink = true;
+    options.extension.tagfilter = false;
+    return options;
+}
+
+
+
 /////////////
 // STRUCTS //
 /////////////
 
+// Entry struct is utility for referencing
+// the id, content and back references of an entry
+#[derive(Debug)]
 struct Entry {
-    id: OsString,
+    id: String,
     content: String,
-    references: Vec<String>,
+    modification_date: String,
+    links: Vec<String>,
 }
+
+// Item struct is for calculating the directory
+struct DirectoryItem {
+    id: String,
+    children: Vec<DirectoryItem>,
+}
+
+
+trait Builder {
+    // collectors
+    fn collect_entries(paths: &str) -> Result<Vec<Entry>>;
+
+    // calculators
+//    fn calculate_directory(entries: Vec<Entry>) -> DirectoryItem;
+//    fn calculate_recent(entries: Vec<Entry>) -> Vec<Entry>;
+//
+//    // converters
+//    fn convert_link_to_md(input: String) -> String;
+//    fn convert_wrap_img_anchor(input: String) -> String;
+//    fn convert_wrap_header_anarchor(input: String) -> String;
+//    fn convert_md_to_html(input: String) -> String;
+//
+//
+//    // render
+//    fn render_outline(entry: Entry) -> String;
+//    fn render_navigation(item: DirectoryItem) -> String;
+}
+
 
 ////////////
 // REGEX //
 ///////////
 
-lazy_static! {static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(.+?)]]").unwrap();}
+lazy_static! {static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(?P<link>.+?)]]").unwrap();}
+lazy_static! {static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();}
 
 
 /////////////
 // EXTRACT //
 /////////////
 
-fn extract_content_from_path(path_buf: &PathBuf) -> Option<(OsString, String)> {
+fn extract_content_from_path(path_buf: &PathBuf) -> Option<(OsString, String, &PathBuf)> {
     // check file stem
     let stem = path_buf.file_stem();
     if stem.is_none() {
-        err(format!("{:?} has no file stem...", path_buf));
+        nope(format!("{:?} has no file stem...", path_buf));
         return None;
 
     }
@@ -68,20 +121,64 @@ fn extract_content_from_path(path_buf: &PathBuf) -> Option<(OsString, String)> {
     // check loading content
     let content = load_file(path_buf);
     if content.is_err() {
-        err(format!("{:?} content could not be loaded...", path_buf));
+        nope(format!("{:?} content could not be loaded...", path_buf));
         return None
     }
-    return Some((OsString::from(stem.unwrap()), content.unwrap()));
+    return Some((OsString::from(stem.unwrap()), content.unwrap(), path_buf));
 
 }
 
-fn extract_references_from_content(body: &str) -> Vec<String> {
+fn extract_links_from_content(content: &str) -> Vec<String> {
     INTERNAL_LINK_REGEX
-        .captures_iter(body)
+        .captures_iter(content)
         .filter_map(|c| c.get(1))
         .map(|x| String::from(x.as_str()))
         .collect()
 }
+
+
+fn extract_modification_date_from_path(path: &PathBuf) -> String {
+    let output = Command::new("git")
+        .arg("log")
+        .arg("-1")
+        .arg("--pretty=\"format:%ci\"")
+        .arg(path.as_os_str())
+        .output();
+
+    let dt: NaiveDate = match output {
+        Ok(res) => {
+            let date = String::from_utf8(res.stdout)
+                .expect("unable to read git log output");
+
+            let clean = date.replace("format:", "").replace("\"", "");
+            let subset = clean.trim();
+
+            let date_time = NaiveDate::parse_from_str(subset, "%Y-%m-%d %H:%M:%S %z");
+            match date_time {
+                Ok(dt) => dt,
+                Err(e) => panic!("{}", e),
+            }
+        },
+        Err(_) => {
+            // Could check modification time. But I check everything into git...
+            Local::today().naive_local()
+        }
+    };
+
+    return dt.to_string().replace("-", ".");
+}
+
+/////////////
+// CONVERT //
+/////////////
+
+fn convert_links_to_md(content: &str) -> String {
+    return INTERNAL_LINK_REGEX
+        .replace_all(&content, "[$link]($link.html)")
+        .to_string();
+}
+
+
 
 // recursively find all .md files in the content path
 // and turn them into entries
@@ -112,11 +209,12 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
                 None => false
             })
             .filter_map(|e| extract_content_from_path(e))
-            .map(|(stem, content)|
+            .map(|(stem, content, path)|
                 Entry{
-                    id: OsString::from(stem),
+                    id: String::from(stem.to_str().unwrap()),
                     content: content.clone(),
-                    references: extract_references_from_content(content.as_str()),
+                    links: extract_links_from_content(content.as_str()),
+                    modification_date: extract_modification_date_from_path(path),
                 }
             )
             .collect();
@@ -133,11 +231,11 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
 
 // TODO: pass template path
 fn build(content_path: &str) -> Result<()> {
-    info("building memex...");
+    hey("building memex...");
 
     match collect_entries(content_path) {
         Ok(entries) => {
-            info(
+            hey(
                 format!(
                     "compiling {} entries...",
                     entries.len().to_string().bright_yellow()
@@ -147,18 +245,28 @@ fn build(content_path: &str) -> Result<()> {
             let base_template = load_file("./templates/base.html")?;
 
             for entry in entries{
-                // TODO: keep track of references before doing replacements
-                // TODO: also calculate directory
-                // finish replacements
-                // write files
+
+                // get or set replacements
                 let contents = entry.content.as_str();
-                let references = format_references(entry.references);
-                let replacements = vec![("content", contents), ("references", &references)];
-                let replaced = replace_templates(base_template.clone(), replacements);
-                info(replaced);
+                let timestamp = entry.modification_date.to_string();
+
+                // TODO: calculate references
+                // TODO: calculate directory
+                // TODO: calculate TOC
+                let references = format_references(entry.links);
+
+                // make replacements
+                let replacements = vec![("content", contents), ("references", &references), ("timestamp", timestamp.as_str())];
+                let html = render_templates(base_template.clone(), replacements);
+
+                // write replacements
+                let fname = format!("dist/{}.html", entry.id);
+                hey(format!("{} => {}", entry.id.yellow(),  fname.green()));
+                let mut fd = File::create(fname)?;
+                fd.write_all(html.as_bytes())?
             }
         }
-        Err(_) => err("couldn't collect paths..."),
+        Err(_) => nope("couldn't collect paths..."),
     }
     Ok(())
 }
@@ -184,19 +292,31 @@ fn format_references(references: Vec<String>) -> String {
 // TEMPLATES //
 ///////////////
 
+fn md(s: &str) -> String {
+    return comrak::markdown_to_html(s, &COMRAK_OPTIONS);
+
+}
+
 fn make_template(item: &str) -> String {
     return format!("{{{{ {} }}}}", item);
 }
 
-fn replace_template<'a>(body: String, item: &str, replacement: &str) -> String {
+fn render_template<'a>(body: String, item: &str, replacement: &str) -> String {
     return body.replace(make_template(item).as_str(), replacement);
 }
 
-fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str)>) -> String {
+fn render_templates<'a>(mut body: String, mapping: Vec<(&str, &str)>) -> String {
+
+
+    // convert internal to md
+    body = convert_links_to_md(body.as_str());
+
     for (key, value) in mapping.iter() {
-        body = replace_template(body, key, value)
+        let val = md(value);
+        body = render_template(body, key, &val)
     }
-    return body;
+    return String::from(body);
+
 }
 
 //////////
@@ -245,17 +365,17 @@ mod tests {
     }
 
     #[test]
-    fn test_replace_template() {
+    fn test_render_template() {
         assert_eq!(
-            replace_template(String::from("{{ test }}"), "test", "fab"),
+            render_template(String::from("{{ test }}"), "test", "fab"),
             "fab"
         )
     }
 
     #[test]
-    fn test_replace_templates() {
+    fn test_render_templates() {
         assert_eq!(
-            replace_templates(
+            render_templates(
                 String::from("{{ test }} {{ something }}"),
                 vec![("test", "fab"), ("something", "replacement")]
             ),
@@ -274,10 +394,24 @@ mod tests {
 
     #[test]
     fn test_extract_references_from_content() {
-        let res = extract_references_from_content("testing [[one]] [[two]]");
+        let res = extract_links_from_content("testing [[one]] [[two]]");
         assert_eq!(res.len(), 2);
         assert_eq!(res[0], "one");
         assert_eq!(res[1], "two");
+    }
 
+    #[test]
+    fn test_extract_modification_date_from_path() {
+        let path = Path::new("Cargo.toml").to_path_buf();
+        let res = extract_modification_date_from_path(&path).to_string();
+        let regex = Regex::new(r"\d{4}.\d{2}.\d{2}").unwrap();
+        let captures = regex.captures(res.as_str()).unwrap();
+        assert_eq!(captures.len(), 1);
+    }
+
+    #[test]
+    fn test_convert_links_to_md() {
+        let converted = convert_links_to_md("[[test]]");
+        assert_eq!(converted, "[test](test.html)");
     }
 }
