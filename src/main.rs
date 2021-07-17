@@ -257,7 +257,7 @@ fn build(content_path: &str) -> Result<()> {
 
                 // make replacements
                 let replacements = vec![("content", contents), ("references", &references), ("timestamp", timestamp.as_str())];
-                let html = render_templates(base_template.clone(), replacements);
+                let html = replace_templates(base_template.clone(), replacements);
 
                 // write replacements
                 let fname = format!("dist/{}.html", entry.id);
@@ -301,19 +301,15 @@ fn make_template(item: &str) -> String {
     return format!("{{{{ {} }}}}", item);
 }
 
-fn render_template<'a>(body: String, item: &str, replacement: &str) -> String {
-    return body.replace(make_template(item).as_str(), replacement);
+fn replace_template<'a>(body: String, item: &str, replacement: &str) -> String {
+    let repl = convert_links_to_md(replacement);
+    let html = md(&repl);
+    return body.replace(make_template(item).as_str(), &html);
 }
 
-fn render_templates<'a>(mut body: String, mapping: Vec<(&str, &str)>) -> String {
-
-
-    // convert internal to md
-    body = convert_links_to_md(body.as_str());
-
+fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str)>) -> String {
     for (key, value) in mapping.iter() {
-        let val = md(value);
-        body = render_template(body, key, &val)
+        body = replace_template(body, key, &value)
     }
     return String::from(body);
 
@@ -365,17 +361,17 @@ mod tests {
     }
 
     #[test]
-    fn test_render_template() {
+    fn test_replace_template() {
         assert_eq!(
-            render_template(String::from("{{ test }}"), "test", "fab"),
+            replace_template(String::from("{{ test }}"), "test", "fab"),
             "fab"
         )
     }
 
     #[test]
-    fn test_render_templates() {
+    fn test_replace_templates() {
         assert_eq!(
-            render_templates(
+            replace_templates(
                 String::from("{{ test }} {{ something }}"),
                 vec![("test", "fab"), ("something", "replacement")]
             ),
