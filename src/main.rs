@@ -1,23 +1,81 @@
+use std::cmp::min;
+use std::collections::{HashMap, HashSet};
+use std::ffi::OsString;
+use std::fmt::Display;
+use std::fs::{self, File, create_dir_all, remove_dir_all};
+use std::io::prelude::Write;
+use std::io::{BufReader, Error, ErrorKind, Read, Result};
+use std::path::{Path, PathBuf};
+use std::process::Command;
+use std::sync::mpsc::channel;
+use std::time::Duration;
+
+use lazy_static::lazy_static;
+use regex::{Captures, Regex};
+
 extern crate clap;
 use clap::{App, Arg};
 
 extern crate colored;
 use colored::*;
 
-use std::process::Command;
-use std::collections::{HashMap, HashSet};
-use std::ffi::OsString;
-use std::fmt::Display;
-use std::fs::{self, File};
-use std::io::{BufReader, Read, Result};
-use std::io::prelude::Write;
-use std::path::{Path, PathBuf};
-
-use lazy_static::lazy_static;
-use regex::{Captures, Regex};
-
 extern crate chrono;
 use chrono::{Local, NaiveDate};
+
+extern crate notify;
+use notify::{RecommendedWatcher, RecursiveMode, Watcher};
+
+
+/////////////
+// STRUCTS //
+/////////////
+
+#[derive(Debug)]
+struct Entry {
+    id: String,
+    content: String,
+    modification_date: String,
+    links: Vec<String>,
+    references: Option<Vec<String>>,
+    path: PathBuf,
+}
+
+#[derive(Debug, Default)]
+struct DirectoryItem {
+    idx: usize,
+    val: String,
+    children: Vec<usize>,
+}
+
+impl DirectoryItem {
+    fn new(idx: usize, val: String) -> Self {
+        Self {
+            idx,
+            val,
+            children: vec![],
+        }
+    }
+}
+
+#[derive(Debug, Default)]
+struct DirectoryTree {
+    arena: Vec<DirectoryItem>,
+}
+
+impl DirectoryTree {
+    fn node(&mut self, val: String) -> usize {
+        //first see if it exists
+        for node in &self.arena {
+            if node.val == val {
+                return node.idx;
+            }
+        }
+        // Otherwise, add new node
+        let idx = self.arena.len();
+        self.arena.push(DirectoryItem::new(idx, val));
+        idx
+    }
+}
 
 ///////////
 // UTILS //
@@ -37,7 +95,28 @@ where
     println!("{} {}", "[ERROR]".bright_red().bold(), msg)
 }
 
-// TODO: implement clean
+fn load_file<P: AsRef<Path>>(path: P) -> std::io::Result<String> {
+    let file = File::open(path)?;
+    let mut buf_reader = BufReader::new(file);
+    let mut contents = String::new();
+    buf_reader.read_to_string(&mut contents)?;
+    return Ok(contents);
+}
+
+// see https://stackoverflow.com/questions/26958489/how-to-copy-a-folder-recursively-in-rust
+fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result<()> {
+    fs::create_dir_all(&dst)?;
+    for entry in fs::read_dir(src)? {
+        let entry = entry?;
+        let ty = entry.file_type()?;
+        if ty.is_dir() {
+            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
+        } else {
+            fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
+        }
+    }
+    Ok(())
+}
 
 // set the comrak html -> md settings
 fn comrak_options() -> comrak::ComrakOptions {
@@ -53,72 +132,23 @@ fn comrak_options() -> comrak::ComrakOptions {
     return options;
 }
 
-
-
-/////////////
-// STRUCTS //
-/////////////
-
-// Entry struct is utility for referencing
-// the id, content and back references of an entry
-#[derive(Debug)]
-struct Entry {
-    id: String,
-    content: String,
-    modification_date: String,
-    links: Vec<String>,
-    references: Option<Vec<String>>,
-    path: PathBuf,
-}
-
-// Item struct is for calculating the directory
-#[derive(Debug)]
-struct DirectoryItem {
-    id: String,
-    children: Vec<DirectoryItem>,
-}
-
-
-impl DirectoryItem {
-    fn new(id: &str) -> DirectoryItem {
-        return DirectoryItem {
-            id: String::from(id),
-            children: Vec::new(),
-        }
-    }
-
-    fn add(&mut self, id: &str) {
-        self.children.push(DirectoryItem::new(id));
-
-    }
-
-    fn contains(&self, child: &String) -> bool {
-        return self.children
-            .iter()
-            .map(|x| &x.id)
-            .collect::<Vec<&String>>()
-            .contains(&child);
-    }
-
-    fn get(&self, id: &str) -> Option<&DirectoryItem> {
-        for child in &self.children {
-            if child.id == id {
-                return Some(&child)
-            }
-        }
-        return None;
-    }
-}
-
 ////////////
 // REGEX //
 ///////////
 
-lazy_static! {static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();}
+lazy_static! {
+    static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
+}
 
-lazy_static! {static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(?P<link>.+?)]]").unwrap();}
-lazy_static! {static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();}
-lazy_static! {static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();}
+lazy_static! {
+    static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(?P<link>.+?)]]").unwrap();
+}
+lazy_static! {
+    static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();
+}
+lazy_static! {
+    static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();
+}
 
 /////////////
 // EXTRACT //
@@ -130,17 +160,15 @@ fn extract_content_from_path(path_buf: &PathBuf) -> Option<(OsString, String, &P
     if stem.is_none() {
         nope(format!("{:?} has no file stem...", path_buf));
         return None;
-
     }
 
     // check loading content
     let content = load_file(path_buf);
     if content.is_err() {
         nope(format!("{:?} content could not be loaded...", path_buf));
-        return None
+        return None;
     }
     return Some((OsString::from(stem.unwrap()), content.unwrap(), path_buf));
-
 }
 
 fn extract_links_from_content(content: &str) -> Vec<String> {
@@ -151,7 +179,6 @@ fn extract_links_from_content(content: &str) -> Vec<String> {
         .collect()
 }
 
-
 fn extract_modification_date_from_path(path: &PathBuf) -> String {
     let output = Command::new("git")
         .arg("log")
@@ -160,29 +187,32 @@ fn extract_modification_date_from_path(path: &PathBuf) -> String {
         .arg(path.as_os_str())
         .output();
 
+    let fallback = Local::today().naive_local().to_string();
     let dt: NaiveDate = match output {
         Ok(res) => {
-            let date = String::from_utf8(res.stdout)
-                .expect("unable to read git log output");
+            let date = String::from_utf8(res.stdout).expect("unable to read git log output");
 
             let clean = date.replace("format:", "").replace("\"", "");
             let subset = clean.trim();
 
+            if subset.is_empty() {
+                return fallback;
+            }
+
             let date_time = NaiveDate::parse_from_str(subset, "%Y-%m-%d %H:%M:%S %z");
             match date_time {
                 Ok(dt) => dt,
-                Err(e) => panic!("{}", e),
+                Err(e) => panic!("subset: {} \n {}", subset, e),
             }
-        },
+        }
         Err(_) => {
             // Could check modification time. But I check everything into git...
-            Local::today().naive_local()
+            return fallback;
         }
     };
 
     return dt.to_string().replace("-", ".");
 }
-
 
 fn extract_references<'a>(entries: &'a Vec<Entry>) -> HashMap<String, Vec<String>> {
     let mut result = HashMap::<String, Vec<String>>::new();
@@ -200,73 +230,164 @@ fn extract_references<'a>(entries: &'a Vec<Entry>) -> HashMap<String, Vec<String
 fn extract_outline_md(content: &str) -> String {
     let mut result = String::from("");
     if HEADER_REGEX.is_match(content) {
-       let headers = content.split("\n")
-           .filter(|x| x.starts_with("#"))
-           .collect::<Vec<&str>>();
+        let headers = content
+            .split("\n")
+            .filter(|x| x.starts_with("#"))
+            .collect::<Vec<&str>>();
 
-       for line in headers {
-           // calculate indent before cleaning
-           let indent = "  ".repeat(line.matches("#").count());
-           result.push_str(&indent);
+        for line in headers {
+            // calculate indent before cleaning
+            let indent = "  ".repeat(line.matches("#").count());
+            result.push_str(&indent);
 
-           // replace anything that isn't a word char
-           let header_link = make_header_link(line);
-           let heading = HEADER_REGEX
-               .captures(line)
-               .expect("invalid regex; no captures for header.")
-               .name("heading")
-               .expect("invalid regex; no capture group named heading")
-               .as_str();
+            // replace anything that isn't a word char
+            let header_link = make_header_link(line);
+            let heading = HEADER_REGEX
+                .captures(line)
+                .expect("invalid regex; no captures for header.")
+                .name("heading")
+                .expect("invalid regex; no capture group named heading")
+                .as_str();
 
-           let link = format!("* <a class='header' href='#{}'>{}</a>\n", header_link, heading);
-           result.push_str(&link);
-       }
+            let link = format!(
+                "* <a class='header' href='#{}'>{}</a>\n",
+                header_link, heading
+            );
+            result.push_str(&link);
+        }
     }
     return result;
 }
 
-
-fn extract_directory(entries: &Vec<Entry>) -> DirectoryItem {
-    let directory = DirectoryItem::new("directory");
-
-
-    let paths = entries
+fn extract_directory(entries: &Vec<Entry>, root_name: &str) -> DirectoryTree {
+    let mut paths = entries
         .iter()
-        .map(|x| { x
-            .path
-            .as_path()
-            .components()
-            .map(|x| x.as_os_str().to_str().unwrap().replace(".md", ""))
-            .collect::<Vec<_>>()
+        .map(|x| {
+            x.path
+                .as_path()
+                .components()
+                .map(|x| x.as_os_str().to_str().unwrap().replace(".md", ""))
+                .filter(|x| x != "404")
+                .collect::<Vec<_>>()
         })
         .collect::<Vec<Vec<String>>>();
 
+    paths.sort();
 
-    fn update(mut item: DirectoryItem, parts: &mut Vec<String>) {
-        if parts.len() == 0 {
-            return
+    let mut tree: DirectoryTree = DirectoryTree::default();
+    let directory = tree.node(root_name.to_string());
+    let mut base = directory;
+
+    for path_segments in paths {
+        for (idx, segment) in path_segments.iter().enumerate() {
+            // always reset the base to the root on the first segment
+            if idx == 0 {
+                base = directory;
+            }
+
+            // fetch (and create if missing)
+            let node = tree.node(segment.clone());
+
+            // add nodes
+            if !tree.arena[base].children.contains(&node) {
+                tree.arena[base].children.push(node);
+            }
+            // switch base
+            base = node;
         }
-
-        let part = parts.pop().unwrap();
-        let child = DirectoryItem::new(&part);
-
-        if !item.contains(&part) {
-            item.children.push(child);
-        }
-
-        if parts.len() == 1 {
-            item.add(&parts.pop().unwrap());
-            return
-        }
-
-        let child = item.get(&part).unwrap();
-        // return update(child, parts);
     }
 
-
-    return directory;
+    return tree;
 }
 
+fn extract_recent_entries(entries: &mut Vec<Entry>) -> String {
+    let length = min(entries.len(), 20);
+
+   entries
+       .sort_by(|a, b|  b.modification_date.partial_cmp(&a.modification_date).unwrap());
+
+    entries
+       .truncate(length);
+
+    return entries
+       .iter()
+       .map(|x| format!("* {} [[{}]]", x.modification_date, x.id))
+       .collect::<Vec<String>>()
+       .join("\n");
+
+
+}
+
+
+////////////
+// FORMAT //
+////////////
+
+fn format_directory(tree: &DirectoryTree) -> String {
+    fn traverse(tree: &DirectoryTree, item: &DirectoryItem, res: &mut String, depth: u8) {
+        if item.children.len() > 0 {
+            res.push_str(
+                format!(
+                    "<details style=\"--depth: {}\"><summary>{}</summary>\n",
+                    depth, item.val
+                )
+                .as_str(),
+            );
+
+            for child in &item.children {
+                traverse(tree, &tree.arena[*child], res, depth + 1)
+            }
+
+            res.push_str("</details>\n");
+        } else {
+            res.push_str(format!("* [[{}]]\n", item.val).as_str());
+        }
+    }
+
+    // own the string here, so we can add to it
+    let mut formatted = String::new();
+    // update the string recrusively
+    traverse(tree, &tree.arena[0], &mut formatted, 0);
+
+    return formatted;
+}
+
+fn format_directory_page(tree: &DirectoryTree) -> String {
+    fn traverse(tree: &DirectoryTree, item: &DirectoryItem, res: &mut String, depth: u8) {
+
+        let indent = "  ".repeat(depth.into());
+
+        if item.children.len() > 0 {
+            res.push_str(
+                format!(
+                    "{}* {}\n",
+                    indent, item.val,
+                    ).as_str()
+                );
+
+            for child in &item.children {
+                traverse(tree, &tree.arena[*child], res, depth + 1)
+            }
+        } else {
+            res.push_str(format!("{}* [[{}]]\n", indent, item.val).as_str());
+        }
+    }
+
+    // own the string here, so we can add to it
+    let mut formatted = String::new();
+    // update the string recrusively
+    traverse(tree, &tree.arena[0], &mut formatted, 0);
+
+    return formatted;
+}
+
+fn format_references(references: Vec<String>) -> String {
+    references
+        .iter()
+        .map(|x| format!("[[{}]]", x))
+        .collect::<Vec<String>>()
+        .join(" ")
+}
 
 /////////////
 // CONVERT //
@@ -304,19 +425,17 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
             .difference(&directories)
             .filter(|e| match e.extension() {
                 Some(ext) => ext == "md",
-                None => false
+                None => false,
             })
             .filter_map(|e| extract_content_from_path(e))
-            .map(|(stem, content, path)|
-                Entry{
-                    id: String::from(stem.to_str().unwrap()),
-                    content: content.clone(),
-                    links: extract_links_from_content(content.as_str()),
-                    modification_date: extract_modification_date_from_path(path),
-                    path: path.strip_prefix(content_path).unwrap().to_path_buf(),
-                    references: None,
-                }
-            )
+            .map(|(stem, content, path)| Entry {
+                id: String::from(stem.to_str().unwrap()),
+                content: content.clone(),
+                links: extract_links_from_content(content.as_str()),
+                modification_date: extract_modification_date_from_path(path),
+                path: path.strip_prefix(content_path).unwrap().to_path_buf(),
+                references: None,
+            })
             .collect();
 
         todo.extend(directories.into_iter().collect::<Vec<PathBuf>>());
@@ -327,86 +446,15 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
     let references = extract_references(&result);
 
     // attach references
-    result
-        .iter_mut()
-        .for_each(|x| {
-            let opt = references.get(&x.id);
-            x.references = match &opt {
-                Some(refs) => Some(refs.to_vec()),
-                None => None,
-            };
-        });
+    result.iter_mut().for_each(|x| {
+        let opt = references.get(&x.id);
+        x.references = match &opt {
+            Some(refs) => Some(refs.to_vec()),
+            None => None,
+        };
+    });
 
     return Ok(result);
-}
-
-//////////////
-// COMMANDS //
-//////////////
-
-// TODO: pass template path
-fn build(content_path: &str) -> Result<()> {
-    hey("building memex...");
-
-    match collect_entries(content_path) {
-        Ok(entries) => {
-            hey(
-                format!(
-                    "compiling {} entries...",
-                    entries.len().to_string().bright_yellow()
-                )
-            );
-            // handle specific files here
-            let base_template = load_file("./templates/base.html")?;
-            let directory = extract_directory(&entries);
-            hey(format!("{:?}", directory));
-
-            for entry in entries {
-
-                // get or set replacements
-                let contents = entry.content.as_str();
-                let timestamp = entry.modification_date.to_string();
-                let references = format_references(entry.references.unwrap_or(Vec::new()));
-                let outline = extract_outline_md(contents);
-
-                // TODO: calculate directory
-
-                // make replacements
-                let replacements = vec![
-                    ("content", contents),
-                    ("references", &references),
-                    ("timestamp", timestamp.as_str()),
-                    ("toc", &outline),
-                ];
-                let html = replace_templates(base_template.clone(), replacements);
-
-                // write replacements
-                let fname = format!("dist/{}.html", entry.id);
-                hey(format!("{} => {}", entry.id.yellow(),  fname.green()));
-                let mut fd = File::create(fname)?;
-                fd.write_all(html.as_bytes())?
-            }
-        }
-        Err(_) => nope("couldn't collect paths..."),
-    }
-    Ok(())
-}
-
-
-fn load_file<P: AsRef<Path>>(path: P) -> std::io::Result<String> {
-    let file = File::open(path)?;
-    let mut buf_reader = BufReader::new(file);
-    let mut contents = String::new();
-    buf_reader.read_to_string(&mut contents)?;
-    return Ok(contents);
-}
-
-fn format_references(references: Vec<String>) -> String {
-    references
-        .iter()
-        .map(|x| format!("[[{}]]", x))
-        .collect::<Vec<String>>()
-        .join(" ")
 }
 
 ///////////////
@@ -414,17 +462,22 @@ fn format_references(references: Vec<String>) -> String {
 ///////////////
 
 fn md(s: &str) -> String {
-
     // TODO: figure out why this didn't work with replace_all on the entire string
     // it seems weird to have to split the string first, then rejoin it.
     // whatever.
-    let prerender = s.split("\n")
+    let prerender = s
+        .split("\n")
         .map(|x| {
             HEADER_REGEX
-                .replace_all(
-                    &x,  |caps: &Captures| {
-                    format!("{} <a name='{}'>{}</a>", &caps[1], make_header_link(&caps[2]), &caps[2])
-                }).to_string()
+                .replace_all(&x, |caps: &Captures| {
+                    format!(
+                        "{} <a name='{}'>{}</a>",
+                        &caps[1],
+                        make_header_link(&caps[2]),
+                        &caps[2]
+                    )
+                })
+                .to_string()
         })
         .collect::<Vec<String>>()
         .join("\n");
@@ -436,18 +489,24 @@ fn make_template(item: &str) -> String {
     return format!("{{{{ {} }}}}", item);
 }
 
-fn replace_template<'a>(body: String, item: &str, replacement: &str) -> String {
+fn replace_template<'a>(body: String, item: &str, replacement: &str, line_by_line: bool) -> String {
     let repl = convert_internal_to_md(replacement);
-    let html = md(&repl);
+    let html = match line_by_line {
+        true => repl
+            .split("\n")
+            .map(|x| md(x))
+            .collect::<Vec<String>>()
+            .join("\n"),
+        false => md(&repl),
+    };
     return body.replace(make_template(item).as_str(), &html);
 }
 
-fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str)>) -> String {
-    for (key, value) in mapping.iter() {
-        body = replace_template(body, key, &value)
+fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str, bool)>) -> String {
+    for (key, value, line_by_line) in mapping.iter() {
+        body = replace_template(body, key, &value, *line_by_line)
     }
     return String::from(body);
-
 }
 
 fn make_header_link(header: &str) -> String {
@@ -457,12 +516,134 @@ fn make_header_link(header: &str) -> String {
         .replace("'", "")
         .replace("\"", "");
 
-
     // everthing else not a word becomes a dash
-   let clean = NON_WORD_REGEX
-       .replace_all(&temp.trim(), "-");
-   return String::from(clean);
+    let clean = NON_WORD_REGEX.replace_all(&temp.trim(), "-");
+    return String::from(clean);
 }
+
+
+
+//////////////
+// COMMANDS //
+//////////////
+
+fn build(content_path: &str, template_path: &str, destination_path: &str, resources_path: &str) -> Result<()> {
+    hey("building memex...");
+
+    hey("cleaning destination dir...");
+    create_dir_all(destination_path)?;
+    remove_dir_all(destination_path)?;
+
+    hey("copying resources...");
+    copy_dir_all(resources_path, Path::new(destination_path).join(resources_path))?;
+
+    match collect_entries(content_path) {
+        Ok(mut entries) => {
+            hey(format!(
+                "compiling {} entries...",
+                entries.len().to_string().bright_yellow()
+            ));
+            let base_template = load_file(template_path)?;
+
+            let directory = extract_directory(&entries, "pages");
+            let formatted_directory = format_directory(&directory);
+            let recents = extract_recent_entries(&mut entries);
+
+            // handle special case for directory page
+            entries
+                .iter_mut()
+                .filter(|x| x.id == "directory")
+                .for_each(|x| x.content = format_directory_page(&directory));
+
+
+            for entry in entries {
+                // get or set replacements
+                let contents = entry.content.as_str();
+                let timestamp = entry.modification_date.to_string();
+                let references = format_references(entry.references.unwrap_or(Vec::new()));
+                let outline = extract_outline_md(contents);
+
+                // make replacements
+                let replacements = vec![
+                    ("directory", formatted_directory.as_str(), true),
+                    ("content", contents, false),
+                    ("references", &references, false),
+                    ("timestamp", timestamp.as_str(), false),
+                    ("toc", &outline, false),
+                    ("recent", recents.as_str(), false),
+                ];
+                let html = replace_templates(base_template.clone(), replacements);
+
+                // write replacements
+                let fname = format!("{}/{}.html", destination_path, entry.id);
+                hey(format!("{} => {}", entry.id.yellow(), fname.green()));
+                let mut fd = File::create(fname)?;
+                fd.write_all(html.as_bytes())?
+            }
+        }
+        Err(_) => nope("couldn't collect paths..."),
+    }
+    Ok(())
+}
+
+fn watch(content_path: &str, template_path: &str, destination_path: &str, resources_path: &str) -> notify::Result<()> {
+   // Create a channel to receive the events.
+    let (tx, rx) = channel();
+
+    // Automatically select the best implementation for your platform.
+    // You can also access each implementation directly e.g. INotifyWatcher.
+    let mut watcher: RecommendedWatcher = Watcher::new(tx, Duration::from_secs(2))?;
+
+    // Add a path to be watched. All files and directories at that path and
+    // below will be monitored for changes.
+    watcher.watch(content_path, RecursiveMode::Recursive)?;
+
+    // This is a simple loop, but you may want to use more complex logic here,
+    // for example to handle I/O.
+
+    let watching = "watching for changes!".bright_magenta().to_string();
+    hey(&watching);
+    loop {
+        match rx.recv() {
+            Ok(event) => {
+                hey("updating...");
+                println!("{:#?}", event);
+                build(content_path, template_path, destination_path, resources_path)?;
+                hey(&watching);
+            }
+            Err(e) => println!("watch error: {:?}", e),
+        }
+    }
+}
+
+
+fn rename(content_path: &str, old: &str, new: &str) -> Result<()> {
+    let entries = collect_entries(content_path)?;
+    hey(format!("replacing {} with {}", old, new));
+
+    let as_string = format!(r"\[\[{}\]\]", old);
+    let regex = Regex::new(as_string.as_str())
+        .expect("invalid replacement regex");
+
+
+    for entry in entries {
+        if regex.is_match(&entry.content) {
+            let replaced = regex.replace_all(&entry.content, format!("[[{}]]", new));
+            let path = Path::new(content_path).join(entry.path);
+            hey(format!("writing to {:#?}", path.as_os_str()));
+            let mut fd = File::create(path)
+                .expect("couldn't create new file");
+            fd.write_all(replaced.as_bytes())
+                .expect("couldn't write new file");
+        }
+    }
+
+    return Ok(());
+}
+
+// TODO: implement build rss
+// TODO: implement rename
+// TODO: implement image anchor wraps for dithered images
 
 //////////
 // MAIN //
@@ -477,22 +658,86 @@ fn main() -> Result<()> {
             Arg::with_name("v")
                 .short("v")
                 .multiple(true)
-                .help("sets the level of verbosity."),
+                .help("sets the level of verbosity.")
         )
         .arg(
             Arg::with_name("content")
                 .short("c")
-                .help("sets the content folder"),
+                .long("content")
+                .help("sets the content folder")
+        )
+        .arg(
+            Arg::with_name("template")
+                .short("t")
+                .long("template")
+                .help("sets the template")
+        )
+        .arg(
+            Arg::with_name("destination")
+                .short("d")
+                .long("destination")
+                .help("sets the destination directory")
+        )
+        .arg(
+            Arg::with_name("resources")
+                .short("r")
+                .long("resources")
+                .help("sets the resources directory")
         )
         .subcommand(App::new("build").about("builds the memex"))
+        .subcommand(App::new("watch").about("watches for file system changes and builds the memex on each change"))
+        .subcommand(App::new("rename").about("updates internal page id across entries")
+            .arg(
+                Arg::with_name("old")
+                    .required(true)
+                    .long("old")
+                    .short("o")
+                    .help("old name")
+                    .takes_value(true)
+            )
+            .arg(
+                Arg::with_name("new")
+                    .required(true)
+                    .long("new")
+                    .short("n")
+                    .help("new name")
+                    .takes_value(true)
+            ))
         .get_matches();
 
-    if let Some(ref matches) = matches.subcommand_matches("build") {
-        let content_path = matches.value_of("content").unwrap_or("content/entries");
-        return build(content_path);
+    let content_path = matches.value_of("content").unwrap_or("content/entries");
+    let template_path = matches.value_of("template").unwrap_or("templates/base.html");
+    let destination_path = matches.value_of("destination").unwrap_or("dist");
+    let resources_path = matches.value_of("resources").unwrap_or("resources");
+
+    if matches.subcommand_matches("build").is_some() {
+        let b = build(content_path, template_path, destination_path, resources_path);
+
+        if b.is_ok() {
+            hey("✨ Done!".bright_cyan().to_string());
+        }
+
+        return b;
     }
 
-    Ok(())
+
+    if matches.subcommand_matches("watch").is_some() {
+        let res = watch(content_path, template_path, destination_path, resources_path);
+        if res.is_err() {
+            let msg =  format!("error watching: {}", res.unwrap_err().to_string());
+            return Err(Error::new(ErrorKind::Other, msg));
+        }
+    }
+
+    if let Some(matches) = matches.subcommand_matches("rename") {
+        let old = matches.value_of("old").unwrap();
+        let new = matches.value_of("new").unwrap();
+        return rename(content_path, old, new)
+    }
+
+
+    let msg =  "invalid command";
+    return Err(Error::new(ErrorKind::Other, msg));
 }
 
 ///////////
@@ -512,7 +757,7 @@ mod tests {
     #[test]
     fn test_replace_template() {
         assert_eq!(
-            replace_template(String::from("{{ test }}"), "test", "fab"),
+            replace_template(String::from("{{ test }}"), "test", "fab", false),
             "<p>fab</p>\n"
         )
     }
@@ -522,7 +767,7 @@ mod tests {
         assert_eq!(
             replace_templates(
                 String::from("{{ test }} {{ something }}"),
-                vec![("test", "fab"), ("something", "replacement")]
+                vec![("test", "fab", false), ("something", "replacement", false)],
             ),
             "<p>fab</p>\n <p>replacement</p>\n"
         )
@@ -535,7 +780,6 @@ mod tests {
         assert!(res.is_some());
         assert!(res.unwrap().0 == "Cargo");
     }
-
 
     #[test]
     fn test_extract_references_from_content() {
@@ -558,5 +802,12 @@ mod tests {
     fn test_convert_internal_to_md() {
         let converted = convert_internal_to_md("[[test]]");
         assert_eq!(converted, "[test](test.html)");
+    }
+
+    #[test]
+    fn test_directory() {
+        let entries = collect_entries("content/entries").unwrap();
+        let directory = extract_directory(&entries, "pages");
+        assert!(directory.arena.len() > 10);
     }
 }
