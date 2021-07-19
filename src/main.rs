@@ -30,7 +30,7 @@ use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 // STRUCTS //
 /////////////
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Entry {
     id: String,
     content: String,
@@ -148,6 +148,9 @@ lazy_static! {
 }
 lazy_static! {
     static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();
+}
+lazy_static! {
+    static ref DITHERED_IMG_REGEX: Regex = Regex::new(r"(?P<img><img src=.*?resources/img/dithered_(?P<name>.+?)\..+?>)").unwrap();
 }
 
 /////////////
@@ -389,6 +392,20 @@ fn format_references(references: Vec<String>) -> String {
         .join(" ")
 }
 
+fn format_img_dither_wrap_anchor(body: &str) -> String {
+    return DITHERED_IMG_REGEX
+        .replace_all(body, |cap: &Captures| {
+            let img = &cap[1];
+            let name = &cap[2];
+
+            return format!(
+                "<a class='img' href=\"resources/img/{}.png\">{}</a>",
+                name, img,
+            )
+        })
+        .to_string();
+}
+
 /////////////
 // CONVERT //
 /////////////
@@ -461,10 +478,10 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
 // TEMPLATES //
 ///////////////
 
-fn md(s: &str) -> String {
+fn render_md(s: &str) -> String {
     // TODO: figure out why this didn't work with replace_all on the entire string
     // it seems weird to have to split the string first, then rejoin it.
-    // whatever.
+    // whatever. this is for making the header links work in the outline.
     let prerender = s
         .split("\n")
         .map(|x| {
@@ -482,7 +499,8 @@ fn md(s: &str) -> String {
         .collect::<Vec<String>>()
         .join("\n");
 
-    return comrak::markdown_to_html(&prerender, &COMRAK_OPTIONS);
+    let wrapped = format_img_dither_wrap_anchor(prerender.as_str());
+    return comrak::markdown_to_html(&wrapped, &COMRAK_OPTIONS);
 }
 
 fn make_template(item: &str) -> String {
@@ -494,10 +512,10 @@ fn replace_template<'a>(body: String, item: &str, replacement: &str, line_by_lin
     let html = match line_by_line {
         true => repl
             .split("\n")
-            .map(|x| md(x))
+            .map(|x| render_md(x))
             .collect::<Vec<String>>()
             .join("\n"),
-        false => md(&repl),
+        false => render_md(&repl),
     };
     return body.replace(make_template(item).as_str(), &html);
 }
@@ -537,7 +555,7 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
     hey("copying resources...");
     copy_dir_all(resources_path, Path::new(destination_path).join(resources_path))?;
 
-    match collect_entries(content_path) {
+    return match collect_entries(content_path) {
         Ok(mut entries) => {
             hey(format!(
                 "compiling {} entries...",
@@ -547,7 +565,7 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
 
             let directory = extract_directory(&entries, "pages");
             let formatted_directory = format_directory(&directory);
-            let recents = extract_recent_entries(&mut entries);
+            let recents = extract_recent_entries(&mut entries.clone());
 
             // handle special case for directory page
             entries
@@ -580,10 +598,13 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
                 let mut fd = File::create(fname)?;
                 fd.write_all(html.as_bytes())?
             }
+            return Ok(());
         }
-        Err(_) => nope("couldn't collect paths..."),
-    }
-    Ok(())
+        Err(e) => {
+            nope("couldn't collect paths...");
+            Err(e)
+        }
+    };
 }
 
 fn watch(content_path: &str, template_path: &str, destination_path: &str, resources_path: &str) -> notify::Result<()> {
@@ -618,7 +639,8 @@ fn watch(content_path: &str, template_path: &str, destination_path: &str, resour
 
 
 fn rename(content_path: &str, old: &str, new: &str) -> Result<()> {
-    let entries = collect_entries(content_path)?;
+    let entries = collect_entries(content_path)
+        .expect("couldn't collect entries.");
     hey(format!("replacing {} with {}", old, new));
 
     let as_string = format!(r"\[\[{}\]\]", old);
@@ -642,8 +664,7 @@ fn rename(content_path: &str, old: &str, new: &str) -> Result<()> {
 }
 
 // TODO: implement build rss
-// TODO: implement rename
-// TODO: implement image anchor wraps for dithered images
+// TODO: add native dithering approach
 
 //////////
 // MAIN //
@@ -730,8 +751,10 @@ fn main() -> Result<()> {
     }
 
     if let Some(matches) = matches.subcommand_matches("rename") {
-        let old = matches.value_of("old").unwrap();
-        let new = matches.value_of("new").unwrap();
+        let old = matches.value_of("old")
+            .expect("no old value provided");
+        let new = matches.value_of("new")
+            .expect("no new value provided");
         return rename(content_path, old, new)
     }
 
