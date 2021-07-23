@@ -13,19 +13,14 @@ use std::time::Duration;
 use lazy_static::lazy_static;
 use regex::{Captures, Regex};
 
-extern crate clap;
 use clap::{App, Arg};
 
-extern crate colored;
 use colored::*;
 
-extern crate chrono;
 use chrono::{Local, NaiveDate};
 
-extern crate notify;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 
-extern crate dither;
 use dither::prelude::*;
 
 /////////////
@@ -608,6 +603,14 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
         }
     };
 }
+
+
+fn build_rss(input_csv_path: &str, output_rss_path: &str) -> Result<()> {
+    return Ok(())
+
+}
+
+
 
 fn watch(content_path: &str, template_path: &str, destination_path: &str, resources_path: &str) -> notify::Result<()> {
    // Create a channel to receive the events.

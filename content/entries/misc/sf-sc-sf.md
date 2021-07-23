@@ -6,9 +6,6 @@ let's go for a bike ride! below i've outlined a trip from San Francisco to Santa
 * length: ~ 150 miles
 * elevation: ~ +8235 ft / -8435 ft
 
-camping is just an option; instead, we could also stay at cheap hotels in half moon bay and santa cruz instead.
-
-
 ## day 1: SF -> Half Moon Bay
 
 <iframe src="https://ridewithgps.com/embeds?type=route&id=36783901&sampleGraph=true" style="width: 1px; min-width: 100%; height: 700px; border: none;" scrolling="no"></iframe>
@@ -24,21 +21,40 @@ straight forwardly to Half Moon bay where we'll stay.
     * this state park has a special section *just for cyclists* that can't be reserved!
     * we might not be the only ones there, but have a hard time imaging we'd get turned away
 
-## day 2: Half Moon Bay -> Santa Cruz
+## day 2: Half Moon Bay -> Costanoa
 
 <iframe src="https://ridewithgps.com/embeds?type=route&id=36784052&sampleGraph=true" style="width: 1px; min-width: 100%; height: 700px; border: none;" scrolling="no"></iframe>
 
-From Half Moon bay, we have a bit of a longer, though flatter, ride all the way to Santa Cruz. The major de-"tour" ;) is the section between San Gregorio, through Pescadero,
-and back to the highway. Though the rest of the ride is on the highway, thankfully there is a pretty big shoulder and the ride is pretty, looking over cliffs to the ocean.
+From Half Moon Bay, we have a pretty chill ride over to the end of Pescadero. The major de-"tour" ;) is the section between San Gregorio, through Pescadero,
+and back to the highway. Right after that, we'll be at the campground. I'm expecting this will be a pretty slow, chill day.
+
+
+### camping
+
+* [Coastanoa KOA](https://koa.com/campgrounds/santa-cruz-north/)
+    * we got a campground here. it lets us have up to 6 people.
+
+
+## day 3: Costanoa -> Henry Cowell State Park
+
+<iframe src="https://ridewithgps.com/embeds?type=route&id=36886411&sampleGraph=true" style="width: 1px; min-width: 100%; height: 700px; border: none;" scrolling="no"></iframe>
+
+Though the most of this ride is on the highway, thankfully there is a pretty big shoulder and the ride is pretty, looking over cliffs to the ocean.
 The freeway takes us all the way into Santa Cruz proper.
 
-### lodging
+* [Henry Cowell State Park](https://www.parks.ca.gov/?page_id=546)
+    * they have a special campsite for touring bicyclists who bike into the state park
+    * we call and confirmed we could stay two nights
 
-while there are lots of cool places to camp at Santa Cruz more generally, right now, i think this will be too last minute.
-instead, we could just stay at a random hotel. alternatively, i could call up some friends and see if we can camp in their back yard ^__^
+## day 4: relax!
 
+* hangout and hike in henry cowel state park?
+* go to the mystery spot?
+* go to the beach?
+* drink beer?
+* relax?
 
-## day 3: Santa Cruz -> SF
+## day 5:  Henry Cowell State Park -> San Jose -> San Francisco
 
 <iframe src="https://ridewithgps.com/embeds?type=route&id=36784071&sampleGraph=true" style="width: 1px; min-width: 100%; height: 700px; border: none;" scrolling="no"></iframe>
 
