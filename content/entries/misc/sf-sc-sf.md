@@ -2,9 +2,9 @@
 
 let's go for a bike ride! below i've outlined a trip from San Francisco to Santa Cruz and back:
 
-* duration: 3 full days
-* length: ~ 150 miles
-* elevation: ~ +8235 ft / -8435 ft
+* duration: 5 days
+* length: ~ 120 miles
+* elevation: ~ +8000/-8100 ft
 
 ## day 1: SF -> Half Moon Bay
 

@@ -47,7 +47,7 @@ carbon dioxide capture and storage
 * continue to burn fossil fuels
 * however capture CO₂ before it reenters the atmosphere
 * biggest opportunities are power plants, refineries, and other large industrial systems
-* sometimes the captured CO₂ can be utilized but its mmore likely that it will be pumped underground instead
+* sometimes the captured CO₂ can be utilized but its more likely that it will be pumped underground instead
 
 ### adaptation
 
@@ -85,3 +85,34 @@ implementing carbon dioxide removal
 * SRM would also fail to affect ocean acidification
 * it may also change weather patterns, cause unforeseen droughts or floods, and may also cause people to mentally chose to _not_ mitigate since they have falsely bought "more time"
 * proponents argue again, however, that given how slowly we are currently mitigating, we need to investigate and research SRM technology now regardless
+
+## ch 2. fossil fuels
+
+### fossil fuel history and consumption
+* in 2021, fossil fuels supplied 82% of the world's commercial energy
+* modern petroleum industry started in pennsylvania in 1859 (first oil well)
+* another name for fossil fuels: **hydrocarbons**
+* primarily carbon, hydrogen, smaller amounts of sulfur, nitrogen
+* combustion combines with O_2 and creates CO_2, H_20 , and trace components of sulfur dioxide (SO_2) and nitrous oxides (NO_X)
+* carbon intensity is the amount of CO_2 emissions per unit of energy in the fuel
+* rule of thumb coal, oil gas == 5:4:3
+* 2016: the US used 103 exajoules of energy
+* exajoule == a trillion megajoule
+* a gallon of gasoline == 120 MJ
+* one kilowatt-hour of electricity, from a coal fired power plane, is about 10 MJ
+* a US household uses about 8800 kilowatt-hours in a year
+* 2016 (US): transportation fuel use is 92% oil
+* 2016 (US): fuel input for electricity: coal (34%), natural gas (27%), nuclear (22%), renewables (15%)
+* 2016 (US): electricity output : coal (31%), natural gas (33%), nuclear (21%), renewables (15%)
+
+## fossil fuel futures
+* peak oil, predicted in 1919, 1956, 1971, probably next year
+* reserves == "generally taken to be those quantities taht geological and engineering information indicates with reasonable certainty can be recovered in the future form known reservoirs under existing economic and operating conditions"
+* 5 decades worth of reserves for oil and gas, a century of coal (this is coming from BP)
+* however new reserves are added every year
+* resources == "potentially recoverable with foreseeable technological and economic developments"
+* if you take BPs word for it, 100,000,000+ years worth of fossil fuels left before peak oil
+* to stabilize at 2C or less, we need to leave 50% of *reserves* in the ground, and 90% of all *resources*
+* if we ran out of the *reserves* by burning it all, we'd be up 9C
+* in short, peak oil and oil shortages, at an ecological level, aren't impetus realistically to change anything
+* the author argues that stronger policy is needed, and if carbon capture systems become good enough, we can still use fossil fuels without going over our budgets

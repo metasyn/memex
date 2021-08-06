@@ -10,18 +10,16 @@ use std::process::Command;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
+use color_eyre::{Report};
 use lazy_static::lazy_static;
 use regex::{Captures, Regex};
-
 use clap::{App, Arg};
-
 use colored::*;
-
 use chrono::{Local, NaiveDate};
+use notify::{RecommendedWatcher, RecursiveMode, Watcher}; use dither::prelude::*;
+use rss::Channel;
 
-use notify::{RecommendedWatcher, RecursiveMode, Watcher};
-
-use dither::prelude::*;
+use rss::validation::Validate;
 
 /////////////
 // STRUCTS //
@@ -92,7 +90,7 @@ where
     println!("{} {}", "[ERROR]".bright_red().bold(), msg)
 }
 
-fn load_file<P: AsRef<Path>>(path: P) -> std::io::Result<String> {
+fn load_file<P: AsRef<Path>>(path: P) -> Result<String> {
     let file = File::open(path)?;
     let mut buf_reader = BufReader::new(file);
     let mut contents = String::new();
@@ -127,6 +125,16 @@ fn comrak_options() -> comrak::ComrakOptions {
     options.extension.autolink = true;
     options.extension.tagfilter = false;
     return options;
+}
+
+// pretty much always want this backtrace on
+fn setup() -> std::result::Result<(), Report> {
+    if std::env::var("RUST_BACKTRACE").is_err() {
+        std::env::set_var("RUST_BACKTRACE", "1")
+    }
+    color_eyre::install()?;
+
+    Ok(())
 }
 
 ////////////
@@ -545,12 +553,24 @@ fn make_header_link(header: &str) -> String {
 fn build(content_path: &str, template_path: &str, destination_path: &str, resources_path: &str) -> Result<()> {
     hey("building memex...");
 
+    let dest_path = Path::new(destination_path);
+
     hey("cleaning destination dir...");
+    let removal = remove_dir_all(destination_path);
+    if removal.is_err() {
+        hey("output destination doesn't exist...");
+    }
     create_dir_all(destination_path)?;
-    remove_dir_all(destination_path)?;
+
+    hey("validating rss...");
+    let rss_path = Path::new("rss.xml").to_path_buf();
+    let _channel = parse_rss(&rss_path);
+    fs::copy(rss_path, dest_path.join("rss.xml"))?;
+
 
     hey("copying resources...");
-    copy_dir_all(resources_path, Path::new(destination_path).join(resources_path))?;
+    let dest_path = Path::new(destination_path);
+    copy_dir_all(resources_path, dest_path.join(resources_path))?;
 
     return match collect_entries(content_path) {
         Ok(mut entries) => {
@@ -604,10 +624,13 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
     };
 }
 
+fn parse_rss(input_rss_path: &PathBuf) -> Result<Channel> {
+    let file = File::open(input_rss_path).unwrap();
+    let channel = Channel::read_from(BufReader::new(file)).unwrap();
+    channel.validate()
+        .expect("should be able to validate rss.xml file...");
 
-fn build_rss(input_csv_path: &str, output_rss_path: &str) -> Result<()> {
-    return Ok(())
-
+    return Ok(channel)
 }
 
 
@@ -816,6 +839,8 @@ fn main() -> Result<()> {
                     .takes_value(true)
             ))
         .get_matches();
+
+    setup().expect("couldn't setup.");
 
     let content_path = matches.value_of("content").unwrap_or("content/entries");
     let template_path = matches.value_of("template").unwrap_or("templates/base.html");

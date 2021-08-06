@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>metasyn.pw</title>
+    <link>https://metasyn.pw</link>
+    <description>metasyn</description>
+    <lastBuildDate>Fri, 06 Aug 2021 02:37:52 GMT</lastBuildDate>
+    <atom:link type="application/rss+xml" rel="self" href="https://metasyn.pw/rss.xml" />
+    <item>
+      <guid isPermaLink="false">5f90c23e68d81f624bd57bc9</guid>
+      <title>writing a memex</title>
+      <link>https://metasyn.pw/memex.html</link>
+      <pubDate>Wed, 21 Oct 2020 11:20:30 GMT</pubDate>
+      <description>learning and writing about the history of the practice</description>
+    </item>
+    <item>
+      <guid isPermaLink="false">5f97ccf1290b0a0a7ff5a95e</guid>
+      <title>a few of my favorite things</title>
+      <link>https://metasyn.pw/collections.html</link>
+      <pubDate>Tue, 27 Oct 2020 07:32:01 GMT</pubDate>
+      <description>i wrote down a handful of my favorite books, shows, and films</description>
+    </item>
+    <item>
+      <guid isPermaLink="false">5fb82d8526519b1134a64b54</guid>
+      <title>learning hangul: notes on korean linguistics</title>
+      <link>https://metasyn.pw/hangul.html</link>
+      <pubDate>Fri, 20 Nov 2020 08:56:37 GMT</pubDate>
+      <description>i decided recently that i want to learn how to read and write the korean alphabet. i&apos;ve added my notes on the basics of hangul and some  random thoughts on korean linguistics.</description>
+    </item>
+    <item>
+      <guid isPermaLink="false">5fd07d52411b7550146a0c66</guid>
+      <title>seedling</title>
+      <link>https://metasyn.pw/seedling.html</link>
+      <pubDate>Wed, 09 Dec 2020 07:31:30 GMT</pubDate>
+      <description>today i recorded a new song. check it out! &lt;br&gt;&lt;img src=&apos;https://metasyn.pw/resources/img/seedling.png&apos; /&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="false">6069181991aae3107ec3d119</guid>
+      <title>raiu - a thunderstorm song</title>
+      <link>https://metasyn.pw/raiu.html</link>
+      <pubDate>Sun, 04 Apr 2021 01:36:25 GMT</pubDate>
+      <description>a song i recorded for my dogbotic class</description>
+    </item>
+  </channel>
+</rss>
