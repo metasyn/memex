@@ -27,3 +27,21 @@ img.avatar { background-color: white }
 * for [[dlei]]
 
 <img class="avatar" src="resources/img/dithered_dlei.png" />
+
+## raiu's droplet
+
+* for [[raiu]]
+
+<img class="avatar" src="resources/img/dithered_raiu.png" />
+
+## crosscut's grate
+
+* for [[crosscut]]
+
+<img class="avatar" src="resources/img/dithered_crosscut.png" />
+
+## petioling's leaf function
+
+* for [[petioling]
+
+<img class="avatar" src="resources/img/dithered_petioling.png" />

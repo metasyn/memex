@@ -10,13 +10,14 @@ use std::process::Command;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
-use color_eyre::{Report};
+use color_eyre::Report;
 use lazy_static::lazy_static;
 use regex::{Captures, Regex};
 use clap::{App, Arg};
 use colored::*;
 use chrono::{Local, NaiveDate};
-use notify::{RecommendedWatcher, RecursiveMode, Watcher}; use dither::prelude::*;
+use notify::{RecommendedWatcher, RecursiveMode, Watcher};
+use dither::prelude::*;
 use rss::Channel;
 
 use rss::validation::Validate;
