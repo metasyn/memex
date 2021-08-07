@@ -2,7 +2,7 @@ use std::cmp::min;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsString;
 use std::fmt::Display;
-use std::fs::{self, DirEntry, File, create_dir_all, remove_dir_all};
+use std::fs::{self, create_dir_all, remove_dir_all, DirEntry, File};
 use std::io::prelude::Write;
 use std::io::{BufReader, Error, ErrorKind, Read, Result};
 use std::path::{Path, PathBuf};
@@ -10,14 +10,14 @@ use std::process::Command;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
-use color_eyre::Report;
-use lazy_static::lazy_static;
-use regex::{Captures, Regex};
-use clap::{App, Arg};
-use colored::*;
 use chrono::{Local, NaiveDate};
-use notify::{RecommendedWatcher, RecursiveMode, Watcher};
+use clap::{App, Arg};
+use color_eyre::Report;
+use colored::*;
 use dither::prelude::*;
+use lazy_static::lazy_static;
+use notify::{RecommendedWatcher, RecursiveMode, Watcher};
+use regex::{Captures, Regex};
 use rss::Channel;
 
 use rss::validation::Validate;
@@ -156,7 +156,8 @@ lazy_static! {
     static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();
 }
 lazy_static! {
-    static ref DITHERED_IMG_REGEX: Regex = Regex::new(r"(?P<img><img src=.*?resources/img/dithered_(?P<name>.+?)\..+?>)").unwrap();
+    static ref DITHERED_IMG_REGEX: Regex =
+        Regex::new(r"(?P<img><img src=.*?resources/img/dithered_(?P<name>.+?)\..+?>)").unwrap();
 }
 
 /////////////
@@ -312,21 +313,20 @@ fn extract_directory(entries: &Vec<Entry>, root_name: &str) -> DirectoryTree {
 fn extract_recent_entries(entries: &mut Vec<Entry>) -> String {
     let length = min(entries.len(), 20);
 
-   entries
-       .sort_by(|a, b|  b.modification_date.partial_cmp(&a.modification_date).unwrap());
+    entries.sort_by(|a, b| {
+        b.modification_date
+            .partial_cmp(&a.modification_date)
+            .unwrap()
+    });
 
-    entries
-       .truncate(length);
+    entries.truncate(length);
 
     return entries
-       .iter()
-       .map(|x| format!("* {} [[{}]]", x.modification_date, x.id))
-       .collect::<Vec<String>>()
-       .join("\n");
-
-
+        .iter()
+        .map(|x| format!("* {} [[{}]]", x.modification_date, x.id))
+        .collect::<Vec<String>>()
+        .join("\n");
 }
-
 
 ////////////
 // FORMAT //
@@ -363,16 +363,10 @@ fn format_directory(tree: &DirectoryTree) -> String {
 
 fn format_directory_page(tree: &DirectoryTree) -> String {
     fn traverse(tree: &DirectoryTree, item: &DirectoryItem, res: &mut String, depth: u8) {
-
         let indent = "  ".repeat(depth.into());
 
         if item.children.len() > 0 {
-            res.push_str(
-                format!(
-                    "{}* {}\n",
-                    indent, item.val,
-                    ).as_str()
-                );
+            res.push_str(format!("{}* {}\n", indent, item.val,).as_str());
 
             for child in &item.children {
                 traverse(tree, &tree.arena[*child], res, depth + 1)
@@ -391,11 +385,21 @@ fn format_directory_page(tree: &DirectoryTree) -> String {
 }
 
 fn format_references(references: Vec<String>) -> String {
-    references
-        .iter()
-        .map(|x| format!("[[{}]]", x))
-        .collect::<Vec<String>>()
-        .join(" ")
+    if references.is_empty() {
+        return String::new();
+    }
+
+    let mut result = String::from("incoming links: ");
+    result.push_str(
+        references
+            .iter()
+            .map(|x| format!("[[{}]]", x))
+            .collect::<Vec<String>>()
+            .join(" ")
+            .as_str(),
+    );
+
+    return result;
 }
 
 fn format_img_dither_wrap_anchor(body: &str) -> String {
@@ -407,7 +411,7 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
             return format!(
                 "<a class='img' href=\"resources/img/{}.png\">{}</a>",
                 name, img,
-            )
+            );
         })
         .to_string();
 }
@@ -545,13 +549,16 @@ fn make_header_link(header: &str) -> String {
     return String::from(clean);
 }
 
-
-
 //////////////
 // COMMANDS //
 //////////////
 
-fn build(content_path: &str, template_path: &str, destination_path: &str, resources_path: &str) -> Result<()> {
+fn build(
+    content_path: &str,
+    template_path: &str,
+    destination_path: &str,
+    resources_path: &str,
+) -> Result<()> {
     hey("building memex...");
 
     let dest_path = Path::new(destination_path);
@@ -567,7 +574,6 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
     let rss_path = Path::new("rss.xml").to_path_buf();
     let _channel = parse_rss(&rss_path);
     fs::copy(rss_path, dest_path.join("rss.xml"))?;
-
 
     hey("copying resources...");
     let dest_path = Path::new(destination_path);
@@ -590,7 +596,6 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
                 .iter_mut()
                 .filter(|x| x.id == "directory")
                 .for_each(|x| x.content = format_directory_page(&directory));
-
 
             for entry in entries {
                 // get or set replacements
@@ -628,16 +633,20 @@ fn build(content_path: &str, template_path: &str, destination_path: &str, resour
 fn parse_rss(input_rss_path: &PathBuf) -> Result<Channel> {
     let file = File::open(input_rss_path).unwrap();
     let channel = Channel::read_from(BufReader::new(file)).unwrap();
-    channel.validate()
+    channel
+        .validate()
         .expect("should be able to validate rss.xml file...");
 
-    return Ok(channel)
+    return Ok(channel);
 }
 
-
-
-fn watch(content_path: &str, template_path: &str, destination_path: &str, resources_path: &str) -> notify::Result<()> {
-   // Create a channel to receive the events.
+fn watch(
+    content_path: &str,
+    template_path: &str,
+    destination_path: &str,
+    resources_path: &str,
+) -> notify::Result<()> {
+    // Create a channel to receive the events.
     let (tx, rx) = channel();
 
     // Automatically select the best implementation for your platform.
@@ -658,7 +667,12 @@ fn watch(content_path: &str, template_path: &str, destination_path: &str, resour
             Ok(event) => {
                 hey("updating...");
                 println!("{:#?}", event);
-                build(content_path, template_path, destination_path, resources_path)?;
+                build(
+                    content_path,
+                    template_path,
+                    destination_path,
+                    resources_path,
+                )?;
                 hey(&watching);
             }
             Err(e) => println!("watch error: {:?}", e),
@@ -666,24 +680,19 @@ fn watch(content_path: &str, template_path: &str, destination_path: &str, resour
     }
 }
 
-
 fn rename(content_path: &str, old: &str, new: &str) -> Result<()> {
-    let entries = collect_entries(content_path)
-        .expect("couldn't collect entries.");
+    let entries = collect_entries(content_path).expect("couldn't collect entries.");
     hey(format!("replacing {} with {}", old, new));
 
     let as_string = format!(r"\[\[{}\]\]", old);
-    let regex = Regex::new(as_string.as_str())
-        .expect("invalid replacement regex");
-
+    let regex = Regex::new(as_string.as_str()).expect("invalid replacement regex");
 
     for entry in entries {
         if regex.is_match(&entry.content) {
             let replaced = regex.replace_all(&entry.content, format!("[[{}]]", new));
             let path = Path::new(content_path).join(entry.path);
             hey(format!("writing to {:#?}", path.as_os_str()));
-            let mut fd = File::create(path)
-                .expect("couldn't create new file");
+            let mut fd = File::create(path).expect("couldn't create new file");
             fd.write_all(replaced.as_bytes())
                 .expect("couldn't write new file");
         }
@@ -730,7 +739,6 @@ fn scratch() {
             (3, -4, 5.),
         ],
     );
-
 }
 
 fn dither(resouces_path: &str, destination_path: &str) {
@@ -744,25 +752,16 @@ fn dither(resouces_path: &str, destination_path: &str) {
 
     // 0 2
     // 3 1
-    let ditherer = dither::ditherer::Ditherer::new(
-        4.,
-        &[
-            (0, 0, 0.),
-            (0, 1, 3.),
-            (1, 0, 2.),
-            (1, 1, 1.),
-        ],
-    );
+    let ditherer =
+        dither::ditherer::Ditherer::new(4., &[(0, 0, 0.), (0, 1, 3.), (1, 0, 2.), (1, 1, 1.)]);
 
-
-    let quantize = &dither::create_quantize_n_bits_func(4)
-        .expect("couldn't create quantizer");
+    let quantize = &dither::create_quantize_n_bits_func(4).expect("couldn't create quantizer");
 
     for entry in entries {
         let path = entry.path().to_path_buf();
 
-        let img: Img<RGB<f64>> = Img::<RGB<f64>>::load(path.as_path())
-            .expect("couldn't load image");
+        let img: Img<RGB<f64>> =
+            Img::<RGB<f64>>::load(path.as_path()).expect("couldn't load image");
 
         let output_img = ditherer
             .dither(img, RGB::map_across(quantize))
@@ -773,7 +772,6 @@ fn dither(resouces_path: &str, destination_path: &str) {
 
         create_dir_all("test/resources/img").unwrap();
         output_img.save(output_path.as_path()).unwrap();
-
     }
 }
 
@@ -793,63 +791,76 @@ fn main() -> Result<()> {
             Arg::with_name("v")
                 .short("v")
                 .multiple(true)
-                .help("sets the level of verbosity.")
+                .help("sets the level of verbosity."),
         )
         .arg(
             Arg::with_name("content")
                 .short("c")
                 .long("content")
-                .help("sets the content folder")
+                .help("sets the content folder"),
         )
         .arg(
             Arg::with_name("template")
                 .short("t")
                 .long("template")
-                .help("sets the template")
+                .help("sets the template"),
         )
         .arg(
             Arg::with_name("destination")
                 .short("d")
                 .long("destination")
-                .help("sets the destination directory")
+                .help("sets the destination directory"),
         )
         .arg(
             Arg::with_name("resources")
                 .short("r")
                 .long("resources")
-                .help("sets the resources directory")
+                .help("sets the resources directory"),
         )
         .subcommand(App::new("build").about("builds the memex"))
-        .subcommand(App::new("watch").about("watches for file system changes and builds the memex on each change"))
+        .subcommand(
+            App::new("watch")
+                .about("watches for file system changes and builds the memex on each change"),
+        )
         .subcommand(App::new("dither").about("dithers images in dist"))
-        .subcommand(App::new("rename").about("updates internal page id across entries")
-            .arg(
-                Arg::with_name("old")
-                    .required(true)
-                    .long("old")
-                    .short("o")
-                    .help("old name")
-                    .takes_value(true)
-            )
-            .arg(
-                Arg::with_name("new")
-                    .required(true)
-                    .long("new")
-                    .short("n")
-                    .help("new name")
-                    .takes_value(true)
-            ))
+        .subcommand(
+            App::new("rename")
+                .about("updates internal page id across entries")
+                .arg(
+                    Arg::with_name("old")
+                        .required(true)
+                        .long("old")
+                        .short("o")
+                        .help("old name")
+                        .takes_value(true),
+                )
+                .arg(
+                    Arg::with_name("new")
+                        .required(true)
+                        .long("new")
+                        .short("n")
+                        .help("new name")
+                        .takes_value(true),
+                ),
+        )
         .get_matches();
 
     setup().expect("couldn't setup.");
 
     let content_path = matches.value_of("content").unwrap_or("content/entries");
-    let template_path = matches.value_of("template").unwrap_or("templates/base.html");
+    let template_path = matches
+        .value_of("template")
+        .unwrap_or("templates/base.html");
     let destination_path = matches.value_of("destination").unwrap_or("dist");
     let resources_path = matches.value_of("resources").unwrap_or("resources");
 
     if matches.subcommand_matches("build").is_some() {
-        let b = build(content_path, template_path, destination_path, resources_path);
+        let b = build(
+            content_path,
+            template_path,
+            destination_path,
+            resources_path,
+        );
 
         if b.is_ok() {
             hey("✨ Done!".bright_cyan().to_string());
@@ -859,27 +870,30 @@ fn main() -> Result<()> {
     }
 
     if matches.subcommand_matches("watch").is_some() {
-        let res = watch(content_path, template_path, destination_path, resources_path);
+        let res = watch(
+            content_path,
+            template_path,
+            destination_path,
+            resources_path,
+        );
         if res.is_err() {
-            let msg =  format!("error watching: {}", res.unwrap_err().to_string());
+            let msg = format!("error watching: {}", res.unwrap_err().to_string());
             return Err(Error::new(ErrorKind::Other, msg));
         }
     }
 
     if let Some(matches) = matches.subcommand_matches("rename") {
-        let old = matches.value_of("old")
-            .expect("no old value provided");
-        let new = matches.value_of("new")
-            .expect("no new value provided");
-        return rename(content_path, old, new)
+        let old = matches.value_of("old").expect("no old value provided");
+        let new = matches.value_of("new").expect("no new value provided");
+        return rename(content_path, old, new);
     }
 
     if matches.subcommand_matches("dither").is_some() {
         dither(resources_path, destination_path);
-        return Ok(())
+        return Ok(());
     }
 
-    let msg =  "invalid command";
+    let msg = "invalid command";
     return Err(Error::new(ErrorKind::Other, msg));
 }
 

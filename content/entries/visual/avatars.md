@@ -42,6 +42,6 @@ img.avatar { background-color: white }
 
 ## petioling's leaf function
 
-* for [[petioling]
+* for [[petioling]]
 
 <img class="avatar" src="resources/img/dithered_petioling.png" />
