@@ -25,7 +25,8 @@ chrome for the occasional chrome-only website, or for work.
 ## google drive
 
 i started a [nextcloud](nextcloud.com) server - but i still need to set up
-automatic backups.
+automatic backups. the server, as a whole, has a weekly autoback up that is
+easy enough to use in the meantime.
 
 ## google calendar
 
@@ -75,6 +76,18 @@ doesn't really have the business information i often rely on google maps for. i
 don't think there is a simple solution here yet for me.
 
 # failures
+
+## google android more generally
+
+i used cyanogen mod for about 8 years before more recently switching back to stock
+(pixel) android. i'd like to consider switching to something like
+
+* [CalyxOS](https://calyxos.org/about/)
+* [GrapheneOS](https://grapheneos.org/)
+
+or even the newer version of cyanogen:
+
+* [LineageOS](https://grapheneos.org/)
 
 ## google fi
 
