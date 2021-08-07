@@ -1,6 +1,6 @@
 # petioling
 
-a song about a plant, an alien, and a video game.
+a song about a plant, an alien, and maybe a video game.
 the idea is that you're sitting under this tree, thinking about video games.
 but a leaf falls next to you and becomes alive, yet digitized.
 its not from this world. maybe its just a memory.
