@@ -7,10 +7,12 @@
 * carbon capture - howard j. herzog
 * skip - [molly mendoza](www.mollymendoza.com)
 * crumbling kingdom - ex. mag issue #03 (peow studio)
+* cross my heart - ex. mag issue #02 (peow studio)
 
 ## started
 * the communism of love - richard gilman-opalsky
 * molecular red - mckenzie wark
+* the possibility of reddish green: wittegenstein outside of philosophy - david rothenburg
 
 # 2020
 
