@@ -2,7 +2,7 @@ use std::cmp::min;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsString;
 use std::fmt::Display;
-use std::fs::{self, create_dir_all, remove_dir_all, DirEntry, File};
+use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
 use std::io::{BufReader, Error, ErrorKind, Read, Result};
 use std::path::{Path, PathBuf};
@@ -14,7 +14,6 @@ use chrono::{Local, NaiveDate};
 use clap::{App, Arg};
 use color_eyre::Report;
 use colored::*;
-use dither::prelude::*;
 use lazy_static::lazy_static;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 use regex::{Captures, Regex};
@@ -701,80 +700,6 @@ fn rename(content_path: &str, old: &str, new: &str) -> Result<()> {
     return Ok(());
 }
 
-fn scratch() {
-    // 0 2
-    // 3 1
-    let ditherer = dither::ditherer::Ditherer::new(
-        9.,
-        &[
-            // dx, dy, mul
-            (1, 0, 2.),
-            (-1, 1, 1.),
-            (-1, 0, 3.),
-        ],
-    );
-
-    let ditherer = dither::ditherer::Ditherer::new(
-        16.,
-        &[
-            // dx, dy, mul
-            (0, -1, 0.),
-            (0, -2, 12.),
-            (0, -3, 3.),
-            (0, -4, 15.),
-            //
-            (1, -1, 8.),
-            (1, -2, 4.),
-            (1, -3, 11.),
-            (1, -4, 7.),
-            //
-            (2, -1, 2.),
-            (2, -2, 14.),
-            (2, -3, 1.),
-            (2, -4, 13.),
-            //
-            (3, -1, 10.),
-            (3, -2, 6.),
-            (3, -3, 9.),
-            (3, -4, 5.),
-        ],
-    );
-}
-
-fn dither(resouces_path: &str, destination_path: &str) {
-    let path = Path::new(resouces_path).join("img/");
-    let entries = fs::read_dir(path)
-        .expect("couldn't read destination")
-        .filter(|x| x.is_ok())
-        .map(|x| x.unwrap())
-        .filter(|x| x.path().to_str().unwrap().contains("maranta"))
-        .collect::<Vec<DirEntry>>();
-
-    // 0 2
-    // 3 1
-    let ditherer =
-        dither::ditherer::Ditherer::new(4., &[(0, 0, 0.), (0, 1, 3.), (1, 0, 2.), (1, 1, 1.)]);
-
-    let quantize = &dither::create_quantize_n_bits_func(4).expect("couldn't create quantizer");
-
-    for entry in entries {
-        let path = entry.path().to_path_buf();
-
-        let img: Img<RGB<f64>> =
-            Img::<RGB<f64>>::load(path.as_path()).expect("couldn't load image");
-
-        let output_img = ditherer
-            .dither(img, RGB::map_across(quantize))
-            .convert_with(|rgb| rgb.convert_with(clamp_f64_to_u8));
-
-        let output_path = Path::new("test").join(path.clone()).to_path_buf();
-        println!("{:?} => {:?}", entry, output_path.as_os_str());
-
-        create_dir_all("test/resources/img").unwrap();
-        output_img.save(output_path.as_path()).unwrap();
-    }
-}
-
 // TODO: implement build rss
 // TODO: add native dithering approach
 
@@ -888,10 +813,6 @@ fn main() -> Result<()> {
         return rename(content_path, old, new);
     }
 
-    if matches.subcommand_matches("dither").is_some() {
-        dither(resources_path, destination_path);
-        return Ok(());
-    }
 
     let msg = "invalid command";
     return Err(Error::new(ErrorKind::Other, msg));
