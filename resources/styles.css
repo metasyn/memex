@@ -204,9 +204,9 @@ th {
 
 #toc {
   position: fixed;
-  max-width: 200px;
-  margin-left: -210px;
-  max-height: calc(100vh - 200px);
+  max-width: 250px;
+  margin-left: -260px;
+  max-height: calc(100vh - 250px);
   overflow-y: scroll;
 
 }
