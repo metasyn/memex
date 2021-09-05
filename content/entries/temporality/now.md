@@ -1,15 +1,15 @@
 # now
 
 ## personal
-* just finished a bicycle trip: see [[sf-sc-sf]].
+* finished a bicycle trip recently: see [[sf-sc-sf]].
 * synthesizers! learning how to build them.
   * see [[electrical-engineering]] and [[integrated-circuits]]
-* trying to figure out how to [[degoogle]] some of my life
+* built the [[learn-uxn]] project
 * building this [[memex]]
 
 ## reading
+* Ex Mag Vol 2 - Paranormal Romance
 
 ## playing
-* satisfactory
-* enter the gungeon
-* stardew valley
+* hollow knight
+* baulders gate 3
