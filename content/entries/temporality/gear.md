@@ -2,6 +2,13 @@
 
 My audio related gear is listed as below.
 
+## eurorack
+
+* metropolix (intellijel)
+* ensemble oscillator (4ms)
+* plaits (mutable instruments)
+* maths (make noise)
+
 ## voices
 
 * DFAM  (Moog)
