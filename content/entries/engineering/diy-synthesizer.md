@@ -13,3 +13,5 @@ i attended the diy synthesizer workshop from [dogbotic](https://dogbotic.com/). 
 * Look Mum No Computer - [Building your own modular synth](https://www.lookmumnocomputer.com/modular)
 * Niklas Ronnberg - [Synth DIY Schematics](http://familjenronnberg.se/~niklas/diy.php)
 * Natahn "Synthnerd" - [Synth DIY Schematics](https://synthnerd.wordpress.com/synth-diy/)
+* [sdiy.info](sdiy.info) - a wiki of various DIY synth information
+* Kristian Blåsol's [Youtube Channel](https://www.youtube.com/channel/UC9NeBnf-9pzDC3C86MeOJvA) - he has a "Modular In A Week" series
