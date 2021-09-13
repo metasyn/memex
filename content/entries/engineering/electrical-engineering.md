@@ -143,6 +143,10 @@ where the left side has a marker like a half circle
 
 Read more about the history of these names [here](https://www.etechnog.com/2019/06/vcc-vss-vdd-vee-in-electronics.html).
 
+## ADC
+
+short for Analog to Digital Converter
+
 ## op-amp
 
 * op-amp is short for operational amplifier
