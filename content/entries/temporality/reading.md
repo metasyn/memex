@@ -13,6 +13,8 @@
 * the communism of love - richard gilman-opalsky
 * molecular red - mckenzie wark
 * the possibility of reddish green: wittegenstein outside of philosophy - david rothenburg
+* the linux programming interface - michael kerrisk
+* a planet for rent - yoss
 
 # 2020
 

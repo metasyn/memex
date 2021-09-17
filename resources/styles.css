@@ -238,6 +238,10 @@ th {
   position: block;
 }
 
+#wheel {
+  filter: invert(0.10);
+}
+
 /* Light/Dark mode */
 
 #light-mode {

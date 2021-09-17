@@ -4,6 +4,20 @@
 img.avatar { background-color: white }
 </style>
 
+##  mtsn
+
+<img class="avatar" src="resources/img/metasyn.png" />
+
+* this insignia was created for use online, in this [[memex]].
+* there are four letters: MTSN
+
+## wheel
+
+<img class="avatar" src="resources/img/metasyn-wheel.png" />
+
+* my primary icon for online interactions, since 2008 or so
+* we are all connected, by things both alive and dead
+
 ## seedling's bacterium
 
 * for [[seedling]]

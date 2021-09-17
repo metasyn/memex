@@ -44,6 +44,20 @@ interestingly there are also similar physical concepts:
 
 (from [here](https://en.wikipedia.org/wiki/Commonplace_book))
 
+
+## digital gardens
+
+another way of talking about the same concept that i have seen in various places
+on the web are the idea of a digital garden. where rather than a museum, a gallery,
+a portfolio, or a journal - it's a place where you can tend to ideas to watch them
+grow, and share with other's if they want to visit. i like the idea more generally,
+as it seems like it strikes a really reasonable balance between the external and
+internal worlds we live in. futher more, the concept of coming back to the same
+idea (i.e. page, theory, writing, notes, etc) and adding to that at a later date
+is also antithetical to the fast consumption we're used to online. the same
+essay doesn't have to stay the same. it's ok to update things - or to rip things
+out when space is needed for other things to grow.
+
 ## writing your own
 
 there are many tools that already exist that help people try to organize their
