@@ -102,3 +102,15 @@ in order to pass data from the assembler to the emualtor, we simply stash the b6
 contents of the rom on the global window object of that iframe, so that the start up function
 can check if it's present and create a virtual file before calling the main function: this operation
 can be seen [here](https://git.sr.ht/~metasyn/learn-uxn/tree/master/item/pre-uxnemu.js).
+
+## synchronicity
+
+for the SDL based implementation, there is a call to `SDL_Delay` that keeps the framerate correct. however, in the javascript/webassembly version, we don't need this, but instead, need the emscripten equivalent. currently this is handled by some hacky code due to the way that the source programs are structured:
+
+```
+if ! grep -q 'emscripten_sleep' uxn/src/uxnemu.c; then
+    sed -i -e '1s/^/#include <emscripten.h>\n/;/SDL_Delay/s/^/emscripten_sleep(10);\n/' uxn/src/uxnemu.c
+fi
+```
+
+shout out to @alderwick@merveilles.town for helping me come up with this hack/solution to modifying the uxn source without having to do any refactoring! this is the only change overall to the uxn source code that is needed to make this whole project work.

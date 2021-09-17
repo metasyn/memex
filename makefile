@@ -1,5 +1,4 @@
 .PHONY: serve downscale build deploy
-
 .ONESHELL:
 
 serve:
