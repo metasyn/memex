@@ -59,3 +59,7 @@ img.avatar { background-color: white }
 * for [[petioling]]
 
 <img class="avatar" src="resources/img/dithered_petioling.png" />
+
+## quasicrit's conumdrum
+
+<img class="avatar" src="resources/img/dithered_quasicrit.png" />
