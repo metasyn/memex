@@ -18,7 +18,7 @@ Ex. Mag is a publication from [Peow Studio](peowstudio.com). Each volume is an a
 
 * choo - @choodraws / @chootalks
 * [jane mai](janemai.co)  / [janemai.com](janemai.com) - @stinkytownmayor
-* [leslie hung](lesliehug.com) - @leslihung (TW) / @dairyfree (IG)
+* [leslie hung](lesliehung.com) - @lesliehung (TW) / @dairyfree (IG)
 * [loic locatelli kournwsky](loiclocatelli.com) - @loiclocatelli
 * [luis yang](https://suscrofad.tumblr.com/) - @suscrofad
 * [michelle kwon](michellekwon.com) - @kwonshellc
