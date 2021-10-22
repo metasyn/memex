@@ -7,9 +7,13 @@ Below are some notes from the [CMU CS 11-711 Advanced NLP](http://www.phontron.c
 
 ## text classification
 
-* [Data Statements for NLP (Bender and Friedman 2018)](https://aclanthology.org/Q18-1041/)
-
 <details>
+<summary>
+    Data Statements for NLP (Bender and Friedman 2018) -
+    <a href="https://aclanthology.org/Q18-1041/">
+        link
+    </a>
+</summary>
 
 * data statements help us address ethical issues of exclusion, over generalization, underexposure while encouraging generalizability and reproducibility - with the intent of creating more ethical science and engineering
 * typical vector space representations of lexical semantics pick up biases which get reflected in models, which have real consequences (racism, sexism, etc)
@@ -20,9 +24,14 @@ Below are some notes from the [CMU CS 11-711 Advanced NLP](http://www.phontron.c
 
 </details>
 
-* [The Hitchhiker’s Guide to Testing Statistical Significance in Natural Language Processing - Rotem Dror, Gili Baumer, Segev Shlomov, Roi Reichart (2018)](https://aclanthology.org/P18-1128/)
 
 <details>
+<summary>
+    The Hitchhiker’s Guide to Testing Statistical Significance in Natural Language Processing - Rotem Dror, Gili Baumer, Segev Shlomov, Roi Reichart (2018) -
+    <a href="https://aclanthology.org/P18-1128/">
+        link
+    </a>
+</summary>
 
 * more data, more compute, deeper nets, and better algorithms lead to more emphasis on empirical results across datasets; but we still need to ensure we do statistical testing to ensure that our results are not coincidental
 * paper presentation based around presenting two algorithms that beat one versus the other based on application to a particular dataset
@@ -58,6 +67,18 @@ conclusion
 * open question: language data is rarely truly independent
 * open question: bonferroni correction when reporting k-fold validation / cross validation results is one way to test for significance - i.e. calculate p value for each fold separately, then perform replicability analysis for the dependent datasets
 
+</details>
+
+<details>
+<summary>
+    RACE: Large-scale ReAding Comprehension Dataset From Examinations (Lai et al. 2017)
+    <a href="https://aclanthology.org/D17-1082.pdf">
+        link
+    </a>
+</summary>
+* new test dataset with objective metric for reading comprehension
+* there is still a substantial gap between automated and human reasoning using RACE
+* **takeaway**: use RACE as one of your metrics if you're doing something related to question answering, reading comprehension, or more generalized type of AI task where information synthesis is one of the goals
 </details>
 
 [Generative and Discriminative Text Classification with Recurrent Neural Networks -
