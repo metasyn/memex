@@ -6,6 +6,6 @@
 
 - Laurie Spiegel - from [The Expanding Universe](retiary.org/expanding_universe)
 
-> Now it seems most machines are square - their design has a goal, to create desire, like a cellphone or a blender or a kid's toy. But what about the machines that don?t have a goal-based design? These are the round machines of the future, and we must start making their elements now.
+> Now it seems most machines are square - their design has a goal, to create desire, like a cellphone or a blender or a kid's toy. But what about the machines that dontt have a goal-based design? These are the round machines of the future, and we must start making their elements now.
 
-- Peter Blasser ([source](https://rhizome.org/editorial/2011/feb/02/psychic-circuits-peter-blasser-ciat-lonbarde/)
+- Peter Blasser ([source](https://rhizome.org/editorial/2011/feb/02/psychic-circuits-peter-blasser-ciat-lonbarde/))
