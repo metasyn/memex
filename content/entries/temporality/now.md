@@ -1,15 +1,14 @@
 # now
 
-## personal
-* finished a bicycle trip recently: see [[sf-sc-sf]].
-* synthesizers! learning how to build them.
-  * see [[electrical-engineering]] and [[integrated-circuits]]
-* built the [[learn-uxn]] project
-* building this [[memex]]
+## general
+* spending extra time with family
+* preparing to grow some mushrooms at home! we're going to try to grow oyster mushrooms that we can eat.
+* following an online course on natural language processing - see [[nlp]]
 
 ## reading
-* Ex Mag Vol 2 - Paranormal Romance
+* a planet for rent - yoss
+* the nature and growth of modern mathematics
 
 ## playing
-* hollow knight
-* baulders gate 3
+* sable
+* black book
