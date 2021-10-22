@@ -76,9 +76,11 @@ conclusion
         link
     </a>
 </summary>
+
 * new test dataset with objective metric for reading comprehension
 * there is still a substantial gap between automated and human reasoning using RACE
 * **takeaway**: use RACE as one of your metrics if you're doing something related to question answering, reading comprehension, or more generalized type of AI task where information synthesis is one of the goals
+
 </details>
 
 [Generative and Discriminative Text Classification with Recurrent Neural Networks -
