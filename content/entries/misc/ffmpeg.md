@@ -14,10 +14,9 @@ ffmpeg -i input.webm -vf reverse reverse.webm
 * stitch two files together
 
 ```
-# cat input.txt
+> cat input.txt
 file 'one.webm'
 file 'two.webm'
 
-# then
 ffmpeg -f concat -i input.txt -c copy output.webm
 ```
