@@ -10,10 +10,10 @@ i'm jotting them down here for safe keeping; they're colors I like!
 }
 </style>
 
-| color | hex |
-| ----- | --- |
-| <div class='color-box' style="background-color: #72c4d0"></div> | #72c4d0 |
-| <div class='color-box' style="background-color: #a5d6c3"></div> | #a5d6c3 |
+| color | hex | rgb |
+| ----- | --- | --- |
+| <div class='color-box' style="background-color: #72c4d0"></div> | #72c4d0 | rgb(114,196,208) |
+| <div class='color-box' style="background-color: #a5d6c3"></div> | #a5d6c3 | rgb(165,214,195) |
 
 
 # generalities
