@@ -80,8 +80,52 @@ conclusion
 * new test dataset with objective metric for reading comprehension
 * there is still a substantial gap between automated and human reasoning using RACE
 * **takeaway**: use RACE as one of your metrics if you're doing something related to question answering, reading comprehension, or more generalized type of AI task where information synthesis is one of the goals
+</details>
+
+<details>
+<summary>
+    A machine learning approach to predicting psychosis using semantic density and latent content analysis (Rezaii, Walker & Wolff 2019)
+    <a href="https://www.nature.com/articles/s41537-019-0077-9">
+        link
+    </a>
+</summary>
+
+* try to detect schizophrenia via language use
+* they suggest that you can use this to create a _digital phenotype_
+* some similar studies look at semantic coherence, variance in coherence, and specific lexical or semantic markers
+* the goal of the paper on some level is to look into how one can create the _digital phenotype_ that helps earlier detection of different types of psychosis, but namely schizophrenia
+* "poverty of content" == "low semantic density"
+* the paper also uses the terms negative versus positive symptoms. negative symptoms are more generally something missing or lacking: catatonic behavior for example, losing interest or motivation, lack of concentration. in contrast, positive symptoms include hallucinations, hearing voices, delusions. negative symptoms can happen years before an acute schizophrenic episode - this is called the "prodomal" period
+* the paper asserts and cites that "low semantic density" is a central feature of this type of psychosis, and may play a useful role in prediction of psychosis.
+* auditory hallucinations, a positive symptom, normally occur later in the progression of the psychosis - but the paper tries to proxy this by looking for people that "implicitly talk about voices and sounds"
+* _vector unpacking_ is is one of the central methods they use to measure semantic richness
+* they also use a technique called _latent content analysis_
+* they contrast semantic density with idea density (number of propositions in a set of words) and information value (something implied by the length of a word vector?)
+
+> Our findings indicate that during the prodromal phase of psychosis, the emergence of psychosis was predicted by speech with low levels of semantic density and an increased tendency to talk about voices and sounds. When combined, these two indicators of psychosis enabled the prediction of future psychosis with a high level of accuracy.
+
+* Sample size is 40 participants over 2 years - train on 30, validate on 10
+* Lemmatization, POS tagging, then filter to content words
+* Look up vectors using Skip gram based Word2Vec word vectors, trained on 25 years of NYT articles
+* the meaning of each sentence is the sum of the word vectors, normalized by the magnitude
+* Walds X^2 test is used specifically to show that the individual feature of SEMANTIC DENSITY is statistically significant
+* They then use classification metrics (f1, precision, recall, accuracy) to show how the model performed as a proxy for the validity of the features they used
+* "poverty of speech" didn't have an effect in the study (the count of content words more generally) - whereas "poverty of content" did
+* "density of determiners" is also looked at but the effect wasn't significant
+* other metrics for semantic density or lexical richness sometimes are affected by the length of the text. they did not find a significant correlation between semantic density and sentence length.
+* after shuffling nouns with nouns and verbs with verbs, they no longer found an effect with the walds x^2 test. this means that the semantic density is sensitive to word ordering. this is interesting since they're using word level features, and its a bag of words type of approach.
+* they also contrast with "idea density": 'One such alternative measure is idea density, a quantity that can be measured by dividing the number of verbs, adjectives, adverbs, prepositions, and conjunctions in a sentence by the total number of words.' - they found no effect or correlation with semantic density
+* another idea "information density" related to vector length was not found to have any effect
+* they also had humans rate sentences for semantic density and showed that their semantic density correlated with it, though a weaker correlation
+* they also mention that inter-rater reliability of human judgements is somewhat low to begin with also
 
 </details>
 
+Might read:
+
 [Generative and Discriminative Text Classification with Recurrent Neural Networks -
 Dani Yogatama, Chris Dyer, Wang Ling, Phil Blunsom (2017)](https://arxiv.org/abs/1703.01898)
+
+[Approximate Nearest Neighbor - Negative Contrastive Learning for Dense Text Retrieval](https://openreview.net/pdf?id=zeFrfgyZln)
+
+[Net-DNF: Effective Deep Modeling of Tabular Data](https://openreview.net/pdf?id=xfmSoxdxFCG)
