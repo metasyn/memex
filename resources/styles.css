@@ -173,7 +173,7 @@ th {
 
 #directory {
   z-index: 100;
-  position: relative;
+  position: absolute;
   float: right;
   right: 10px;
   top: 30px;
@@ -248,7 +248,7 @@ th {
 
 #light-mode {
   float: right;
-  margin-top: 30px;
+  margin-top: 50px;
   right: 10px;
 }
 
