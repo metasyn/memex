@@ -5,7 +5,6 @@
 
 Below are some notes from the [CMU CS 11-711 Advanced NLP](http://www.phontron.com/class/anlp2021/index.html) course taught by [Graham Neubig](http://www.phontron.com/) and some papers related to the course.
 
-## text classification
 
 <details>
 <summary>
@@ -90,34 +89,116 @@ conclusion
     </a>
 </summary>
 
-* try to detect schizophrenia via language use
-* they suggest that you can use this to create a _digital phenotype_
-* some similar studies look at semantic coherence, variance in coherence, and specific lexical or semantic markers
+introduction
+
+* try to detect schizophrenia via language use via the creation a _digital phenotype_
 * the goal of the paper on some level is to look into how one can create the _digital phenotype_ that helps earlier detection of different types of psychosis, but namely schizophrenia
 * "poverty of content" == "low semantic density"
-* the paper also uses the terms negative versus positive symptoms. negative symptoms are more generally something missing or lacking: catatonic behavior for example, losing interest or motivation, lack of concentration. in contrast, positive symptoms include hallucinations, hearing voices, delusions. negative symptoms can happen years before an acute schizophrenic episode - this is called the "prodomal" period
+* the paper also uses the terms negative versus positive symptoms. negative symptoms are more generally something missing or lacking: catatonic behavior for example, losing interest or motivation, lack of concentration. in contrast, positive symptoms include hallucinations, hearing voices, delusions. negative symptoms can happen years before an acute schizophrenic episode - this is called the "prodromal" period
 * the paper asserts and cites that "low semantic density" is a central feature of this type of psychosis, and may play a useful role in prediction of psychosis.
-* auditory hallucinations, a positive symptom, normally occur later in the progression of the psychosis - but the paper tries to proxy this by looking for people that "implicitly talk about voices and sounds"
-* _vector unpacking_ is is one of the central methods they use to measure semantic richness
-* they also use a technique called _latent content analysis_
-* they contrast semantic density with idea density (number of propositions in a set of words) and information value (something implied by the length of a word vector?)
+* auditory hallucinations, a positive symptom, normally occur later in the progression of the psychosis
+
+
+results
 
 > Our findings indicate that during the prodromal phase of psychosis, the emergence of psychosis was predicted by speech with low levels of semantic density and an increased tendency to talk about voices and sounds. When combined, these two indicators of psychosis enabled the prediction of future psychosis with a high level of accuracy.
 
-* Sample size is 40 participants over 2 years - train on 30, validate on 10
-* Lemmatization, POS tagging, then filter to content words
-* Look up vectors using Skip gram based Word2Vec word vectors, trained on 25 years of NYT articles
-* the meaning of each sentence is the sum of the word vectors, normalized by the magnitude
-* Walds X^2 test is used specifically to show that the individual feature of SEMANTIC DENSITY is statistically significant
-* They then use classification metrics (f1, precision, recall, accuracy) to show how the model performed as a proxy for the validity of the features they used
-* "poverty of speech" didn't have an effect in the study (the count of content words more generally) - whereas "poverty of content" did
-* "density of determiners" is also looked at but the effect wasn't significant
-* other metrics for semantic density or lexical richness sometimes are affected by the length of the text. they did not find a significant correlation between semantic density and sentence length.
-* after shuffling nouns with nouns and verbs with verbs, they no longer found an effect with the walds x^2 test. this means that the semantic density is sensitive to word ordering. this is interesting since they're using word level features, and its a bag of words type of approach.
-* they also contrast with "idea density": 'One such alternative measure is idea density, a quantity that can be measured by dividing the number of verbs, adjectives, adverbs, prepositions, and conjunctions in a sentence by the total number of words.' - they found no effect or correlation with semantic density
-* another idea "information density" related to vector length was not found to have any effect
-* they also had humans rate sentences for semantic density and showed that their semantic density correlated with it, though a weaker correlation
-* they also mention that inter-rater reliability of human judgements is somewhat low to begin with also
+* sample size: 40 participants
+* time frame: 2 years until conversion
+* training data: speech samples from 23 who do not "convert", 7 who do not
+* holdout/validation data: 5 who convert, 5 who do not
+* data are transcriptions of the Structured Interview for Prodromal Symptoms (SIPS)
+* methods: **vector unpacking** and **latent content analysis**
+
+methods: vector unpacking
+
+step 1.) create word vectors
+* skip-gram word2vec from gensim
+* context window: 5
+* hidden units: 200
+* training data: 25 years of NYT text: 42.8M sentences
+* preprocessing: lemmatization
+
+step 2.) create sentence vectors
+* preprocess: content words only, POS tag, lemmatize
+* sum up individual word vectors by looking them up in the word vectors from step 1
+* take l2 norm of the sentence
+
+step 3.) measuring semantic density
+* assign weights to individual words
+* linearly combine them to approximate the sentence vector
+* cost function: euclidean distance
+* objective: minimize sum of squared errors
+* model: neural network
+* architecture: single layer - each dimension of each word vector is connected to the identical dimension of the target sentence - but words are not connected at all to each other.
+* pruning: weight == 0 if weight < (iteration / tau * max_iters)
+  (where tau=100, max_iters=500)
+* produces roughly 30-50 non zero weights across the lexicon
+* lastly, iterativel bisect the top N ranked weights; compare F-ratio of the two groups (the authors dont say how long/far this goes) and select the group with the higher F-ratio
+* in the end these are called **meaning vectors**
+* in summary: by having access to all the words in the lexicon to reconstruct the original sentence, and having access to (generally) more non-zero weights in practice than there are words in the sentence, we effecctively "unpack the sentence vector" into a larger number of words that represent the sentence, but then use F tests to go backwards back to (some) smaller group of high density (highly weighted) words
+
+information value
+
+* average vector length (norm) of a word as a measure of semantic density
+* vector length is suggested a potential proxy to true semantic density
+
+semantic density
+
+* density = len(meaning vectors) / len(tokens in sentence)
+* mean density = sum(sentence vectors) / len(sentence vectors)
+* alternatives: Information value (vector length) and Idea density (measurement of content word usage) did not have effects and did not correlate with mechanical turk responses they got; but semantic density did (weakly, but significantly) - iter-rater human reliability may also be low though
+
+latent content analysis
+
+* represent particiapnts sentences as vectors again, normalized
+* semantic probes: top 13.5K most commonly written english words (from NYT)
+* find closest probe word via cosine similarity between each sentence
+* averaged probe words for convertered/non-convertered
+* determine each probe words "base rate" cosine - find the degree to which that word is considered "similar" to some other set of sentences that we consider is "normal" in contrast with the text from the converters and non-converters
+* dataset: 30k users on reddit, 30-100 posts in close proximity in the same subreddit - 400M words
+* preprocessing: sentence segementation, POS tagging, sum word vectors (using the same word vectors trained from NYT)
+* tf-idf weight the probe words for each group, keep the top 50
+* reduce dimensionality of top 50 probe words from 200 -> 2 with t-SNE
+* kmeans++, determine k=14 by maximizing silhouette coefficient
+* used this approach to find a cluster around auditory hallucinations, voices, sounds and other auditory perceptions
+* the VOICES cluster's items were then summed, normalized, and turned into a predictor variable by measuring the largest cosine between the participants sentences and the CONVERSION target
+
+modeling
+
+* model: logistic regression with semantic density feature
+* feature analysis test: Wald's Chi-Squared test
+* Semantic Density was a strong predictor of conversion
+* Poverty of Content (or semantic density) had more predictive power than Poverty of Speech (# of content words used)
+* Word order randomization destroyed effect (while preserving sentence length and POS)
+
+* model: logistic regression with VOICES cluster similarity feature
+* feature analysis test: Wald's Chi-Squared test
+* Voices was a strong predictor of conversion
+* some work on ensuring the structure of the interview didn't cause the closeness to the VOICES cluster (since interlocutor speech was separated in the data processing)
+
+* model: logistic regression with both
+* (Precision = 1; F1 score = 0.89, Sensitivity/Recall = 0.80, Specificity = 1)
+* VOICES aligns with positive symptoms
+* low semantic density with negative symptoms
+* the two features are not correlated
+
+
+technologies:
+* gensim - word2vec implementation
+* tensorflow - word2vec implementation
+* stanford corenlp server
+* stanford PCFG for pos tagging
+* stanford parser for sentence tokenziation
+* NLTK WordNetLemmatizier
+
+summary:
+> In future studies, larger cohorts of patients, more variety in the neuropsychiatric disorders under investigation, and the inclusion of healthy controls could help clarify the generalizability and reliability of the results. Further research could also investigate the ways in which machine learning can extract and magnify the signs of mental illness. Such efforts could lead to not only an earlier detection of mental illness, but also a deeper understanding of the mechanism by which these disorders are caused.
+
+questions
+* usage of F ratio in meaning vector selection?
+* semantic density as a property of a set of words: what in their model would have made it so sensitive to word ordering - since it is kind of bag of words?
+* other metrics for semantic density or lexical richness sometimes are affected by the length of the text. they did not find a significant correlation between semantic density and sentence length?
 
 </details>
 
