@@ -164,20 +164,18 @@ latent content analysis
 * used this approach to find a cluster around auditory hallucinations, voices, sounds and other auditory perceptions
 * the VOICES cluster's items were then summed, normalized, and turned into a predictor variable by measuring the largest cosine between the participants sentences and the CONVERSION target
 
-modeling
-
-* model: logistic regression with semantic density feature
+model: logistic regression with semantic density feature
 * feature analysis test: Wald's Chi-Squared test
 * Semantic Density was a strong predictor of conversion
 * Poverty of Content (or semantic density) had more predictive power than Poverty of Speech (# of content words used)
 * Word order randomization destroyed effect (while preserving sentence length and POS)
 
-* model: logistic regression with VOICES cluster similarity feature
+model: logistic regression with VOICES cluster similarity feature
 * feature analysis test: Wald's Chi-Squared test
 * Voices was a strong predictor of conversion
 * some work on ensuring the structure of the interview didn't cause the closeness to the VOICES cluster (since interlocutor speech was separated in the data processing)
 
-* model: logistic regression with both
+model: logistic regression with both
 * (Precision = 1; F1 score = 0.89, Sensitivity/Recall = 0.80, Specificity = 1)
 * VOICES aligns with positive symptoms
 * low semantic density with negative symptoms
