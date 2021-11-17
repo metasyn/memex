@@ -2,4 +2,9 @@
 
 members = [
     "schotter3",
+    "circler",
 ]
+
+[[draw]]
+name = "draw"
+path = "draw.rs"
