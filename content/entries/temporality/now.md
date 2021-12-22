@@ -1,8 +1,7 @@
 # now
 
 ## general
-* spending extra time with family
-* preparing to grow some mushrooms at home! we're going to try to grow oyster mushrooms that we can eat.
+* growing blue oyster mushrooms at home
 * following an online course on natural language processing - see [[nlp]]
 
 ## reading
@@ -10,5 +9,6 @@
 * the nature and growth of modern mathematics
 
 ## playing
-* sable
-* black book
+ironically, both games i'm playing right now have similar sounds
+* eastward
+* outward
