@@ -16,6 +16,58 @@
   --depth: 0;
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  a {
+    color: var(--text-color);
+  }
+
+  .content a:hover:not(.img) {
+    color: var(--background-color);
+    background-color: var(--text-color);
+  }
+
+  #directory-content {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--text-color);
+  }
+
+  #directory-content > details[open] {
+    border-color: var(--text-color);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: var(--light-background-color);
+    color: var(--light-text-color);
+  }
+
+  a {
+    color: var(--light-text-color);
+  }
+
+  .content a:hover:not(.img) {
+    color: var(--light-background-color);
+    background-color: var(--light-text-color);
+  }
+
+  #directory-content {
+    background-color: var(--light-background-color);
+    color: var(--light-text-color);
+    border-color: var(--light-text-color);
+  }
+
+  #directory-content > details[open] {
+    border-color: var(--light-text-color);
+  }
+}
+
 /* Font related */
 @font-face {
   font-family:"SourceSansPro";
@@ -24,16 +76,10 @@
 
 /* Standard elements */
 body {
-  background-color: var(--background-color);
-  color: var(--text-color);
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   line-height: 1.5;
   padding: var(--base-padding);
-}
-
-a {
-  color: var(--text-color);
 }
 
 h1 {
@@ -138,14 +184,6 @@ th {
   display: none;
 }
 
-.light {
-  background-color: var(--light-background-color);
-  color: var(--light-text-color);
-}
-
-.light a {
-  color: var(--light-text-color);
-}
 
 .content a {
   font-family: var(--font-family);
@@ -154,8 +192,6 @@ th {
 }
 
 .content a:hover:not(.img) {
-  color: var(--background-color);
-  background-color: var(--text-color);
   border-radius: 8px 0px;
   padding: 1px
 }
@@ -182,7 +218,6 @@ th {
 }
 
 #directory-content > details[open] {
-  border-color: var(--text-color);
   border-style: solid;
   border-width: 2px;
 }
@@ -190,18 +225,10 @@ th {
 #directory-content {
   position: relative;
   bottom: 5px;
-  background-color: var(--background-color);
-  color: var(--text-color);
   margin-top: 5px;
   font-size: calc(var(--font-size) - 2px);
   max-width: inherit;
   min-width: inherit;
-}
-
-.light #directory-content {
-  background-color: var(--light-background-color);
-  color: var(--light-text-color);
-  border-color: var(--light-text-color);
 }
 
 #toc {
@@ -209,7 +236,7 @@ th {
   max-width: 250px;
   margin-left: -260px;
   max-height: calc(100vh - 250px);
-  overflow-y: scroll;
+  overflow-y: hidden;
 
 }
 
@@ -243,24 +270,6 @@ th {
 #wheel {
   filter: invert(0.10);
 }
-
-/* Light/Dark mode */
-
-#light-mode {
-  float: right;
-  margin-top: 50px;
-  right: 10px;
-}
-
-#light-mode img {
-  height: 32px;
-  width: 32px;
-}
-
-#light-mode:hover {
-  cursor: pointer;
-}
-
 
 #summary {
   text-align: end ;
