@@ -11,4 +11,6 @@ build:
 	cargo run build
 
 deploy:
+	git push origin master
+	git push github master
 	./scripts/deploy.sh
