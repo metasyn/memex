@@ -1,6 +1,6 @@
 # gear
 
-<img src="resources/img/audio_gear.png"></img>
+<img src="resources/img/dithered_audio_gear.png"></img>
 
 My audio related gear is listed as below.
 
