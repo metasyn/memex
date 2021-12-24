@@ -1,5 +1,7 @@
 # gear
 
+<img src="resources/img/audio_gear.png"></img>
+
 My audio related gear is listed as below.
 
 ## eurorack

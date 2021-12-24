@@ -1,3 +1,16 @@
+# ubuntu
+
+## dist upgrade
+
+```
+sudo apt update
+sudo apt upgrade
+sudo apt dist-upgrade
+sudo apt autoremove
+sudo do-release-upgrade
+sudo reboot now
+```
+
 # arch linux
 
 These are some notes for myself when setting up arch.

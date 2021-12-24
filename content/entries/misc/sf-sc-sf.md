@@ -1,5 +1,7 @@
 # SF -> SC -> SF
 
+<img src="resources/img/sf_sc_sf_crew.png"></img>
+
 let's go for a bike ride! below i've outlined a trip from San Francisco to Santa Cruz and back:
 
 * duration: 5 days

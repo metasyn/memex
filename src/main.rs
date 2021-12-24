@@ -360,7 +360,7 @@ fn format_directory(tree: &DirectoryTree) -> String {
     return formatted;
 }
 
-fn format_directory_page(tree: &DirectoryTree) -> String {
+fn format_directory_page(existing_contents: &String, tree: &DirectoryTree) -> String {
     fn traverse(tree: &DirectoryTree, item: &DirectoryItem, res: &mut String, depth: u8) {
         let indent = "  ".repeat(depth.into());
 
@@ -380,7 +380,7 @@ fn format_directory_page(tree: &DirectoryTree) -> String {
     // update the string recrusively
     traverse(tree, &tree.arena[0], &mut formatted, 0);
 
-    return formatted;
+    return format!("{}\n{}", existing_contents, formatted);
 }
 
 fn format_references(references: Vec<String>) -> String {
@@ -594,7 +594,7 @@ fn build(
             entries
                 .iter_mut()
                 .filter(|x| x.id == "directory")
-                .for_each(|x| x.content = format_directory_page(&directory));
+                .for_each(|x| x.content = format_directory_page(&x.content, &directory));
 
             for entry in entries {
                 // get or set replacements
