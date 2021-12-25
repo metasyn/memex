@@ -701,7 +701,6 @@ fn rename(content_path: &str, old: &str, new: &str) -> Result<()> {
 }
 
 // TODO: implement build rss
-// TODO: add native dithering approach
 
 //////////
 // MAIN //
@@ -747,7 +746,6 @@ fn main() -> Result<()> {
             App::new("watch")
                 .about("watches for file system changes and builds the memex on each change"),
         )
-        .subcommand(App::new("dither").about("dithers images in dist"))
         .subcommand(
             App::new("rename")
                 .about("updates internal page id across entries")

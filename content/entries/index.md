@@ -1,5 +1,5 @@
 
-<img id='wheel' src="resources/img/metasyn-schotter.gif" width="100%"></img>
+<img id='wheel' src="resources/img/metasyn-schotter-rotate.gif" width="100%"></img>
 
 * this is a [[memex]]
 * see what is up [[now]]
