@@ -6,7 +6,7 @@ Notes for things I find myself searching for over and over.
 
 * convert a bunch of stils into a webm file
 ```
-ffmpeg -framerate 30 -i name%4d.png -c:v libvpx-vp9 -pix_fmt yuva420p -lossless 1 out.webm
+ffmpeg -framerate 30 -i name%4d.webp -c:v libvpx-vp9 -pix_fmt yuva420p -lossless 1 out.webm
 ```
 
 * reverse

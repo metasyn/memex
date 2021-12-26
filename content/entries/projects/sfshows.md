@@ -2,7 +2,7 @@
 
 mapping underground music shows in the bay area. see it [here](https://metasyn.pw/shows)
 
-<img src="resources/img/dithered_sfshows.png" alt="screenshot of metasyn.pw/shows"><img>
+<img src="resources/img/dithered_sfshows.webp" alt="screenshot of metasyn.pw/shows"><img>
 
 ## background
 
@@ -12,7 +12,7 @@ area. the shows are scraped from an amazing resource: [The List](http://www.foop
 *the list* has been around for quite some time, and does a great job listing a
 lot of shows in a pretty nice, simple, accessible format. like craigslist!
 
-<img src="resources/img/dithered_foopee.png" alt="screenshot of foopee.com"></img>
+<img src="resources/img/dithered_foopee.webp" alt="screenshot of foopee.com"></img>
 
 however, i found myself forgetting which venues where which, and more
 importantly, which ones were on my side of the bay (in san francisco usually).

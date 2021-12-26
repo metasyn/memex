@@ -1,6 +1,6 @@
 
 <video  width="100%" autoplay loop muted>
-    <source src="resources/img/metasyn-schotter-rotate.webm" />
+    <source src="resources/video/metasyn-schotter-rotate.webm" />
 </video>
 
 * this is a [[memex]]
