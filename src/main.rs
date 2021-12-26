@@ -655,6 +655,7 @@ fn watch(
     // Add a path to be watched. All files and directories at that path and
     // below will be monitored for changes.
     watcher.watch(content_path, RecursiveMode::Recursive)?;
+    watcher.watch(resources_path, RecursiveMode::Recursive)?;
 
     // This is a simple loop, but you may want to use more complex logic here,
     // for example to handle I/O.

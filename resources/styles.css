@@ -26,6 +26,10 @@
     color: var(--text-color);
   }
 
+  pre {
+    background-color: #2c2c2c;
+  }
+
   .content a:hover:not(.img) {
     color: var(--background-color);
     background-color: var(--text-color);
@@ -50,6 +54,13 @@
 
   a {
     color: var(--light-text-color);
+  }
+
+  pre {
+    background-color: white;
+    border-style: line;
+    border-width: 1px;
+    border-color: #777
   }
 
   .content a:hover:not(.img) {
@@ -146,12 +157,25 @@ blockquote p {
   display: inline;
 }
 
-*:focus {
-  outline: none;
-}
-
 th {
   padding-right: 25px
+}
+
+pre {
+  border-style: solid;
+  border-width: 1px;
+  white-space: pre-wrap;
+  padding: 10px;
+}
+
+summary:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+summary
+
+*:focus {
+  outline: none;
 }
 
 /* scroll bars */
@@ -265,10 +289,6 @@ th {
 #metasyn-icon {
   width: 100px;
   position: block;
-}
-
-#wheel {
-  filter: invert(0.10);
 }
 
 #summary {

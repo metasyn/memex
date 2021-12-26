@@ -1,5 +1,7 @@
 
-<img id='wheel' src="resources/img/metasyn-schotter-rotate.gif" width="100%"></img>
+<video  width="100%" autoplay loop muted>
+    <source src="resources/img/metasyn-schotter-rotate.webm" />
+</video>
 
 * this is a [[memex]]
 * see what is up [[now]]
