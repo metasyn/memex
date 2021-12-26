@@ -656,6 +656,7 @@ fn watch(
     // below will be monitored for changes.
     watcher.watch(content_path, RecursiveMode::Recursive)?;
     watcher.watch(resources_path, RecursiveMode::Recursive)?;
+    watcher.watch(template_path, RecursiveMode::Recursive)?;
 
     // This is a simple loop, but you may want to use more complex logic here,
     // for example to handle I/O.
