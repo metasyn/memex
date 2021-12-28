@@ -549,7 +549,7 @@ fn render_gemtext(s: &str) -> String {
         .replace_all(s, |caps: &Captures| {
             let link = &caps[1];
 
-            let gemlink = format!("=> gemini://{}/{}.gmi", DOMAIN, link);
+            let gemlink = format!("=> gemini://{}/{}.gmi {}", DOMAIN, link, link);
             gem_links.push(gemlink);
 
             return format!("[{}]", link);
