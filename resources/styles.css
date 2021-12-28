@@ -14,6 +14,10 @@
 
   --base-padding: 5px;
   --depth: 0;
+
+  --margin-left: 15px;
+  --max-width: 100ch;
+  --toc-width: 250px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -226,17 +230,16 @@ summary
 
 .top {
   display: absolute;
-  max-width: 80ch;
-  margin: auto;
+  max-width: var(--max-width);
   padding-top: 10px;
+  margin-left: var(--margin-left);
 }
 
 #directory {
   z-index: 100;
   position: absolute;
-  float: right;
-  right: 10px;
-  top: 30px;
+  left: 150px;
+  top: 50px;
   min-width: 18ch;
   max-width: 45ch;
 }
@@ -257,14 +260,14 @@ summary
 
 #toc {
   position: fixed;
-  max-width: 250px;
-  margin-left: -260px;
+  max-width: var(--toc-width);
+  margin-left: var(--max-width);
   max-height: calc(100vh - 250px);
   overflow-y: hidden;
 
 }
 
-@media only screen and (max-width: calc(80ch + 420px)) {
+@media only screen and (max-width: calc(var(--max-width)+ 420px)) {
   #toc {
     display: none;
   }
@@ -273,8 +276,8 @@ summary
 
 #main {
   display: block;
-  max-width: 80ch;
-  margin: auto;
+  margin-left: var(--margin-left);
+  max-width: var(--max-width);
   padding-top: 10px;
 }
 
