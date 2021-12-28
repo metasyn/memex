@@ -13,3 +13,7 @@
 > "Progress means: humanity emerges from its spellbound state no longer under the spell of progress as well, itself nature, by becoming aware of its own indigenousness to nature and by halting the mastery over nature through which nature continues its mastery"
 
 - Theodor Adorno
+
+> The end of the human race will be that it will eventually die of civilisation.
+
+- Ralph Waldo Emerson
