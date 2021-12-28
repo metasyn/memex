@@ -15,7 +15,7 @@
   --base-padding: 5px;
   --depth: 0;
 
-  --margin-left: 15px;
+  --edge-margin: 15px;
   --max-width: 100ch;
   --toc-width: 250px;
 }
@@ -232,7 +232,8 @@ summary
   display: absolute;
   max-width: var(--max-width);
   padding-top: 10px;
-  margin-left: var(--margin-left);
+  margin-left: var(--edge-margin);
+  margin-right: var(--edge-margin);
 }
 
 #directory {
@@ -276,8 +277,9 @@ summary
 
 #main {
   display: block;
-  margin-left: var(--margin-left);
   max-width: var(--max-width);
+  margin-left: var(--edge-margin);
+  margin-right: var(--edge-margin);
   padding-top: 10px;
 }
 
