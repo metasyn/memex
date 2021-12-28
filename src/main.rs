@@ -21,6 +21,8 @@ use rss::Channel;
 
 use rss::validation::Validate;
 
+static DOMAIN: &str = "metasyn.pw";
+
 /////////////
 // STRUCTS //
 /////////////
@@ -141,22 +143,19 @@ fn setup() -> std::result::Result<(), Report> {
 // REGEX //
 ///////////
 
-lazy_static! {
-    static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
-}
 
 lazy_static! {
+    static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
+
     static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(?P<link>.+?)]]").unwrap();
-}
-lazy_static! {
     static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();
-}
-lazy_static! {
     static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();
-}
-lazy_static! {
     static ref DITHERED_IMG_REGEX: Regex =
         Regex::new(r"(?P<img><img src=.*?resources/img/dithered_(?P<name>.+?)\..+?>)").unwrap();
+    static ref MD_LINK_REGEX: Regex = Regex::new(r"\[(?P<title>.+?)\]\((?P<link>.+?)\)").unwrap();
+
+    static ref HTML_TAG_REGEX: Regex = Regex::new(r"<[^>]*>").unwrap();
+    static ref TAG_SRC_REGEX: Regex = Regex::new("src=\"(?P<src>.+?)\"").unwrap();
 }
 
 /////////////
@@ -536,6 +535,65 @@ fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str, bool)>) -> 
     return String::from(body);
 }
 
+fn render_gemtext(s: &str) -> String {
+    // first convert links
+    let mut gem_links: Vec<String> = vec![
+        format!("=> gemini://{}/index.gmi index and recent changes", DOMAIN).to_owned(),
+        format!("=> gemini://{}/directory.gmi directory of all pages", DOMAIN).to_owned(),
+    ];
+
+    let mut http_links =  vec![];
+
+    // Get all internal links
+    let mut output = INTERNAL_LINK_REGEX
+        .replace_all(s, |caps: &Captures| {
+            let link = &caps[1];
+
+            let gemlink = format!("=> gemini://{}/{}.gmi", DOMAIN, link);
+            gem_links.push(gemlink);
+
+            return format!("[{}]", link);
+        })
+        .to_string();
+
+    // TODO: create memex syntax for linking to external gemini capsules
+
+    output = MD_LINK_REGEX
+        .replace_all(&output, |caps: &Captures| {
+            let title = &caps[1];
+            let link = &caps[2];
+
+            let gemlink = format!("=> {} {}", link, title);
+            http_links.push(gemlink);
+
+            return format!("[{}]", title);
+        })
+        .to_string();
+
+    TAG_SRC_REGEX.captures_iter(&output)
+        .for_each(|x| {
+            let src = &x[1];
+            if src.starts_with("resources/") {
+                http_links.push(format!("=> https://{}/{}", DOMAIN, src));
+            } else {
+                http_links.push(format!("=> {}", src));
+            }
+        });
+
+    output = HTML_TAG_REGEX.replace_all(&output, "").to_string();
+
+    output.push_str("\nGemini Links:\n");
+    let links_str = String::from(gem_links.join("\n"));
+    output.push_str(&links_str);
+
+    output.push_str("\n\nWeb Links:\n");
+    let links_str = String::from(http_links.join("\n"));
+    output.push_str(&links_str);
+
+    return output;
+}
+
+
 fn make_header_link(header: &str) -> String {
     let temp = HEADER_REGEX
         .replace_all(header, "$heading")
@@ -618,7 +676,25 @@ fn build(
                 let fname = format!("{}/{}.html", destination_path, entry.id);
                 hey(format!("{} => {}", entry.id.yellow(), fname.green()));
                 let mut fd = File::create(fname)?;
-                fd.write_all(html.as_bytes())?
+                let res = fd.write_all(html.as_bytes());
+                if res.is_err() {
+                    return Err(res.err().unwrap())
+                }
+
+
+                // create gemtext files
+                let gemtext = contents
+                    .replace(make_template("directory").as_str(), formatted_directory.as_str())
+                    .replace(make_template("recent").as_str(), recents.as_str());
+                let gemtext = render_gemtext(&gemtext);
+
+                let fname = format!("{}/{}.gmi", destination_path, entry.id);
+                hey(format!("{} => {}", entry.id.yellow(), fname.green()));
+                let mut fd = File::create(fname)?;
+                let res = fd.write_all(gemtext.as_bytes());
+                if res.is_err() {
+                    return Err(res.err().unwrap())
+                }
             }
             return Ok(());
         }

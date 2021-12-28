@@ -9,6 +9,10 @@ sense for me to use. but i am attempting to at least slowly move my online self
 off of their services. if you have particular suggestions, please do [[contact]]
 me for how to continue getting off of google's services.
 
+here is a great list of [alternatives](https://degoogle.jmoore.dev/).
+
+below, some notes on things i have and haven't switched off.
+
 # successes
 
 ## gmail
