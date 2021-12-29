@@ -11,6 +11,22 @@ sudo do-release-upgrade
 sudo reboot now
 ```
 
+## add desktop launcher
+
+* example file in `/usr/share/applications/wally.desktop`
+
+```
+[Desktop Entry]
+Type=Application
+Name=Wally
+Comment=USB Flasher for Ergodox EZ
+Version=3.0.23
+Exec=/usr/local/bin/wally
+Icon=/opt/wally/appicon.png
+Terminal=False
+Categories=Firmware
+```
+
 # arch linux
 
 These are some notes for myself when setting up arch.
