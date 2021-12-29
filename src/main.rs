@@ -4,20 +4,20 @@ use std::ffi::OsString;
 use std::fmt::Display;
 use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
-use std::io::{BufReader, Error, ErrorKind, Read, Result};
+use std::io::{BufReader, Error, ErrorKind, Read, Result, stdin};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
-use chrono::{Local, NaiveDate};
+use chrono::{Local, NaiveDate, Utc};
 use clap::{App, Arg};
 use color_eyre::Report;
 use colored::*;
 use lazy_static::lazy_static;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 use regex::{Captures, Regex};
-use rss::Channel;
+use rss::{Channel, ItemBuilder, GuidBuilder};
 
 use rss::validation::Validate;
 
@@ -715,6 +715,60 @@ fn parse_rss(input_rss_path: &PathBuf) -> Result<Channel> {
     return Ok(channel);
 }
 
+fn add_rss_post(rss_path: PathBuf) -> Result<()> {
+    let mut channel = parse_rss(&rss_path)
+        .expect("unable to parse rss");
+
+    hey("Title?");
+    let mut title = String::new();
+    stdin().read_line(&mut title).unwrap();
+    title.pop();
+
+    hey("Link?");
+    let mut link = String::new();
+    stdin().read_line(&mut link).unwrap();
+    link.pop();
+
+    hey("Description?");
+    let mut description = String::new();
+    stdin().read_line(&mut description).unwrap();
+    description.pop();
+
+    let guid = GuidBuilder::default()
+        .build()
+        .expect("unable to build new guid");
+
+
+    let rfc2822 = Utc::now().to_rfc2822();
+
+    let item = ItemBuilder::default()
+        .title(title)
+        .link(link)
+        .description(description)
+        .guid(guid)
+        .pub_date(rfc2822.clone())
+        .build()
+        .expect("could not build item");
+
+    channel.set_last_build_date(rfc2822.clone());
+
+    let mut cloned = channel.clone();
+    let mut items = channel.into_items();
+    items.push(item);
+    cloned.set_items(items);
+
+    cloned.validate()
+        .expect("could not validate");
+
+    let writer = File::create(rss_path)
+        .expect("could not open rss path for writing");
+
+    cloned.pretty_write_to(writer, b' ', 2)
+        .expect("could not write new post to rss file.");
+
+    return Ok(())
+}
+
 fn watch(
     content_path: &str,
     template_path: &str,
@@ -778,8 +832,6 @@ fn rename(content_path: &str, old: &str, new: &str) -> Result<()> {
     return Ok(());
 }
 
-// TODO: implement build rss
-
 //////////
 // MAIN //
 //////////
@@ -820,6 +872,7 @@ fn main() -> Result<()> {
                 .help("sets the resources directory"),
         )
         .subcommand(App::new("build").about("builds the memex"))
+        .subcommand(App::new("rss").about("adds a new rss item"))
         .subcommand(
             App::new("watch")
                 .about("watches for file system changes and builds the memex on each change"),
@@ -889,6 +942,10 @@ fn main() -> Result<()> {
         return rename(content_path, old, new);
     }
 
+    if  matches.subcommand_matches("rss").is_some() {
+        let rss_path = Path::new("rss.xml").to_path_buf();
+        return add_rss_post(rss_path);
+    }
 
     let msg = "invalid command";
     return Err(Error::new(ErrorKind::Other, msg));
