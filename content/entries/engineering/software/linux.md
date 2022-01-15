@@ -76,3 +76,12 @@ git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 ```
+
+# Pop!_OS
+
+Sometimes my system76 laptop's audio just stops working. This seems to fix it:
+```
+systemctl --user restart pulseaudio
+rm -r ~/.config/pulse
+pulseaudio -k
+```
