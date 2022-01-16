@@ -41,9 +41,6 @@ below are some of my favorites.
 
 * age of empires ii: age of kings
 * pixel junk monsters
-* flower
-* hyperlight drifter
-* pixel junk eden
 * don't starve together
-* factorio
 * enter the gungeon
+* factorio
