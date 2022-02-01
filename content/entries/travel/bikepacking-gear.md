@@ -95,6 +95,8 @@ advantages to me:
 * overall more room to bring more things, tools, snacks, clothes etc.
 * good racks can hold a lot of weight and awkward sized objects - for example, we once put my friends bicycle on my rack, and she sat on my handlebars, so we could get back to where we were fixing her bicycle - much harder to do without a rack
 
+## basketpacking
+
 another common approach is just to get a cheap basket! the washington area bicycle
 organization posted a [good article](https://waba.org/blog/2020/04/carrying-stuff-on-bike/)
 on carrying things on a bike which shows an example of how a few of my friends use baskets
@@ -105,6 +107,15 @@ instead of racks/bags to hold their stuff:
 baskets like this can be found for very cheap and also don't require any type
 of mounting points on your frame, which make them attractive as a quick and
 affordable option.
+
+advantages:
+* works great even for doing random stuff
+* adding a cargo net over it can expand the space
+* any bag works as basket bag
+
+disadvantage:
+* somewhat higher center of gravity
+* your bag might need to be waterproof?
 
 ### my setup
 
