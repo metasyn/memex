@@ -1,8 +1,8 @@
 # now
 
 ## general
-* planning bicycle trips
-* working for the man
+* planning [[bikepacking]] trips
+* craving deeper friendships and connections
 * trying to play more guitar again
 
 ## reading

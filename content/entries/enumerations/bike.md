@@ -1,0 +1,46 @@
+# bike
+
+some details on my bicycle
+
+## surly stragger
+
+### components
+
+* frame
+    * year: 2015
+    * color: glitter dream
+* weight: 4.74 lb (2.27kg)
+* headset: crane creek 40
+* crankset: shimano FC-FX50, 36/46t
+* bottom bracket
+    * maker: surly enduro
+    * 68mm wide, standard English threaded 1.37 x 24t
+* brake levers: shimano tiagra
+* shifters: shimano tiagra
+* derailleurs
+    * front: shimano CX-70-B-D
+    * rear: shimano tiagra RD-4601
+cogset: shimano CS-HG62 11-32
+* rims:
+    * 1 Alexrims XD-E Lite
+    * 1 Mystery Rim
+* seatpost diameter: 27.2mm
+* seatpost clamp diameter: 30.0mm
+* headset/steertube: 1-1/8" threadless
+* stem: kalloy
+* handlebar: salsa cowwell
+
+### storage
+
+* rack: tubus logo classic (57.3lb limit)
+* panniers
+    * rear
+        * [north st.](https://northstbags.com) woodward backpack pannier (32L)
+        * [north st.](https://northstbags.com) route pannier (24L)
+    * front
+        * two ortlieb fork pack panniers (5.8L)
+* frame bag: sunlite epic tour long haul frame bag
+* handlebar bags
+    * [outershell](https://outershell.com) handlebar harness
+    * [outershell](https://outershell.com) drawcord handlebar bag
+* bell: spurcycle original bell
