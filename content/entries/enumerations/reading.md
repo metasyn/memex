@@ -1,3 +1,8 @@
+# 2022
+
+## started
+* how to do nothing - jenny odell
+
 # 2021
 * hyperemployment: post-work, online labour and automation - domenico quaranta, janez janša, !mediengruppe bitnik (carmen weisskopf and domagoj smoljo) felix stalder, silvio lorusso, luciana parisi
 * logicomix - apostolos doxiadis and christos papadimitriou

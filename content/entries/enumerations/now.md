@@ -1,14 +1,14 @@
 # now
 
 ## general
-* growing blue oyster mushrooms at home
-* following an online course on natural language processing - see [[nlp]]
+* planning bicycle trips
+* working for the man
+* trying to play more guitar again
 
 ## reading
-* a planet for rent - yoss
-* the nature and growth of modern mathematics
+* how to do nothing
 
 ## playing
-ironically, both games i'm playing right now have similar sounds
+* horizon zero dawn
+* valheim
 * eastward
-* outward
