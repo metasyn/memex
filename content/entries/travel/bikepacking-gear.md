@@ -45,8 +45,11 @@ also, before embarking, make sure to lube your chain!
 * knife
 * coffee making device
 * mug/plate/bowl/spork
+* firestarter
 * sunscreen
 * toiletries & bug repellent
+* lol i'm sure you've gone camping
+* why am i even listing this stuff >__<
 
 ## clothing
 
@@ -56,7 +59,7 @@ people prefer having shorts with added padding in them which can more
 comfortable on long rides, and help you from getting saddle sores. for upper
 layers, its most importantly just to have a somewhat breathable wind breaker in
 my opinion. otherwise, i like wool best since it dries fast and doesn't smell
-as bad.
+as bad after riding all day.
 
 ## bags and packs
 
