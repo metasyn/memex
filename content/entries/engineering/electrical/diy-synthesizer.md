@@ -1,6 +1,6 @@
 # diy-synthesizer
 
-<img src="resources/img/dithered_diy_synthesizer.webp"><img>
+<img src="resources/img/dithered_diy_synthesizer.png"><img>
 
 below are notes on building my own synthesizer from scratch.
 

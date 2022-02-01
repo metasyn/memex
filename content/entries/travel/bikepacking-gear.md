@@ -72,7 +72,7 @@ storage seems preferred -
 [mixed terrain cycle touring](https://en.wikipedia.org/wiki/Mixed_terrain_cycle_touring)
 - this ends up looking something like this:
 
-<img src="resources/img/dithered_mixed_touring_bicycle.webp"/>
+<img src="resources/img/dithered_mixed_touring_bicycle.png"/>
 (Photo: Jules Verne Times Two / [julesvernex2.com](https://julesvernex2.com) / [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en))
 
 some of the major advantages of this type:
@@ -90,7 +90,7 @@ the other type is more suited for paved, road based routes - where the bags
 (called panniers - from the french for "basket") are mounted on racks and
 usually much closer to the ground:
 
-<img src="resources/img/dithered_touring_bicycle.webp"/>
+<img src="resources/img/dithered_touring_bicycle.png"/>
 (Photo: Keitheronearth / [Wikipedia](https://en.wikipedia.org/wiki/Bicycle_touring#/media/File:Loaded_touring_bicycle.JPG) / [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
 
 advantages to me:
@@ -105,7 +105,7 @@ organization posted a [good article](https://waba.org/blog/2020/04/carrying-stuf
 on carrying things on a bike which shows an example of how a few of my friends use baskets
 instead of racks/bags to hold their stuff:
 
-<img src="resources/img/dithered_bicycle_basket.webp"/>
+<img src="resources/img/dithered_bicycle_basket.png"/>
 
 baskets like this can be found for very cheap and also don't require any type
 of mounting points on your frame, which make them attractive as a quick and

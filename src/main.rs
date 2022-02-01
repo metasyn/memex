@@ -407,7 +407,7 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
             let name = &cap[2];
 
             return format!(
-                "<a class='img' href=\"resources/img/{}.webp\">{}</a>",
+                "<a class='img' href=\"resources/img/{}.png\">{}</a>",
                 name, img,
             );
         })

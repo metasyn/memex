@@ -4,7 +4,7 @@ houseplant notes!
 
 # calathea lancifolia
 
-<img src="resources/img/dithered_calathea_lancifolia.webp" />
+<img src="resources/img/dithered_calathea_lancifolia.png" />
 
 * common: rattlesnake plant
 * light: indirect light, partial shade
@@ -24,7 +24,7 @@ no picture because this plant is dying. i have hopes for recovery!
 
 # aglonema maria
 
-<img src="resources/img/dithered_aglonema_maria.webp" />
+<img src="resources/img/dithered_aglonema_maria.png" />
 
 * common: chinese evergreen plant
 * light: filtered / diffused sunlight
@@ -34,7 +34,7 @@ no picture because this plant is dying. i have hopes for recovery!
 
 # ficus decora tineke
 
-<img src="resources/img/dithered_ficus_decora_tineke.webp" />
+<img src="resources/img/dithered_ficus_decora_tineke.png" />
 
 * common: rubber tree plant
 * light: bright, filtered, indirect light
@@ -44,7 +44,7 @@ no picture because this plant is dying. i have hopes for recovery!
 
 # peperomia obtusifolia
 
-<img src="resources/img/dithered_peperomia_obtusifolia.webp" />
+<img src="resources/img/dithered_peperomia_obtusifolia.png" />
 
 * common: baby rubber plant
 * light: part shade. bright indirect. avoid direct afternoon sun.
@@ -55,7 +55,7 @@ no picture because this plant is dying. i have hopes for recovery!
 
 ## dracaena fragans
 
-<img src="resources/img/dithered_dracaena_fragans.webp" />
+<img src="resources/img/dithered_dracaena_fragans.png" />
 
 * common: corn plant
 * light: light shade, filtered sunlight.
@@ -65,7 +65,7 @@ no picture because this plant is dying. i have hopes for recovery!
 
 ## dracaena trifasciata
 
-<img src="resources/img/dithered_dracaena_trifasciata.webp" />
+<img src="resources/img/dithered_dracaena_trifasciata.png" />
 
 * common: snake plant, mother-in-law's tongue, golden bird nest
 * light: bright, filtered sunlight
@@ -83,7 +83,7 @@ no picture because this plant is dying. i have hopes for recovery!
 
 ## sedum sunsparkler 'lime zinger'
 
-<img src="resources/img/dithered_sedum_sunsparkler.webp" />
+<img src="resources/img/dithered_sedum_sunsparkler.png" />
 
 this is evidentially a patented plant we have, bred by chris hansen.
 evidentially "unauthorized propagation is prohibited". lmfao.
@@ -96,7 +96,7 @@ unrelated, i wanted to share a link on [propagating sedums](https://worldofsuccu
 
 ## sedum burrito moran
 
-<img src="resources/img/dithered_sedum_burrito_moran.webp" />
+<img src="resources/img/dithered_sedum_burrito_moran.png" />
 
 * common: baby burro's tail
 * light: bright direct light
@@ -105,7 +105,7 @@ unrelated, i wanted to share a link on [propagating sedums](https://worldofsuccu
 
 # maranta leuconeura
 
-<img src="resources/img/dithered_maranta_leuconeura.webp" />
+<img src="resources/img/dithered_maranta_leuconeura.png" />
 
 * common: prayer plant
 * light: medium to bright indirect. no intense direct sunlight.
@@ -115,7 +115,7 @@ unrelated, i wanted to share a link on [propagating sedums](https://worldofsuccu
 
 # crassula ovata
 
-<img src="resources/img/dithered_crassula_ovata.webp" />
+<img src="resources/img/dithered_crassula_ovata.png" />
 
 * common: jade plant, lucky plant
 * light: indirect sunlight
@@ -125,7 +125,7 @@ unrelated, i wanted to share a link on [propagating sedums](https://worldofsuccu
 
 # kalanchoe blossfeldiana
 
-<img src="resources/img/dithered_kalanchoe_blossfeldiana.webp" />
+<img src="resources/img/dithered_kalanchoe_blossfeldiana.png" />
 
 * common: kalanchoe
 * light: full sun to partial shade
@@ -135,7 +135,7 @@ unrelated, i wanted to share a link on [propagating sedums](https://worldofsuccu
 
 # asplenium dimorphum x difforme
 
-<img src="resources/img/dithered_asplenium_dimorphum.webp" />
+<img src="resources/img/dithered_asplenium_dimorphum.png" />
 
 * common: austral gem ferm
 * light: medium to bright indirect
@@ -145,7 +145,7 @@ unrelated, i wanted to share a link on [propagating sedums](https://worldofsuccu
 
 # philodendron brandtianum
 
-<img src="resources/img/dithered_philodendron_brandtianum.webp" />
+<img src="resources/img/dithered_philodendron_brandtianum.png" />
 
 this plant is often confused with the silver pothos.
 
@@ -157,7 +157,7 @@ this plant is often confused with the silver pothos.
 
 # monstera deliciosa
 
-<img src="resources/img/dithered_monstera_deliciosa.webp" />
+<img src="resources/img/dithered_monstera_deliciosa.png" />
 
 * common: tropical split-leaf philodendron
 * light: bright,  indirect
@@ -167,7 +167,7 @@ this plant is often confused with the silver pothos.
 
 # tradescantia albiflora 'nanouk'
 
-<img src="resources/img/dithered_tradescantia_albiflora.webp" />
+<img src="resources/img/dithered_tradescantia_albiflora.png" />
 
 * common: fantasy venice
 * light: bright, indrect
@@ -177,7 +177,7 @@ this plant is often confused with the silver pothos.
 
 # dieffenbachia seguine
 
-<img src="resources/img/dithered_dieffenbachia_seguine.webp" />
+<img src="resources/img/dithered_dieffenbachia_seguine.png" />
 
 * common: dumbcane
 * light: medium, partial shade

@@ -4,7 +4,7 @@ Ex. Mag is a publication from [Peow Studio](peowstudio.com). Each volume is an a
 
 ## FULL METAL DREAMLAND - CYBERPUNK (Vol 1)
 
-<img src="resources/img/dithered_exmag1.webp"/>
+<img src="resources/img/dithered_exmag1.png"/>
 
 * [connor willumsen](http://connorwillumsen.com) - @connorwillumsenltd (IG)
 * [freddy carrasco](http://freddycarrasco.com) - @freddycarrasco (IG)
@@ -18,7 +18,7 @@ Ex. Mag is a publication from [Peow Studio](peowstudio.com). Each volume is an a
 
 ## CROSS MY HEART - PARANORMAL ROMANCE (Vol 2)
 
-<img src="resources/img/dithered_exmag2.webp"/>
+<img src="resources/img/dithered_exmag2.png"/>
 
 * choo - @choodraws / @chootalks
 * [jane mai](http://janemai.co)  / [janemai.com](http://janemai.com) - @stinkytownmayor (IG)
@@ -32,7 +32,7 @@ Ex. Mag is a publication from [Peow Studio](peowstudio.com). Each volume is an a
 
 ## CRUMBLING KINGDOM - DARK FANTASY (Vol 3)
 
-<img src="resources/img/dithered_exmag3.webp"/>
+<img src="resources/img/dithered_exmag3.png"/>
 
 * al gofa - @al_gofa (IG)
 * [delfina pérez adán](http://estampita.tumblr.com) - @estampita (IG)

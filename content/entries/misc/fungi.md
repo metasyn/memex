@@ -3,7 +3,7 @@
 this page has some notes about growing mushrooms at home.
 i've only tried growing blue oyster mushrooms so far.
 
-<img src="resources/img/mushroom-bucket.webp"/>
+<img src="resources/img/mushroom-bucket.png"/>
 
 recently i followed [this guide on freshcap.com](https://learn.freshcap.com/growing/bucket-grow/)
 on how to grow mushrooms out of a 5 gallon bucket. we decided to try it out
@@ -30,7 +30,7 @@ we took the lid off to check on the growth after a few weeks. the mycellium had
 some bits of water sitting on the top, but otherwise, it looked the substrate
 was gegetting very colonised, which is great. it looked like this:
 
-<img src="resources/img/mycelium.webp" width=400 />
+<img src="resources/img/mycelium.png" width=400 />
 
 ## pins
 
@@ -38,10 +38,10 @@ the bucket has small 1/4" holes drilled around it (spaced at about 4-6" apart).
 a small cluster of little mushrooms will form which are called "pins". this is
 when you're supposed to ensure that the humidity of the space is very high.
 
-<img src="resources/img/mushroom-pins.webp" width=400 />
+<img src="resources/img/mushroom-pins.png" width=400 />
 
 ## fruiting
 
 and pretty soon you've got giant mushrooms growing!
 
-<img src="resources/img/mushroom-harvest.webp" width=400 />
+<img src="resources/img/mushroom-harvest.png" width=400 />

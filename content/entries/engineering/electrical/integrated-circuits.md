@@ -17,7 +17,7 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
 * the count is advanced one count at each positive clock signal transition, as long as the clock inhibit signal is low. otherwise, if the inhibit signal is high, the clock will not advance.
 * sending a high signal to reset will clear the counter to the zero position
 
-<img src="resources/img/cd4017be.webp" width="300" />
+<img src="resources/img/cd4017be.png" width="300" />
 
 ## CD4040BE
 
@@ -27,7 +27,7 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
 * takes input pulses and divides them into smaller / faster pulses
 * each Q value = division by 2^Q
 
-<img src="resources/img/cd4040be.webp" width="300" />
+<img src="resources/img/cd4040be.png" width="300" />
 
 ## CD4046BE
 
@@ -43,7 +43,7 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
     * R2 determines frequency offset
 * also features an on/off switch of sorts
 
-<img src="resources/img/cd4046be.webp" width="300" />
+<img src="resources/img/cd4046be.png" width="300" />
 
 ## C4051BE
 
@@ -57,7 +57,7 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
 * these can be reversed when used as demultiplexers
 * `INH` is inhibit
 
-<img src="resources/img/cd4051be.webp" width="300" />
+<img src="resources/img/cd4051be.png" width="300" />
 
 ## CD4066BE
 
@@ -67,7 +67,7 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
 * intended for transmission or multiplexing of analog or digital signals
 * pin for pin compatible with the CD4016B
 
-<img src="resources/img/cd4066be.webp" width="300" />
+<img src="resources/img/cd4066be.png" width="300" />
 
 ## CD4093BE
 
@@ -77,7 +77,7 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
 * has four distinct NAND gates in it
 * can use this for making oscillators
 
-<img src="resources/img/cd4093be.webp" width="300" />
+<img src="resources/img/cd4093be.png" width="300" />
 
 # Others
 
@@ -89,7 +89,7 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
 * can be used as an operational amplifier
 * it also lets you specify the gain you want to add
 
-<img src="resources/img/lm386.webp" width="300" />
+<img src="resources/img/lm386.png" width="300" />
 
 ## L293DNE
 
@@ -103,4 +103,4 @@ i'm learning how to make my own [[diy-synthesizer]]. also see my notes on [[elec
 
 * General Purpose Photocoupler
 
-<img src="resources/img/ltv4n35.webp" width="300" />
+<img src="resources/img/ltv4n35.png" width="300" />

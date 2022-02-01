@@ -1,3 +1,3 @@
 # directory
 
-<img src="resources/img/ink.webp"><img>
+<img src="resources/img/ink.png"><img>

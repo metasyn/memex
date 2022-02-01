@@ -1,6 +1,6 @@
 # learn-uxn
 
-<img src="resources/img/dithered_learn-uxn.webp"><img>
+<img src="resources/img/dithered_learn-uxn.png"><img>
 
 the [learn-uxn](https://metasyn.github.io/learn-uxn) project is a project for taking the
 [uxn](https://wiki.xxiivv.com/site/uxn.html) emulator and assembler and making

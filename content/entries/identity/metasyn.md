@@ -1,6 +1,6 @@
 # metasyn
 
-<img src="resources/img/bay_bridge.webp"><img>
+<img src="resources/img/bay_bridge.png"><img>
 
 metasyn has been a name i've used since around 2006. _metasyn_ is a neologism,
 a made up word. so, what does it mean?

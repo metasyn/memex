@@ -1,6 +1,6 @@
 # work
 
-<img src="resources/img/painted_hand.webp"></img>
+<img src="resources/img/painted_hand.png"></img>
 
 currently, i am primarily working on applied machine learning research, search
 systems, and services that involve natural language processing. a large portion

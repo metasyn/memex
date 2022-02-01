@@ -1,6 +1,6 @@
 # sanfreo euroling
 
-<img src="resources/img/dithered_sanfreo_3.webp"></img>
+<img src="resources/img/dithered_sanfreo_3.png"></img>
 
 the sanfreo euroling is a [[diy-synthesizer]]. i made it as part of a [dogbotic](https://dogbotic.com/) course. it features:
 
@@ -45,7 +45,7 @@ the timing engine has one of two inputs:
 
 these two inputs are selected via a switch. from there, this timing is fed into a binary divider which divides the clock by 2, 4, and 8 respectively so, from this, we end up with three different clocks. these, when treated as digital signals (that is, binary in this case), can be used to specify a number between 0 and 7 (or 8 steps total). for example, here is our clock value, and our divisions:
 
-<img src="resources/img/ripple_counter.webp"></img>
+<img src="resources/img/ripple_counter.png"></img>
 
 (image from [here](https://www.eecs.tufts.edu/~dsculley/tutorial/flopsandcounters/flops6.html))
 
@@ -61,21 +61,21 @@ from the sonic engine, we have 6 outputs (the 6 different octaves of the origina
 
 lastly, the audio out is a 1/4" (7mm) jack, and the whole thing is powered by a 9V battery.
 
-<img src="resources/img/dithered_sanfreo_4.webp"></img>
+<img src="resources/img/dithered_sanfreo_4.png"></img>
 
 
 ## schematic
 
-<img src="resources/img/dithered_sanfreo_1.webp"></img>
+<img src="resources/img/dithered_sanfreo_1.png"></img>
 
 the schematic is missing one voltage divider with a potentiometer on the audio out. this is used to decrease the volume, because before the audio signal was way too high / loud /hot.
 
-<img src="resources/img/sanfreo_euroling.webp"></img>
+<img src="resources/img/sanfreo_euroling.png"></img>
 
 
 ## enclosure
 
-<img src="resources/img/dithered_sanfreo_2.webp"></img>
+<img src="resources/img/dithered_sanfreo_2.png"></img>
 
 i purchased an old wooden box at salvation army for $2 USD. i drilled holes in it, then painted it.
 
