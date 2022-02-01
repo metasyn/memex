@@ -28,7 +28,13 @@ cogset: shimano CS-HG62 11-32
 * seatpost clamp diameter: 30.0mm
 * headset/steertube: 1-1/8" threadless
 * stem: kalloy
-* handlebar: salsa cowwell
+* handlebar: salsa cowbell
+
+## lighting
+
+* [velogical](https://www.velogical-engineering.com/dynamo/product-information/?lang=en) sport rim dyanmo
+* front light: supernova E3 PRO 2
+* tail light: supernova E3 Tail Light 2
 
 ### storage
 
