@@ -17,7 +17,11 @@ multiple days. this cadence allows us to take time to take photos, explore a
 side trail, hike to the beach, or often, have a midday beer or coffee. usually
 with a more relaxed pace like this, we also end up getting to where we're
 intending to go a bit earlier in the day, so have time to relax and hangout
-wherever we end up. usually we will do something very casual, like 25-50 miles a day. while if you don't bicycle, that sounds maybe like a lot, but really, it isn't so much if you split up your riding throughout the day.
+wherever we end up. usually we will do something very casual, like 25-50 miles
+a day. while if you don't bicycle, that sounds maybe like a lot, but really, it
+isn't so much if you split up your riding throughout the day. we've found that
+pushing too much more than that takes away a lot of the fun, since we like taking
+breaks, photos, and enjoying the journey more generally.
 
 ## randonneuring
 
@@ -40,3 +44,7 @@ others who might be interested before we depart:
 
 * [[sf-sc-sf]]: a route from SF -> santa cruz -> san jose -> SF
 * [[sf-pr-sf]]: a route from SF -> point reyes -> SF
+
+## gear
+
+i split this out to its own page on [[bikepacking-gear]].

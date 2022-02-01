@@ -70,6 +70,7 @@ storage seems preferred -
 - this ends up looking something like this:
 
 <img src="resources/img/dithered_mixed_touring_bicycle.webp"/>
+(Photo: Jules Verne Times Two / [julesvernex2.com](https://julesvernex2.com) / [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en))
 
 some of the major advantages of this type:
 * no racks needed, which is less weight and gear
@@ -88,7 +89,6 @@ usually much closer to the ground:
 
 <img src="resources/img/dithered_touring_bicycle.webp"/>
 (Photo: Keitheronearth / [Wikipedia](https://en.wikipedia.org/wiki/Bicycle_touring#/media/File:Loaded_touring_bicycle.JPG) / [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
-(Photo: Jules Verne Times Two / [julesvernex2.com](https://julesvernex2.com) / [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en))
 
 advantages to me:
 * lower center of gravity, which makes me feel more stable going fast
