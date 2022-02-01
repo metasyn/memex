@@ -34,4 +34,4 @@ back to the campground before it gets dark to make dinner.
 
 # day 3: Samuel P. Taylor -> SF
 
-This is just the reverse of the first map, so I won't bother adding it here. Depending how tired we are, we could even take the ferry back from Larkspur or Sausalito into San Francisco.
+this is just the reverse of the first map, so i won't bother adding it here. Depending how tired we are, we could even take the ferry back from Larkspur or Sausalito into San Francisco.
