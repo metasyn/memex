@@ -17,3 +17,6 @@ i attended the diy synthesizer workshop from [dogbotic](https://dogbotic.com/). 
 * Natahn "Synthnerd" - [Synth DIY Schematics](https://synthnerd.wordpress.com/synth-diy/)
 * [sdiy.info](sdiy.info) - a wiki of various DIY synth information
 * Kristian Blåsol's [Youtube Channel](https://www.youtube.com/channel/UC9NeBnf-9pzDC3C86MeOJvA) - he has a "Modular In A Week" series
+* Winterbloom
+    * [Designing Castor and Pollux](https://blog.thea.codes/designing-castor-and-pollux/)
+    * [Designing Big Honking Button](https://blog.thea.codes/designing-big-honking-button/)
