@@ -176,3 +176,22 @@ guide on reading schematics.
 # bom
 
 BOM usually stands for bill of materials - a list of all the components or eletronics or pieces used in a circuit or build.
+
+# protocols
+
+## I2C
+
+* Inter-Integrated Circuit
+* [Wikipedia](https://en.wikipedia.org/wiki/I%C2%B2C)
+* 1982
+
+## SPI
+
+* Serial Peripheral Interface
+* [Wikipedia](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface)
+* 1979
+
+## UART
+
+* Universal Asynchonrous Receiver-Transmitter
+* [Wikipedia](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter)

@@ -1,9 +1,10 @@
 # 2022
 
-## started
 * how to do nothing - jenny odell
+* [the relation between things in a continuum](https://www.flowerflowerpress.press/shop/the-relation-between-things-in-a-continuum) - [nicole lavelle](https://www.nicolelavelle.com/)
 
 # 2021
+
 * hyperemployment: post-work, online labour and automation - domenico quaranta, janez janša, !mediengruppe bitnik (carmen weisskopf and domagoj smoljo) felix stalder, silvio lorusso, luciana parisi
 * logicomix - apostolos doxiadis and christos papadimitriou
 * [stores at the mall](https://digitalcollections.wesleyan.edu/object/ir-2556) - peter blasser's thesis (2015)

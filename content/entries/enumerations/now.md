@@ -2,13 +2,13 @@
 
 ## general
 * planning [[bikepacking]] trips
+* building some adafruit microcontroller projects
 * craving deeper friendships and connections
-* trying to play more guitar again
 
 ## reading
-* how to do nothing
+* CS textbooks
 
 ## playing
-* horizon zero dawn
+* just finished horizon zero dawn
 * valheim
 * eastward
