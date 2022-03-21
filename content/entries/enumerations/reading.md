@@ -2,6 +2,7 @@
 
 * how to do nothing - jenny odell
 * [the relation between things in a continuum](https://www.flowerflowerpress.press/shop/the-relation-between-things-in-a-continuum) - [nicole lavelle](https://www.nicolelavelle.com/)
+* [no love lost](https://shop.peowstudio.com/collections/books/products/copy-of-brush-paradise)
 
 # 2021
 
