@@ -1,14 +1,13 @@
 # now
 
 ## general
-* planning [[bikepacking]] trips
-* building some adafruit microcontroller projects
-* craving deeper friendships and connections
+* planning [[bikepacking]] trips and trips in general
 
 ## reading
-* CS textbooks
+* the factory
 
 ## playing
-* just finished horizon zero dawn
-* valheim
-* eastward
+* death's door
+* recently finished
+    * horizon zero dawn
+    * eastward
