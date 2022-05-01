@@ -45,5 +45,6 @@ a list of notable games i've played that i enjoyed in particular. loosely groupe
 * polybridge (2016) & polybridge 2 (2020)
 * baba is you (2019)
 
-## its a book, but a movie, but a game
+## yer a detective, harry
 * disco elysium
+* return of the obra dinn
