@@ -2,7 +2,7 @@
 
 a list of notable games i've played that i enjoyed in particular. loosely grouped by a combination of theme, aesthetics, and gameplay.
 
-## story driven indie
+## story driven indie adventure
 * a short hike (2019)
 * eastward (2021)
 * sable (2021)
@@ -32,7 +32,6 @@ a list of notable games i've played that i enjoyed in particular. loosely groupe
 * Risk of Rain (2013) & Risk of Rain 2(2020)
 
 ## platformer but somehow not boring
-
 * fez (2012)
 * hollow knight (2017)
 
@@ -45,3 +44,6 @@ a list of notable games i've played that i enjoyed in particular. loosely groupe
 * islanders (2019)
 * polybridge (2016) & polybridge 2 (2020)
 * baba is you (2019)
+
+## its a book, but a movie, but a game
+* disco elysium
