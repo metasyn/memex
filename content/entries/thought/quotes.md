@@ -21,3 +21,7 @@ the things we read, that somehow stick with us, more than they might.
 > The end of the human race will be that it will eventually die of civilisation.
 
 - Ralph Waldo Emerson
+
+> they were working: doing what they wanted to do. he was not working. he was being worked.
+
+- Ursula K. Le Guinn (The Dispossesed)
