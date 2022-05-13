@@ -44,6 +44,7 @@ struct DirectoryItem {
     children: Vec<usize>,
 }
 
+
 impl DirectoryItem {
     fn new(idx: usize, val: String) -> Self {
         Self {
@@ -147,7 +148,7 @@ fn setup() -> std::result::Result<(), Report> {
 lazy_static! {
     static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
 
-    static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[(?P<link>.+?)]]").unwrap();
+    static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[((?P<title>.*)\\|)?(?P<link>.+?)]]").unwrap();
     static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();
     static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();
     static ref DITHERED_IMG_REGEX: Regex =
@@ -182,7 +183,7 @@ fn extract_content_from_path(path_buf: &PathBuf) -> Option<(OsString, String, &P
 fn extract_links_from_content(content: &str) -> Vec<String> {
     INTERNAL_LINK_REGEX
         .captures_iter(content)
-        .filter_map(|c| c.get(1))
+        .filter_map(|c| c.get(3))
         .map(|x| String::from(x.as_str()))
         .collect()
 }
@@ -391,6 +392,7 @@ fn format_references(references: Vec<String>) -> String {
     result.push_str(
         references
             .iter()
+            .filter(|x| *x != "meta")
             .map(|x| format!("[[{}]]", x))
             .collect::<Vec<String>>()
             .join(" ")
@@ -420,7 +422,23 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
 
 fn convert_internal_to_md(content: &str) -> String {
     return INTERNAL_LINK_REGEX
-        .replace_all(&content, "[$link]($link.html)")
+        .replace_all(content, |caps: &Captures| {
+
+            // must exist
+            let link = &caps[3];
+
+            let title = match caps.get(2) {
+                Some(title) => title.as_str(),
+                None => link,
+            };
+
+            format!(
+                "[{}]({}.html)",
+                title,
+                link,
+
+            )
+        })
         .to_string();
 }
 
@@ -547,7 +565,7 @@ fn render_gemtext(s: &str) -> String {
     // Get all internal links
     let mut output = INTERNAL_LINK_REGEX
         .replace_all(s, |caps: &Captures| {
-            let link = &caps[1];
+            let link = &caps[3];
 
             let gemlink = format!("=> gemini://{}/{}.gmi {}", DOMAIN, link, link);
             gem_links.push(gemlink);

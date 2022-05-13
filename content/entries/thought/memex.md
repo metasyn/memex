@@ -102,7 +102,7 @@ learning, and documenting your ideas, in public.
 
 ## at your own pace, in your own way
 
-as someone who thinks that [[anarchism]] is system we should consider and move towards, there is a lot of the above that makes sense in particular: write at your own pace, in your own way, to create something unique to your own needs. if your memex doesn't do something you want it to, the sky's your limit - you can change whatever it is you want. it might take a little more effort, but like consensus decision making, or making bread from scratch, the end result is worth it. i've been very influenced by other people's gardens and zettlekastens:
+as an [[anarchist|anarchism]], there is a lot of the above that makes sense in particular: write at your own pace, in your own way, to create something unique to your own needs. if your memex doesn't do something you want it to, the sky's your limit - you can change whatever it is you want. it might take a little more effort, but like consensus decision making, or making bread from scratch, the end result is worth it. i've been very influenced by other people's gardens and zettlekastens:
 
 * [xxiivv - device lu linvega's wiki](https://wiki.xxiivv.com)
 * [Andy Matuschak's Notes](https://notes.andymatuschak.org/About_these_notes)
