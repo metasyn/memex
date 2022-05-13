@@ -3,6 +3,7 @@
 * how to do nothing - jenny odell
 * [the relation between things in a continuum](https://www.flowerflowerpress.press/shop/the-relation-between-things-in-a-continuum) - [nicole lavelle](https://www.nicolelavelle.com/)
 * [no love lost](https://shop.peowstudio.com/collections/books/products/copy-of-brush-paradise)
+* the factory - hiroko oyamada
 * this dispossesd - ursula k le guinn
 * [combinators and the story of computation](https://writings.stephenwolfram.com/2020/12/combinators-and-the-story-of-computation/)
 
@@ -17,13 +18,13 @@
 * skip - [molly mendoza](www.mollymendoza.com)
 * crumbling kingdom - ex. mag issue #03 (peow studio)
 * cross my heart - ex. mag issue #02 (peow studio)
+* a planet for rent - yoss
 
-## started
+### started
 * the communism of love - richard gilman-opalsky
 * molecular red - mckenzie wark
 * the possibility of reddish green: wittegenstein outside of philosophy - david rothenburg
 * the linux programming interface - michael kerrisk
-* a planet for rent - yoss
 
 # 2020
 
