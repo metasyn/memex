@@ -17,6 +17,7 @@ extern link: [turtle.audio](https://turtle.audio)
 ```
 
 internal link: [[memex]]
+internal link with preview: [[something else|memex]]
 extern link: [turtle.audio](https://turtle.audio)
 
 # todo
