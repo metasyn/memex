@@ -99,3 +99,13 @@ blog. it feels like a portfolio, but also a scratchpad. it also is _under your
 control_. if you want to change your mind about something, you can just update
 whatever you want. at the end of the day, making a memex feels more like
 learning, and documenting your ideas, in public.
+
+## at your own pace, in your own way
+
+as someone who thinks that [[anarchism]] is system we should consider and move towards, there is a lot of the above that makes sense in particular: write at your own pace, in your own way, to create something unique to your own needs. if your memex doesn't do something you want it to, the sky's your limit - you can change whatever it is you want. it might take a little more effort, but like consensus decision making, or making bread from scratch, the end result is worth it. i've been very influenced by other people's gardens and zettlekastens:
+
+* [xxiivv - device lu linvega's wiki](https://wiki.xxiivv.com)
+* [Andy Matuschak's Notes](https://notes.andymatuschak.org/About_these_notes)
+* [C2 wiki](http://wiki.c2.com/)
+* [gwern.net](https://www.gwern.net/)
+* [indie web](https://indieweb.org/)
