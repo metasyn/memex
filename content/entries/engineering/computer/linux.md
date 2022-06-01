@@ -11,6 +11,13 @@ sudo do-release-upgrade
 sudo reboot now
 ```
 
+sometimes after that there are some random dpkg / apt errors:
+
+```
+sudo dpkg --configure -a
+sudo apt --fix-broken install
+```
+
 ## add desktop launcher
 
 * example file in `/usr/share/applications/wally.desktop`
