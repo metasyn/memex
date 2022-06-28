@@ -6,6 +6,8 @@
 * the factory - hiroko oyamada
 * this dispossesd - ursula k le guinn
 * [combinators and the story of computation](https://writings.stephenwolfram.com/2020/12/combinators-and-the-story-of-computation/)
+* [imperiled life: revolution against clime catastrophe](https://www.akpress.org/imperiledlife.html) by javier sethness-castro
+* [black panels only: vol v](https://tommycreep.bandcamp.com/merch/black-panels-only-eurorack-zine-issue-v) by [tommy creep](https://tommycreep.bandcamp.com/)
 
 # 2021
 

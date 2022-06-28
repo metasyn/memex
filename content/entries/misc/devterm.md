@@ -1,6 +1,6 @@
 # devterm
 
-a while back clockworkpi released a small handheld computer called the [devterm](https://www.clockworkpi.com/devterm). i originally bought it for the inclusion with my eurorack synthesizer, hoping to potentially use it as a small and quick way to add [orca](https://100r.co/site/orca.html). if you haven't used orca before, check out my project [[learn-orca]] too. in particular, i was interested in a compact screen and keyboard combo, which fits the bill for the devterm. i also thought it might be an interesting computer to bring to certain situations, where i don't necessarily need the entirety of a full laptop/computer to accomplish some task. it is really small and light!
+a while back clockworkpi released a small handheld computer called the [devterm](https://www.clockworkpi.com/devterm). i originally bought it for the inclusion with my eurorack synthesizer, hoping to potentially use it as a small and quick way to add [orca](https://100r.co/site/orca.html). if you haven't used orca before, check out my project [[learn-orca]] too. in particular, i was interested in a compact screen and keyboard combo, which fits the bill for the devterm. i also thought it might be an interesting computer to bring to certain situations, where i don't necessarily need the entirety of a full laptop/computer to accomplish some task. it is really small and light! i have a feeling that i will mostly end up just tinkering with it as a way of learning more, and maybe playing some video games.
 
 upon receiving it though, i realized i would need to customize it a little to
 feel comfortable using it. below are some various notes on getting it setup and
@@ -21,3 +21,17 @@ one thing that took me a little bit to figure out was switching this hardware sw
 * update xfce window manager keyboard combinations - they keyboard layout doesn't really allow for a ton of the defaults to make sense. i remapped how i can shift windows around and maximize, minimize, etc without having to use anything other than Ctrl / Super / Alt and the arrow keys.
 * i decided to use [rofi](https://github.com/davatorium/rofi) as a way of launching applications easily, since using the trackball can be a little tedious sometimes
 * i bound "Super + Space" to `rofi -show combi -combi-modes "window,run,drun" -modes combi` which is a really nice TUI style interface (though its a window) to launch and select various applications that are installed (including tons of xfce related settings etc)
+
+## installing retroarch
+
+* following this guide
+* https://docs.libretro.com/development/retroarch/compilation/ubuntu/
+* the only tricky part was ensuring the `deb-src` was available
+* i was only able to add it for `sudo apt-get build-dep retroarch` by running `sudo software-properties-gtk` and finding the right `deb-src` to allow there
+
+
+## resources / references
+
+* https://forum.clockworkpi.com/t/retroarch-megathread
+* https://forum.clockworkpi.com/t/trying-to-get-retroarch-to-work-on-a06/7442/11jj
+* https://forum.clockworkpi.com/t/i-can-t-use-retroarch/7471/4
