@@ -1,11 +1,11 @@
 # now
 
 ## general
-* taking a trip to scotland and england
+* working on synthesizers lately
 * trying to plan for the future (harder than usual)
 
 ## reading
-* just finished reading the dispossed
+* been reading imperiled life
 
 ## playing
-* i just picked up no man's sky. not sure how much time i am going to put into it, but definitely have enjoyed it a bit so far.
+* not so many video games lately
