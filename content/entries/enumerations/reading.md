@@ -9,6 +9,7 @@
 * [imperiled life: revolution against clime catastrophe](https://www.akpress.org/imperiledlife.html) by javier sethness-castro
 * [black panels only: vol v](https://tommycreep.bandcamp.com/merch/black-panels-only-eurorack-zine-issue-v) by [tommy creep](https://tommycreep.bandcamp.com/)
 * inhabiting the negative space - jenny odell
+* forth application techniques - elizabeth rather
 
 # 2021
 
@@ -23,7 +24,7 @@
 * cross my heart - ex. mag issue #02 (peow studio)
 * a planet for rent - yoss
 
-### started
+i started but didn't finish:
 * the communism of love - richard gilman-opalsky
 * molecular red - mckenzie wark
 * the possibility of reddish green: wittegenstein outside of philosophy - david rothenburg
