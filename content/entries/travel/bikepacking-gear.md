@@ -13,43 +13,52 @@ fancy or expensive gear in order to ride a bike a long distance.
 
 ## bicycle essentials
 
-* a helmet
-* lights
-* a lock
-* water bottle cage
-* appropriate tires for your route
-    * skinnier if its more paved
-    * fatter/knobbier if its more offroad
-* tools needed to change a flat
-    * a crescent wrench if your wheel requires it
-    * tire irons (levers)
-    * a patchkit (make sure the glue isn't dried up)
-    * an extra tube
-    * a tire pump
-* a multitool for tightening or otherwise working on your bicycle
-    * generally i only end up using my hex/allen wrenches
-* a chainbreaker and a small bit of extra chain
-    * while its rare, last ride we broke a chain!
-    * we had no extra links to repair the chain sadly though
+- a helmet
+- lights
+- a lock
+- water bottle cages
+- appropriate tires for your route
 
-also, before embarking, make sure to lube your chain!
+  - skinnier if its more paved
+  - fatter/knobbier if its more offroad
+
+- repair kit
+  - flats
+    - tire irons (levers)
+    - a 15mm crescent wrench if your wheel requires it for removal
+    - a patchkit (make sure the glue isn't dried up)
+    - extra tube
+    - a tire pump
+  - wheel
+    - extra spokes
+  - drive chain
+    - a chainbreaker
+    - a small bit of extra chain
+  - brakes
+    - extra brake pads
+  - general
+    - a multitool
+    - zip ties
+    - duct tape
+    - superglue
+    - straps / bungee cords
 
 ## camping essentials
 
-* tent
-* sleeping pad
-* sleeping bag
-* headlamp/light
-* fuel and flame source
-* spork/spoon
-* knife
-* coffee making device
-* mug/plate/bowl/spork
-* firestarter
-* sunscreen
-* toiletries & bug repellent
-* lol i'm sure you've gone camping
-* why am i even listing this stuff >__<
+- tent
+- sleeping pad
+- sleeping bag
+- headlamp/light
+- fuel and flame source
+- spork/spoon
+- knife
+- coffee making device
+- mug/plate/bowl/spork
+- firestarter
+- sunscreen
+- toiletries & bug repellent
+- lol i'm sure you've gone camping
+- why am i even listing this stuff >\_\_<
 
 ## clothing
 
@@ -70,19 +79,22 @@ on your bicycle. for folks that spend more time going offroad, doing gravel, or
 have suspension on their bicycle, frame mounted bags and handle bar/seat
 storage seems preferred -
 [mixed terrain cycle touring](https://en.wikipedia.org/wiki/Mixed_terrain_cycle_touring)
+
 - this ends up looking something like this:
 
-<img src="resources/img/dithered_mixed_touring_bicycle.png"/>
-(Photo: Jules Verne Times Two / [julesvernex2.com](https://julesvernex2.com) / [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en))
+    <img src="resources/img/dithered_mixed_touring_bicycle.png"/>
+    (Photo: Jules Verne Times Two / [julesvernex2.com](https://julesvernex2.com) / [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en))
 
-some of the major advantages of this type:
-* no racks needed, which is less weight and gear
-* no works much better for bikes with suspension
-* doesn't require mounting points
+some of the major advantages of this type, to me:
 
-on the other hand:
-* no racks is less flexibility for carying bulky or large boxy objects
-* center of gravity is high, which causes some instability when riding
+- no racks needed, which is less weight and gear
+- no works much better for bikes with suspension
+- doesn't require mounting points
+
+  on the other hand:
+
+- no racks is less flexibility for carying bulky or large boxy objects
+- center of gravity is high, which causes some instability when riding
 
 ### mostly paved
 
@@ -94,9 +106,10 @@ usually much closer to the ground:
 (Photo: Keitheronearth / [Wikipedia](https://en.wikipedia.org/wiki/Bicycle_touring#/media/File:Loaded_touring_bicycle.JPG) / [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
 
 advantages to me:
-* lower center of gravity, which makes me feel more stable going fast
-* overall more room to bring more things, tools, snacks, clothes etc.
-* good racks can hold a lot of weight and awkward sized objects - for example, we once put my friends bicycle on my rack, and she sat on my handlebars, so we could get back to where we were fixing her bicycle - much harder to do without a rack
+
+- lower center of gravity, which makes me feel more stable going fast
+- overall more room to bring more things, tools, snacks, clothes etc.
+- good racks can hold a lot of weight and awkward sized objects - for example, we once put my friends bicycle on my rack, and she sat on my handlebars, so we could get back to where we were fixing her bicycle - much harder to do without a rack
 
 ## basketpacking
 
@@ -112,13 +125,15 @@ of mounting points on your frame, which make them attractive as a quick and
 affordable option.
 
 advantages:
-* works great even for doing random stuff
-* adding a cargo net over it can expand the space
-* any bag works as basket bag
 
-disadvantage:
-* somewhat higher center of gravity
-* your bag might need to be waterproof?
+- works great even for doing random stuff
+- adding a cargo net over it can expand the space
+- any bag works as basket bag
+
+  disadvantage:
+
+- somewhat higher center of gravity
+- your bag might need to be waterproof?
 
 ### my setup
 
