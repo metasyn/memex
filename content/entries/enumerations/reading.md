@@ -10,6 +10,7 @@
 * [black panels only: vol v](https://tommycreep.bandcamp.com/merch/black-panels-only-eurorack-zine-issue-v) by [tommy creep](https://tommycreep.bandcamp.com/)
 * inhabiting the negative space - jenny odell
 * forth application techniques - elizabeth rather
+* walkway - cory doctorow
 
 # 2021
 
