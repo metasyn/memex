@@ -1,6 +1,6 @@
 # Ex. Mag
 
-Ex. Mag is a publication from [Peow Studio](https://peowstudio.com). Each volume is an anthology loosely centered around a theme, from various artists. At the end of each volume, there are list of artist interview cards. I wanted to assemble a list of all the artists in the magazines so I can reference them, as well as share their awesome work. Check them out... oh and buy Ex. Mag!
+Ex. Mag is a publication from [Peow Studio](https://www.peowstudio.com). Each volume is an anthology loosely centered around a theme, from various artists. At the end of each volume, there are list of artist interview cards. I wanted to assemble a list of all the artists in the magazines so I can reference them, as well as share their awesome work. Check them out... oh and buy Ex. Mag!
 
 ## FULL METAL DREAMLAND - CYBERPUNK (Vol 1)
 
