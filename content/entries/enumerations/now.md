@@ -1,11 +1,15 @@
 # now
 
 ## general
-* working on synthesizers lately
-* trying to plan for the future (harder than usual)
+
+- working on synthesizers lately
+- planning travles - bike trips
 
 ## reading
-* been reading imperiled life
+
+- been reading ex mag vol 4
 
 ## playing
-* not so many video games lately
+
+- playing V rising
+- sokpop stuff
