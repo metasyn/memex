@@ -1,3 +1,7 @@
+# linux
+
+a collection of notes for sysadmin and general linux tasks that i find myself having to look up over and over again.
+
 # ubuntu
 
 ## dist upgrade
@@ -20,7 +24,7 @@ sudo apt --fix-broken install
 
 ## add desktop launcher
 
-* example file in `/usr/share/applications/wally.desktop`
+- example file in `/usr/share/applications/wally.desktop`
 
 ```
 [Desktop Entry]
@@ -84,9 +88,10 @@ cd yay
 makepkg -si
 ```
 
-# Pop!_OS
+# Pop!\_OS
 
 Sometimes my system76 laptop's audio just stops working. This seems to fix it:
+
 ```
 systemctl --user restart pulseaudio
 rm -r ~/.config/pulse
