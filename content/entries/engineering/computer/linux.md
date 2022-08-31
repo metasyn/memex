@@ -97,3 +97,21 @@ systemctl --user restart pulseaudio
 rm -r ~/.config/pulse
 pulseaudio -k
 ```
+
+# disk space
+
+```
+# Whats taking up space
+df -h
+
+# Go through the folders
+du -h -d 1 . --exclude proc
+
+# /var/log/journal?
+journalctl --vacuum-size=100M
+journalctl --vacuum-size=10d
+
+# /var/lib/docker?
+docker system prune -a
+docker volume prune -a
+```
