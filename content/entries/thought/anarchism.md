@@ -4,6 +4,10 @@
 
 ## readings
 
+> by anarchist spirit i mean that deeply human sentiment, which aims at the good of all, freedom and justice for all, solidarity and love among the people; which is not an exclusive characteristic only of self-declared anarchists, but inspires all people who have a generous heart and an open mind.
+
+—Errico Malatesta, Umanita Nova, April 13, 1922
+
 - [anarchism and its aspirations - cindy milstein](https://theanarchistlibrary.org/library/cindy-milstein-anarchism-and-its-aspirations)
 - [anarchy: a graphic guide](https://files.libcom.org/files/anarchy-graphic-guide-clifford-harper.pdf)
 - [on anarchism - noam choamsky](https://theanarchistlibrary.org/library/noam-chomsky-on-anarchism)
