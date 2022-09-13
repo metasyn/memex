@@ -4,7 +4,7 @@ use std::ffi::OsString;
 use std::fmt::Display;
 use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
-use std::io::{BufReader, Error, ErrorKind, Read, Result, stdin};
+use std::io::{stdin, BufReader, Error, ErrorKind, Read, Result};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::mpsc::channel;
@@ -17,7 +17,7 @@ use colored::*;
 use lazy_static::lazy_static;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 use regex::{Captures, Regex};
-use rss::{Channel, ItemBuilder, GuidBuilder};
+use rss::{Channel, GuidBuilder, ItemBuilder};
 
 use rss::validation::Validate;
 
@@ -43,7 +43,6 @@ struct DirectoryItem {
     val: String,
     children: Vec<usize>,
 }
-
 
 impl DirectoryItem {
     fn new(idx: usize, val: String) -> Self {
@@ -144,17 +143,15 @@ fn setup() -> std::result::Result<(), Report> {
 // REGEX //
 ///////////
 
-
 lazy_static! {
     static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
-
-    static ref INTERNAL_LINK_REGEX: Regex = Regex::new("\\[\\[((?P<title>.*)\\|)?(?P<link>.+?)]]").unwrap();
+    static ref INTERNAL_LINK_REGEX: Regex =
+        Regex::new("\\[\\[((?P<title>.*)\\|)?(?P<link>.+?)]]").unwrap();
     static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();
     static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();
     static ref DITHERED_IMG_REGEX: Regex =
         Regex::new(r"(?P<img><img src=.*?resources/img/dithered_(?P<name>.+?)\..+?>)").unwrap();
     static ref MD_LINK_REGEX: Regex = Regex::new(r"\[(?P<title>.+?)\]\((?P<link>.+?)\)").unwrap();
-
     static ref HTML_TAG_REGEX: Regex = Regex::new(r"<[^>]*>").unwrap();
     static ref TAG_SRC_REGEX: Regex = Regex::new("src=\"(?P<src>.+?)\"").unwrap();
 }
@@ -423,7 +420,6 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
 fn convert_internal_to_md(content: &str) -> String {
     return INTERNAL_LINK_REGEX
         .replace_all(content, |caps: &Captures| {
-
             // must exist
             let link = &caps[3];
 
@@ -432,12 +428,7 @@ fn convert_internal_to_md(content: &str) -> String {
                 None => link,
             };
 
-            format!(
-                "[{}]({}.html)",
-                title,
-                link,
-
-            )
+            format!("[{}]({}.html)", title, link,)
         })
         .to_string();
 }
@@ -557,10 +548,14 @@ fn render_gemtext(s: &str) -> String {
     // first convert links
     let mut gem_links: Vec<String> = vec![
         format!("=> gemini://{}/index.gmi index and recent changes", DOMAIN).to_owned(),
-        format!("=> gemini://{}/directory.gmi directory of all pages", DOMAIN).to_owned(),
+        format!(
+            "=> gemini://{}/directory.gmi directory of all pages",
+            DOMAIN
+        )
+        .to_owned(),
     ];
 
-    let mut http_links =  vec![];
+    let mut http_links = vec![];
 
     // Get all internal links
     let mut output = INTERNAL_LINK_REGEX
@@ -588,15 +583,14 @@ fn render_gemtext(s: &str) -> String {
         })
         .to_string();
 
-    TAG_SRC_REGEX.captures_iter(&output)
-        .for_each(|x| {
-            let src = &x[1];
-            if src.starts_with("resources/") {
-                http_links.push(format!("=> https://{}/{}", DOMAIN, src));
-            } else {
-                http_links.push(format!("=> {}", src));
-            }
-        });
+    TAG_SRC_REGEX.captures_iter(&output).for_each(|x| {
+        let src = &x[1];
+        if src.starts_with("resources/") {
+            http_links.push(format!("=> https://{}/{}", DOMAIN, src));
+        } else {
+            http_links.push(format!("=> {}", src));
+        }
+    });
 
     output = HTML_TAG_REGEX.replace_all(&output, "").to_string();
 
@@ -610,7 +604,6 @@ fn render_gemtext(s: &str) -> String {
 
     return output;
 }
-
 
 fn make_header_link(header: &str) -> String {
     let temp = HEADER_REGEX
@@ -696,13 +689,15 @@ fn build(
                 let mut fd = File::create(fname)?;
                 let res = fd.write_all(html.as_bytes());
                 if res.is_err() {
-                    return Err(res.err().unwrap())
+                    return Err(res.err().unwrap());
                 }
-
 
                 // create gemtext files
                 let gemtext = contents
-                    .replace(make_template("directory").as_str(), formatted_directory.as_str())
+                    .replace(
+                        make_template("directory").as_str(),
+                        formatted_directory.as_str(),
+                    )
                     .replace(make_template("recent").as_str(), recents.as_str());
                 let gemtext = render_gemtext(&gemtext);
 
@@ -711,7 +706,7 @@ fn build(
                 let mut fd = File::create(fname)?;
                 let res = fd.write_all(gemtext.as_bytes());
                 if res.is_err() {
-                    return Err(res.err().unwrap())
+                    return Err(res.err().unwrap());
                 }
             }
             return Ok(());
@@ -734,8 +729,7 @@ fn parse_rss(input_rss_path: &PathBuf) -> Result<Channel> {
 }
 
 fn add_rss_post(rss_path: PathBuf) -> Result<()> {
-    let mut channel = parse_rss(&rss_path)
-        .expect("unable to parse rss");
+    let mut channel = parse_rss(&rss_path).expect("unable to parse rss");
 
     hey("Title?");
     let mut title = String::new();
@@ -756,7 +750,6 @@ fn add_rss_post(rss_path: PathBuf) -> Result<()> {
         .build()
         .expect("unable to build new guid");
 
-
     let rfc2822 = Utc::now().to_rfc2822();
 
     let item = ItemBuilder::default()
@@ -775,16 +768,15 @@ fn add_rss_post(rss_path: PathBuf) -> Result<()> {
     items.push(item);
     cloned.set_items(items);
 
-    cloned.validate()
-        .expect("could not validate");
+    cloned.validate().expect("could not validate");
 
-    let writer = File::create(rss_path)
-        .expect("could not open rss path for writing");
+    let writer = File::create(rss_path).expect("could not open rss path for writing");
 
-    cloned.pretty_write_to(writer, b' ', 2)
+    cloned
+        .pretty_write_to(writer, b' ', 2)
         .expect("could not write new post to rss file.");
 
-    return Ok(())
+    return Ok(());
 }
 
 fn watch(
@@ -960,7 +952,7 @@ fn main() -> Result<()> {
         return rename(content_path, old, new);
     }
 
-    if  matches.subcommand_matches("rss").is_some() {
+    if matches.subcommand_matches("rss").is_some() {
         let rss_path = Path::new("rss.xml").to_path_buf();
         return add_rss_post(rss_path);
     }
