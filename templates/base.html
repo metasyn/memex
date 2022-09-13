@@ -2,51 +2,67 @@
 <html lang="en">
   <head>
     <title>metasyn</title>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link href='resources/styles.css' rel='stylesheet' type='text/css' />
-    <link rel='alternate' type='application/rss+xml' title='RSS' href='rss.xml' />
-    <!-- see https://umami.is for info -->
-    <script defer data-website-id="6af01537-1667-44ac-b79b-c8e2006596dd" src="https://umami.metasyn.pw/umami.js" data-domains="metasyn.pw"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="resources/styles.css" rel="stylesheet" type="text/css" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="RSS"
+      href="rss.xml"
+    />
   </head>
   <body>
-    <div class='top'>
-      <a href='index.html'><img alt='metasyn-icon' id='metasyn-icon' src='resources/img/metasyn.png' /></a>
+    <div class="top">
+      <a href="index.html"
+        ><img
+          alt="metasyn-icon"
+          id="metasyn-icon"
+          src="resources/img/metasyn.png"
+      /></a>
       <!-- These float right -->
-      <div id='directory'>
-        <div id='directory-content' class='content'>
-          {{ directory }}
-        </div>
+      <div id="directory">
+        <div id="directory-content" class="content">{{ directory }}</div>
       </div>
-      <div id='rainbow'>
+      <div id="rainbow">
         <div>
-          <img alt='pastel rainbow stripes' src='resources/img/rainbow.png' />
+          <img alt="pastel rainbow stripes" src="resources/img/rainbow.png" />
         </div>
       </div>
     </div>
-    <div id='main'>
-      <div id='toc'>
-        <div>
-          {{ toc }}
-        </div>
+    <div id="main">
+      <div id="toc">
+        <div>{{ toc }}</div>
       </div>
-      <div class='content'>
+      <div class="content">
         {{ content }}
-        <hr/>
-        <div class='references'>
-          {{ references }}
-        </div>
-        <div class='timestamp'>
-          {{ timestamp }}
-        </div>
+        <hr />
+        <div class="references">{{ references }}</div>
+        <div class="timestamp">{{ timestamp }}</div>
       </div>
       <footer>
-        <a href='https://git.sr.ht/~metasyn/memex'><svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><title>circle resembling sourcehut logo</title><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"></path></svg></a>
-        <a href='https://github.com/metasyn'><img alt='github octocat icon' src='resources/img/github.png' /></a>
-        <a href='https://merveilles.town/@metasyn'><img alt='mervilles.town logo' src='resources/img/merveilles.town.png' /></a>
-        <a href='https://metasyn.bandcamp.com'><img alt='bandcamp' src='resources/img/bandcamp.png' /></a>
-        <a href='rss.xml'><img alt='rss' src='resources/img/rss.png' /></a>
-        <a href='https://webring.xxiivv.com/#random' target='_blank'><img alt='webring' src='https://webring.xxiivv.com/icon.white.svg'/></a>
+        <a href="https://git.sr.ht/~metasyn/memex"
+          ><svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <title>circle resembling sourcehut logo</title>
+            <path
+              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z"
+            ></path></svg
+        ></a>
+        <a href="https://github.com/metasyn"
+          ><img alt="github octocat icon" src="resources/img/github.png"
+        /></a>
+        <a href="https://merveilles.town/@metasyn"
+          ><img
+            alt="mervilles.town logo"
+            src="resources/img/merveilles.town.png"
+        /></a>
+        <a href="https://metasyn.bandcamp.com"
+          ><img alt="bandcamp" src="resources/img/bandcamp.png"
+        /></a>
+        <a href="rss.xml"><img alt="rss" src="resources/img/rss.png" /></a>
+        <a href="https://webring.xxiivv.com/#random" target="_blank"
+          ><img alt="webring" src="https://webring.xxiivv.com/icon.white.svg"
+        /></a>
       </footer>
     </div>
   </body>
