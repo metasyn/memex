@@ -1,14 +1,14 @@
 # memex
 
-
 ## the original memex
->  The memex is the name of the hypothetical proto-hypertext system that
-   Vannevar Bush described in his 1945 The Atlantic Monthly article "As We May
-   Think". Bush envisioned the memex as a device in which individuals would
-   compress and store all of their books, records, and communications,
-   "mechanized so that it may be consulted with exceeding speed and
-   flexibility". The memex would provide an "enlarged intimate supplement to
-   one's memory".
+
+> The memex is the name of the hypothetical proto-hypertext system that
+> Vannevar Bush described in his 1945 The Atlantic Monthly article "As We May
+> Think". Bush envisioned the memex as a device in which individuals would
+> compress and store all of their books, records, and communications,
+> "mechanized so that it may be consulted with exceeding speed and
+> flexibility". The memex would provide an "enlarged intimate supplement to
+> one's memory".
 
 (from [here](https://en.wikipedia.org/wiki/Memex))
 
@@ -17,34 +17,32 @@
 another similar one, also analog, but more methodological:
 
 > A zettelkasten consists of many individual notes with ideas and other short
-  pieces of information that are taken down as they occur or are acquired. The
-  notes are numbered hierarchically, so that new notes may be inserted at the
-  appropriate place, and contain metadata to allow the note-taker to associate
-  notes with each other. For example, notes may contain tags that describe key
-  aspects of the note, and they may reference other notes. The numbering,
-  metadata, format and structure of the notes is subject to variation depending
-  on the specific method employed.
+> pieces of information that are taken down as they occur or are acquired. The
+> notes are numbered hierarchically, so that new notes may be inserted at the
+> appropriate place, and contain metadata to allow the note-taker to associate
+> notes with each other. For example, notes may contain tags that describe key
+> aspects of the note, and they may reference other notes. The numbering,
+> metadata, format and structure of the notes is subject to variation depending
+> on the specific method employed.
 
 (from [here](https://en.wikipedia.org/wiki/Zettelkasten))
-
 
 ## commonplaces
 
 interestingly there are also similar physical concepts:
 
 > Commonplace books (or commonplaces) are a way to compile knowledge, usually
-  by writing information into books. They have been kept from antiquity, and
-  were kept particularly during the Renaissance and in the nineteenth century.
-  Such books are essentially scrapbooks filled with items of every kind:
-  recipes, quotes, letters, poems, tables of weights and measures, proverbs,
-  prayers, legal formulas. Commonplaces are used by readers, writers, students,
-  and scholars as an aid for remembering useful concepts or facts. Each one is
-  unique to its creator's particular interests but they almost always include
-  passages found in other texts, sometimes accompanied by the compiler's
-  responses. They became significant in Early Modern Europe.
+> by writing information into books. They have been kept from antiquity, and
+> were kept particularly during the Renaissance and in the nineteenth century.
+> Such books are essentially scrapbooks filled with items of every kind:
+> recipes, quotes, letters, poems, tables of weights and measures, proverbs,
+> prayers, legal formulas. Commonplaces are used by readers, writers, students,
+> and scholars as an aid for remembering useful concepts or facts. Each one is
+> unique to its creator's particular interests but they almost always include
+> passages found in other texts, sometimes accompanied by the compiler's
+> responses. They became significant in Early Modern Europe.
 
 (from [here](https://en.wikipedia.org/wiki/Commonplace_book))
-
 
 ## digital gardens
 
@@ -63,30 +61,30 @@ out when space is needed for other things to grow.
 
 there are many tools that already exist that help people try to organize their
 thoughts in similar ways - but there is also value in figuring it out for
-yourself.  similarly, there are ton of options out there for static site
+yourself. similarly, there are ton of options out there for static site
 generators. at least for me, i see value in often doing something for yourself,
 even if there is an easier way. like gardening, or riding your bike maybe.
 
 this iteration is my first attempt at sharing ideas in this manner. i spent a
 lot of time thinking about how i could plan for longevity while also keeping
-the writing process simple.  in the [merveilles](https://merveilles.town)
+the writing process simple. in the [merveilles](https://merveilles.town)
 community, writing your own static site generator is something of a rite of
 passage. and while it is fun to some, and can be a fun little challenge, it
 represents a deeper idea about building tools that work exactly in the way the
-user needs them to work.  i considered using a variety of different tools to do
+user needs them to work. i considered using a variety of different tools to do
 this, but none exactly met my need. in the end, it made more sense to write my
 own.
 
 for me, the requirements were:
 
-* plain text is the primary (on disk format)
-* minimal markup outside of markdown
-* easily templated
-* customizable, going forward, if i want things to change
+- plain text is the primary (on disk format)
+- minimal markup outside of markdown
+- easily templated
+- customizable, going forward, if i want things to change
 
 the plain text is the most important. if later, i want to try to use some other
 system, i don't have to import or export any files out of different formats. the
-content itself is in a pretty raw form.  you can see the source code of this
+content itself is in a pretty raw form. you can see the source code of this
 memex [on sourcehut](https://git.sr.ht/~metasyn/memex).
 
 ## learning in public
@@ -104,8 +102,8 @@ learning, and documenting your ideas, in public.
 
 as an [[anarchist|anarchism]], there is a lot of the above that makes sense in particular: write at your own pace, in your own way, to create something unique to your own needs. if your memex doesn't do something you want it to, the sky's your limit - you can change whatever it is you want. it might take a little more effort, but like consensus decision making, or making bread from scratch, the end result is worth it. i've been very influenced by other people's gardens and zettlekastens:
 
-* [xxiivv - device lu linvega's wiki](https://wiki.xxiivv.com)
-* [Andy Matuschak's Notes](https://notes.andymatuschak.org/About_these_notes)
-* [C2 wiki](http://wiki.c2.com/)
-* [gwern.net](https://www.gwern.net/)
-* [indie web](https://indieweb.org/)
+- [xxiivv - device lu linvega's wiki](https://wiki.xxiivv.com)
+- [Andy Matuschak's Notes](https://notes.andymatuschak.org/About_these_notes)
+- [C2 wiki](http://wiki.c2.com/)
+- [gwern.net](https://www.gwern.net/)
+- [indie web](https://indieweb.org/)

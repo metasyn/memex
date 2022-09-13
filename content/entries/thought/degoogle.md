@@ -1,8 +1,8 @@
 # degoogle
 
 at one point, i realized how many different parts of my life were somehow
-intertwined with google's services.  while i don't deny their usefulness, as
-they saying goes, if you don't pay for the product, you are the product.  and i
+intertwined with google's services. while i don't deny their usefulness, as
+they saying goes, if you don't pay for the product, you are the product. and i
 started thinking more about how to actually move my data and usage off their
 services. i'm far from being finished - because some of the services still make
 sense for me to use. but i am attempting to at least slowly move my online self
@@ -74,8 +74,8 @@ use it sometimes, but am hoping that someday,
 ## google maps
 
 i tried using open street maps for android, and frankly, it is far from
-comparable.  i still use google maps all the time. i would like to find a
-reasonable alternative.  while open street maps works to some degree, it
+comparable. i still use google maps all the time. i would like to find a
+reasonable alternative. while open street maps works to some degree, it
 doesn't really have the business information i often rely on google maps for. i
 don't think there is a simple solution here yet for me.
 
@@ -86,22 +86,22 @@ don't think there is a simple solution here yet for me.
 i used cyanogen mod for about 8 years before more recently switching back to stock
 (pixel) android. i'd like to consider switching to something like
 
-* [CalyxOS](https://calyxos.org/about/)
-* [GrapheneOS](https://grapheneos.org/)
+- [CalyxOS](https://calyxos.org/about/)
+- [GrapheneOS](https://grapheneos.org/)
 
 or even the newer version of cyanogen:
 
-* [LineageOS](https://grapheneos.org/)
+- [LineageOS](https://grapheneos.org/)
 
 ## google fi
 
 i use google fi for my phone plan. this one is easy to change, so i have been
-putting it off.  for some reason, i'm not exactly sure why, i kind of care
+putting it off. for some reason, i'm not exactly sure why, i kind of care
 about this one the least.
 
 ## google photos
 
 google photos, hands down, is going to be the hardest service for me to
 separate from. i've spent quite a bit of time looking at alternatives, but
-simply organizing photos is such a royal pain imo.  however, out of all the
+simply organizing photos is such a royal pain imo. however, out of all the
 services, this is the one i'd like to tackle the most.
