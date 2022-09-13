@@ -5,7 +5,7 @@
 (illustration by [cliff harper](https://en.wikipedia.org/wiki/Clifford_Harper))
 
 a fascinating book from 1976 capturing the thoughts and philosophy of the
-[Undercurrents](<https://en.wikipedia.org/wiki/Undercurrents_(magazine)>)T magazine.
+[Undercurrents](https://en.wikipedia.org/wiki/Undercurrents_(magazine) magazine.
 You can read all of the issues online
 [here](https://undercurrents1972.wordpress.com/contents/). The editors of that
 came out with a book called **"Radical Technology - Food and Shelter, Tools and Materials, Energy and Communications, Autonomy and Community"**. the book is broken up into sections:
