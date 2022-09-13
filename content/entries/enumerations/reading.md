@@ -21,7 +21,7 @@
 - [the second convivialist manifesto: towards a post-neolibral world](https://online.ucpress.edu/cs/article/1/1/12721/112920/THE-SECOND-CONVIVIALIST-MANIFESTO-Towards-a-Post)
 - full metal dreamland - ex. mag issue #01 (peow studio)
 - carbon capture - howard j. herzog
-- skip - [molly mendoza](www.mollymendoza.com)
+- skip - [molly mendoza](https://www.mollymendoza.com)
 - crumbling kingdom - ex. mag issue #03 (peow studio)
 - cross my heart - ex. mag issue #02 (peow studio)
 - a planet for rent - yoss
