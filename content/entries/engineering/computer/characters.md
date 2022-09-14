@@ -4,7 +4,7 @@ below are a list of engineering **characters**. they're characters in the sense
 that they've intrigued, inspired, or otherwise stuck out to me, and generally,
 are people i have never met.
 
-- [philip guo](https://pg.ucsd.edu/) -  guo's research on human computer
+- [philip guo](https://pg.ucsd.edu/) - guo's research on human computer
   interaction, and and how we learn to use technology is fascinating, and he
   has made some neat tools around learning different software related things -
   a bunch for [[python]]. also his lectures just make him seem like a really
@@ -13,7 +13,7 @@ are people i have never met.
 - [drew devault](https://drewdevault.com/) - drew's commitment to FOSS (free
   and open source software) is admirable, and sometimes intimidating. he
   created [sourcehut](https://sr.ht), of which i am a contributor and proudly
-  paying supporter.  i host this [[memex]] on sourcehut, as well as pretty much
+  paying supporter. i host this [[memex]] on sourcehut, as well as pretty much
   all my other code.
 
 - [devine lu linvega](https://wiki.xxiivv.com/) - devine is a curious soul who
@@ -56,4 +56,5 @@ are people i have never met.
 - [amos wenger](https://fasterthanli.me/) - rust focused didactic long form
   conversational blog posts. these take a long time to read but they're
   incredibly fun to go through. i learn something interesting everytime i read
-  amos's posts and enjoy his story of how he got into programming.
+  amos's posts and particularly enjoyed his vide on on
+  [how he learned to love build systems](https://www.youtube.com/watch?v=7_DExGdUw7w)
