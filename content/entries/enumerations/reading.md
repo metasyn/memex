@@ -10,8 +10,10 @@
 - [black panels only: vol v](https://tommycreep.bandcamp.com/merch/black-panels-only-eurorack-zine-issue-v) by [tommy creep](https://tommycreep.bandcamp.com/)
 - inhabiting the negative space - jenny odell
 - forth application techniques - elizabeth rather
+- stages of rot by linnea sterte (peow)
 - walkway - cory doctorow
 - [synth history zine: issue 1](https://www.synthhistory.tv/shop/Synth-History-Zine-Issue-1-p368968067)
+- a frog in the fall (and later on) by linnea sterte (peow)
 
 # 2021
 
