@@ -4,42 +4,34 @@ below are a list of engineering **characters**. they're characters in the sense
 that they've intrigued, inspired, or otherwise stuck out to me, and generally,
 are people i have never met.
 
-- [philip guo](https://pg.ucsd.edu/) - i was exposed to philip guos teachings
-  sometime in college, especially when i got my first computer related job at a
-  graduate school for education. simultaneously, i was studying TESOL,
-  programming languages, and second language acquisition. philip guo's research
-  on human computer interaction, how humans understand computers, and how we
-  learn to use technology is fascinating, and he has made some neat tools
-  around learning different things. also his lectures just make him seem like a
-  really nice smart humble guy.
+- [philip guo](https://pg.ucsd.edu/) -  guo's research on human computer
+  interaction, and and how we learn to use technology is fascinating, and he
+  has made some neat tools around learning different software related things -
+  a bunch for [[python]]. also his lectures just make him seem like a really
+  nice smart humble guy.
 
 - [drew devault](https://drewdevault.com/) - drew's commitment to FOSS (free
   and open source software) is admirable, and sometimes intimidating. he
   created [sourcehut](https://sr.ht), of which i am a contributor and proudly
-  paying supporter. drews projects are varied and interesting from texas
-  instruments z80 calculator operating systems, to new programming languages
-  like hare, to commerical ventures like sourcehut - all with intense
-  dedication to foss principles and ethics. he reminds me for some reason of
-  richard stallman (in the good way, whatever that means to you).
+  paying supporter.  i host this [[memex]] on sourcehut, as well as pretty much
+  all my other code.
 
 - [devine lu linvega](https://wiki.xxiivv.com/) - devine is a curious soul who
   inspires me like few others. i am thankful to have met him on the internet
   after getting interested in his project orca. for orca, i made a
   tutorial/sandbox site [[learn-orca]] after becoming intrigued. later, i did
-  the same for one of his uxn project - [[learn-uxn]]. devine's impact on me
-  has been considerable, and the technology and philosophy that accompany his
-  online persona are worth checking out.
+  the same for one of his uxn project - [[learn-uxn]]. the technology and
+  philosophy that accompany his online persona are worth checking out - also
+  see [[solarpunk]] and [[permacomputing]].
 
-- [dan luu](https://danluu.com/) - i've accidentally stumbled across dan luu's
-  blog posts a number of times, and spent quite some reading them. i enjoy his
-  takes on technology and computer science, as well as his candid approach to
-  talking about his own career in tech.
+- [dan luu](https://danluu.com/) - i enjoy his thoughts on technology, computer
+  science, industry, learning, and writing. more generally though reading dan's
+  post is always fun, and he is humble and funny.
 
 - [julia evans](https://jvns.ca/) - i love julias comics. i learn something
   every time i read them as well! julia reminds me to stay curious and keep
   learning and also not be intimidated by things that feel insurmountable.
-  especially when i first started learning networking and linux, i feel like
-  reading some of her zines reminded me that troubleshooting and debugging and
+  reading some of her zines reminds me that troubleshooting and debugging and
   investing in tooling around that is time well spent.
 
 - [andrew kelley](https://andrewkelley.me/) - andrew kelley is creating the zig
@@ -53,6 +45,15 @@ are people i have never met.
 - [richard littauer](https://www.burntfen.com/) - richard littauer is great -
   and one of the few people i know who studied computational linguistics
   _before_ moving into software and engineering. his work is wide ranging and
-  worth exploring.
+  worth exploring - i appreciate reading about his journey into open source and
+  his work with [open source collective](https://www.oscollective.org/)
 
-- [xe iaso](https://xeiaso.net/)
+- [xe iaso](https://xeiaso.net/) - the depth of xe's blog posts into somewhat
+  obscure and interesting parts of technology is remarkable. i also appreciate
+  their honesty and ability to be self aware, as well as candidness around
+  their career and plurality.
+
+- [amos wenger](https://fasterthanli.me/) - rust focused didactic long form
+  conversational blog posts. these take a long time to read but they're
+  incredibly fun to go through. i learn something interesting everytime i read
+  amos's posts and enjoy his story of how he got into programming.

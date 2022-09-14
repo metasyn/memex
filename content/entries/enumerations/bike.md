@@ -39,6 +39,14 @@ some details on my bicycle
 - front light: supernova E3 PRO 2
 - tail light: supernova E3 Tail Light 2
 
+#### velogical repair
+
+recently my velogical light suddenly went out. i wasn't sure what was wrong. i
+cut the wires to the thermistor and then just used a multimeter to figure out
+if charge was being generated. after i was able to use multimeters to determine
+that the dynamo was still producing current, i just replaced the thermistor,
+and now we're back in business.
+
 ### storage
 
 - rack: tubus logo classic (57.3lb limit)

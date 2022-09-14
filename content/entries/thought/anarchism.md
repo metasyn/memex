@@ -13,6 +13,7 @@
 - [on anarchism - noam choamsky](https://theanarchistlibrary.org/library/noam-chomsky-on-anarchism)
 - [on the phenomonology of giant puppets - david graeber](https://theanarchistlibrary.org/library/david-graeber-on-the-phenomenology-of-giant-puppets)
 - [inventing the future: post-capitalism and world without work - srnicek & williams](https://www.versobooks.com/books/2315-inventing-the-future)
+- [the ethics of anarchism](https://libcom.org/library/ethics-anarchism)
 
 ## people
 

@@ -43,3 +43,15 @@ convert INPUT_FILE -resize 640x480 OUTPUT_FILE
 ```
 
 use `mogrify` for processing multiple files at once generally
+
+- invert colors
+
+```
+convert INPUT -channel RGB -negate OUTPUT
+```
+
+- make transparent
+
+```
+convert INPUT -transparent white OUTPUT
+```
