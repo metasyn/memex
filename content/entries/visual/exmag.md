@@ -43,3 +43,7 @@ Ex. Mag is a publication from [Peow Studio](https://www.peowstudio.com). Each vo
 - patrick crotty - @ppcrotty (TW) Darkest_wizard (PSN)
 - [tarmasz](http://rascassebxl.com) - @tarmasz (IG)
 - valentin seiche - @jiojio_warudo (IG)
+
+## MASTER GRADE - MECHA (Vol 4)
+
+<img src="resources/img/dithered_exmag4.png"/>
