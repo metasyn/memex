@@ -14,6 +14,7 @@
 
 ## zettelkasten
 
+however, the idea, more generally, apepars in many forma.s
 another similar one, also analog, but more methodological:
 
 > A zettelkasten consists of many individual notes with ideas and other short
@@ -44,10 +45,13 @@ interestingly there are also similar physical concepts:
 
 (from [here](https://en.wikipedia.org/wiki/Commonplace_book))
 
+i first read about commonplaces from [simon sarris](https://simonsarris.com/).
+unfortunately i cannot find his essay on it.
+
 ## digital gardens
 
 another way of talking about the same concept that i have seen in various places
-on the web are the idea of a digital garden. where rather than a museum, a gallery,
+on the web are the idea of a _digital garden_. where rather than a museum, a gallery,
 a portfolio, or a journal - it's a place where you can tend to ideas to watch them
 grow, and share with other's if they want to visit. i like the idea more generally,
 as it seems like it strikes a really reasonable balance between the external and
@@ -93,14 +97,20 @@ the above outlines what a memex is, and how this one is created. however, why
 would one want to do this? i think the idea of a memex, zettelkasten,
 commonplace, digital garden is relaxing - in contrast with so much of the rest
 of my interactions with other's online. it feels like a journal, but also a
-blog. it feels like a portfolio, but also a scratchpad. it also is _under your
-control_. if you want to change your mind about something, you can just update
-whatever you want. at the end of the day, making a memex feels more like
-learning, and documenting your ideas, in public.
+blog, and a notebook. it feels like a portfolio, but also a scratchpad. it also
+is _under your control_. if you want to change your mind about something, you
+can just update whatever you want. at the end of the day, making a memex feels
+more like learning, and documenting your ideas, in public.
 
 ## at your own pace, in your own way
 
-as an [[anarchist|anarchism]], there is a lot of the above that makes sense in particular: write at your own pace, in your own way, to create something unique to your own needs. if your memex doesn't do something you want it to, the sky's your limit - you can change whatever it is you want. it might take a little more effort, but like consensus decision making, or making bread from scratch, the end result is worth it. i've been very influenced by other people's gardens and zettlekastens:
+as an [[anarchist|anarchism]], there is a lot of the above that makes sense in
+particular: write at your own pace, in your own way, to create something unique
+to your own needs. if your memex doesn't do something you want it to, the sky's
+your limit - you can change whatever it is you want. it might take a little
+more effort, but like consensus decision making, or making bread from scratch,
+the end result is worth it. i've been very influenced by other people's gardens
+and zettlekastens:
 
 - [xxiivv - device lu linvega's wiki](https://wiki.xxiivv.com)
 - [Andy Matuschak's Notes](https://notes.andymatuschak.org/About_these_notes)

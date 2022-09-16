@@ -56,5 +56,5 @@ are people i have never met.
 - [amos wenger](https://fasterthanli.me/) - rust focused didactic long form
   conversational blog posts. these take a long time to read but they're
   incredibly fun to go through. i learn something interesting everytime i read
-  amos's posts and particularly enjoyed his vide on on
+  amos's posts and particularly enjoyed his video on
   [how he learned to love build systems](https://www.youtube.com/watch?v=7_DExGdUw7w)
