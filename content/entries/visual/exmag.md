@@ -1,6 +1,8 @@
 # Ex. Mag
 
-Ex. Mag is a publication from [Peow Studio](https://www.peowstudio.com). Each volume is an anthology loosely centered around a theme, from various artists. At the end of each volume, there are list of artist interview cards. I wanted to assemble a list of all the artists in the magazines so I can reference them, as well as share their awesome work. Check them out... oh and buy Ex. Mag!
+ex. mag is a publication from [peow studio](https://www.peowstudio.com). each volume is an anthology loosely centered around a theme, from various artists. at the end of each volume, there are list of artist interview cards. i wanted to assemble a list of all the artists in the magazines so i can reference them, as well as share their awesome work. check them out...
+
+peow studio and ex. mag is produced by [patrick crotty](https://boysfantasy.tumblr.com/) and by [wren mcdonald](https://wrenmcdonald.com), amongst many others i'm sure. they have released their decision to close up shop. you can read their goodbye document [here](https://docs.google.com/document/d/192di4xzbka8eijeq7fnbg42ir8d9iyjtvej5gpkz6_s/edit).
 
 ## FULL METAL DREAMLAND - CYBERPUNK (Vol 1)
 
@@ -47,3 +49,16 @@ Ex. Mag is a publication from [Peow Studio](https://www.peowstudio.com). Each vo
 ## MASTER GRADE - MECHA (Vol 4)
 
 <img src="resources/img/dithered_exmag4.png"/>
+
+- aseyn - @aseyn (IG)
+- [ayako ozaki](https://koutya5k2l1u1g.booth.pm/) - @canalbooks1125 (TW)
+- [beto irigoyen](https://kero.world) - @BETOTL3000 (IG) @TIEMPOS*HIBRIDOS* (IG)
+- [casey nowak](https://caseynowak.com) - @ignatzhaderach (TW)
+- [emil friis ernst](https://www.beingernst.com/) - @efernst (TW/IG)
+- [felipe bolivar](https://felipebolivar.com) - @felibe.bolivar
+- [inkee wang](https://www.inkee-wang.com) - @wanginkee(IG)
+- [jan buragay](https://tsugomori.artstation.com) - @rags23 (IG) @buragay_jan (TW)
+- sebastien sunstrun - @ssunstrum (IG) @s_sunstrum (TW)
+- luca negri - @regular_size_monster (IG)
+- simon roy - @simonamroy (IG)
+- tatsumi - @tatsumimimi (TW)
