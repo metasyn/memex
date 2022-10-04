@@ -3,18 +3,17 @@
 ## general
 
 - planning travels - bike trips
+- riding my fixed gear lately
 
 ## watching
 
-- i'm watching the sopranos lately
-- its suprisingly good
+- i'm watching the sopranos
+- bee and puppy cat
 
 ## reading
 
-- been reading ex mag vol 4
-- jacobin
+- jacobin, some anarchist literature
 
 ## playing
 
-- playing V rising
-- cult of the lamb
+- recently finished cult of the lamb
