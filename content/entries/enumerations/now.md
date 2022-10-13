@@ -12,7 +12,7 @@
 
 ## reading
 
-- jacobin, some anarchist literature
+- [anarchism and political theory: contemporary problems](https://theanarchistlibrary.org/library/uri-gordon-anarchism-and-political-theory-contemporary-problems)
 
 ## playing
 
