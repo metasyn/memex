@@ -2,8 +2,8 @@
     <source src="resources/video/metasyn-schotter-rotate.webm" />
 </video>
 
-- this is a [[memex]]
-- see what is up [[now]]
+- this is a [[memex]] - many pages are in progress, incomplete, or even incorrect
+- see what is up [[now]] - i update this pagae semi regularly
 - see all pages in the [[directory]]
 
 # recent changes
