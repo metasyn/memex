@@ -5,7 +5,7 @@
 - [Orca](https://github.com/hundredrabbits/Orca)
 - [Enfer](https://github.com/neauoire/Enfer)
 
-two projects by the sea faring research studio [hunredrabbits](https:/100r.co).
+two projects by the sea faring research studio [hunredrabbits](https://100r.co).
 
 there is a tutorial on orca, which covers the basic of navigation, operators,
 as well as some preloaded examples. it is intended for people who have not used
