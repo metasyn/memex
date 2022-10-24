@@ -1,5 +1,7 @@
 # memex
 
+this memex is part of a [webring](https://webring.xxiivv.com/)
+
 ## the original memex
 
 > The memex is the name of the hypothetical proto-hypertext system that
@@ -51,7 +53,8 @@ unfortunately i cannot find his essay on it.
 ## digital gardens
 
 another way of talking about the same concept that i have seen in various places
-on the web are the idea of a _digital garden_. where rather than a museum, a gallery,
+on the web are the idea of a [digital garden](https://maggieappleton.com/garden-history).
+where rather than a museum, a gallery,
 a portfolio, or a journal - it's a place where you can tend to ideas to watch them
 grow, and share with other's if they want to visit. i like the idea more generally,
 as it seems like it strikes a really reasonable balance between the external and
@@ -66,30 +69,9 @@ out when space is needed for other things to grow.
 there are many tools that already exist that help people try to organize their
 thoughts in similar ways - but there is also value in figuring it out for
 yourself. similarly, there are ton of options out there for static site
-generators. at least for me, i see value in often doing something for yourself,
+generators. at least for me, i see value in often doing something yourself,
 even if there is an easier way. like gardening, or riding your bike maybe.
-
-this iteration is my first attempt at sharing ideas in this manner. i spent a
-lot of time thinking about how i could plan for longevity while also keeping
-the writing process simple. in the [merveilles](https://merveilles.town)
-community, writing your own static site generator is something of a rite of
-passage. and while it is fun to some, and can be a fun little challenge, it
-represents a deeper idea about building tools that work exactly in the way the
-user needs them to work. i considered using a variety of different tools to do
-this, but none exactly met my need. in the end, it made more sense to write my
-own.
-
-for me, the requirements were:
-
-- plain text is the primary (on disk format)
-- minimal markup outside of markdown
-- easily templated
-- customizable, going forward, if i want things to change
-
-the plain text is the most important. if later, i want to try to use some other
-system, i don't have to import or export any files out of different formats. the
-content itself is in a pretty raw form. you can see the source code of this
-memex [on sourcehut](https://git.sr.ht/~metasyn/memex).
+you can read more about this memex in the [[colophon]].
 
 ## learning in public
 
@@ -116,4 +98,5 @@ and zettlekastens:
 - [Andy Matuschak's Notes](https://notes.andymatuschak.org/About_these_notes)
 - [C2 wiki](http://wiki.c2.com/)
 - [gwern.net](https://www.gwern.net/)
+- [maggie appleton's digital garden](https://maggieappleton.com/garden)
 - [indie web](https://indieweb.org/)

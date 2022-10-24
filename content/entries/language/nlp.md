@@ -205,8 +205,4 @@ questions
 </details>
 
 Might read:
-
-[Generative and Discriminative Text Classification with Recurrent Neural Networks -
-Dani Yogatama, Chris Dyer, Wang Ling, Phil Blunsom (2017)](https://arxiv.org/abs/1703.01898)
 [Approximate Nearest Neighbor - Negative Contrastive Learning for Dense Text Retrieval](https://openreview.net/pdf?id=zeFrfgyZln)
-[Net-DNF: Effective Deep Modeling of Tabular Data](https://openreview.net/pdf?id=xfmSoxdxFCG)
