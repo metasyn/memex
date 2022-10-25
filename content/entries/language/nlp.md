@@ -1,8 +1,16 @@
 # natural language processing
 
+just some scattered notes here
+
+- Winoground: Probing Vision and Language Models
+  for Visio-Linguistic Compositionality - https://arxiv.org/pdf/2204.03162v2.pdf
+- [Approximate Nearest Neighbor - Negative Contrastive Learning for Dense Text Retrieval](https://openreview.net/pdf?id=zeFrfgyZln)
+
 # advanced nlp notes
 
 Below are some notes from the [CMU CS 11-711 Advanced NLP](http://www.phontron.com/class/anlp2021/index.html) course taught by [Graham Neubig](http://www.phontron.com/) and some papers related to the course.
+
+<details>
 
 <details>
 <summary>
@@ -204,5 +212,4 @@ questions
 
 </details>
 
-Might read:
-[Approximate Nearest Neighbor - Negative Contrastive Learning for Dense Text Retrieval](https://openreview.net/pdf?id=zeFrfgyZln)
+</details>
