@@ -103,10 +103,25 @@ pulseaudio -k
 ```
 df -h
 du -h -d 1 . --exclude proc
+```
 
+journal logs
+
+```
+journalctl --rotate
 journalctl --vacuum-size=100M
-journalctl --vacuum-size=10d
+journalctl --vacuum-time=10d
+```
 
+docker
+
+```
 docker system prune -a
 docker volume prune -a
+```
+
+snap
+
+```
+snap set system refresh.retain=2
 ```
