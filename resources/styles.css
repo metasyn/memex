@@ -9,7 +9,7 @@
   --text-color: var(--light);
   --background-color: var(--dark);
 
-  --font-family: 'SourceSansPro',Palatino,Helvetica;
+  --font-family: "SourceSansPro", Palatino, Helvetica;
   --font-size-base: 18px;
 
   --base-padding: 5px;
@@ -36,6 +36,10 @@ pre {
 .content a:hover:not(.img) {
   color: var(--background-color);
   background-color: var(--text-color);
+}
+
+.content a:hover .epistemic-icon {
+  filter: invert(100%);
 }
 
 #directory-content {
@@ -88,7 +92,7 @@ pre {
 
 /* Font related */
 @font-face {
-  font-family:"SourceSansPro";
+  font-family: "SourceSansPro";
   src: url("fonts/SourceSansPro-Light.ttf") format("truetype");
 }
 
@@ -104,17 +108,16 @@ h1 {
   font-size: 28px;
 }
 
-
 h2 {
   font-size: 24px;
 }
-
 
 h3 {
   font-size: 20px;
 }
 
-footer img, svg {
+footer img,
+svg {
   border-radius: 5px;
   padding: 10px;
   width: 32px;
@@ -135,7 +138,7 @@ img {
 }
 
 details {
-  padding-left: calc( 10px * var(--depth) - (5px * (var(--depth) - 2)))
+  padding-left: calc(10px * var(--depth) - (5px * (var(--depth) - 2)));
 }
 
 details ul {
@@ -145,7 +148,7 @@ details ul {
 }
 
 blockquote {
-	border-image: url(img/rainbow.webp) 30;
+  border-image: url(img/rainbow.webp) 30;
   border-image-width: 2px;
   margin: 0.5em 20px;
   padding: 1.505em 30px;
@@ -165,7 +168,7 @@ blockquote p {
 }
 
 th {
-  padding-right: 25px
+  padding-right: 25px;
 }
 
 pre {
@@ -179,9 +182,7 @@ summary:hover {
   cursor: pointer;
   text-decoration: underline;
 }
-summary
-
-*:focus {
+summary *:focus {
   outline: none;
 }
 
@@ -208,13 +209,11 @@ summary
   border: 3px solid var(--dark);
 }
 
-
 /* Classes */
 
 .hidden {
   display: none;
 }
-
 
 .content a {
   font-family: var(--font-family);
@@ -224,7 +223,7 @@ summary
 
 .content a:hover:not(.img) {
   border-radius: 8px 0px;
-  padding: 1px
+  padding: 1px;
 }
 
 .timestamp {
@@ -268,7 +267,6 @@ summary
   margin-left: var(--max-width);
   max-height: calc(100vh - 250px);
   overflow-y: hidden;
-
 }
 
 @media only screen and (max-width: calc(var(--max-width)+ 420px)) {
@@ -276,7 +274,6 @@ summary
     display: none;
   }
 }
-
 
 #main {
   display: block;
@@ -294,11 +291,25 @@ summary
 
 /* Snowflakes */
 
+.epistemic-icon {
+  padding-left: 5px;
+  padding-right: 2px;
+  max-height: calc(var(--font-size-base) - 2px);
+  max-width: calc(var(--font-size-base) - 2px);
+  transition: transform 1s ease-in-out;
+  position: relative;
+  top: 4px;
+}
+
+a:hover .epistemic-icon {
+  transform: rotateX(-180deg);
+}
+
 #metasyn-icon {
   width: 100px;
   position: block;
 }
 
 #summary {
-  text-align: end ;
+  text-align: end;
 }

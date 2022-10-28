@@ -1,12 +1,14 @@
 use std::cmp::min;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsString;
+use std::fmt;
 use std::fmt::Display;
 use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
 use std::io::{stdin, BufReader, Error, ErrorKind, Read, Result};
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::str::FromStr;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
@@ -22,6 +24,9 @@ use rss::{Channel, GuidBuilder, ItemBuilder};
 use rss::validation::Validate;
 
 static DOMAIN: &str = "metasyn.pw";
+const SEEDLING: &str = "seedling";
+const DUALITY: &str = "duality";
+const PERSISTENCE: &str = "persistence";
 
 /////////////
 // STRUCTS //
@@ -31,6 +36,7 @@ static DOMAIN: &str = "metasyn.pw";
 struct Entry {
     id: String,
     content: String,
+    epistemic_status: EpistemicStatus,
     modification_date: String,
     links: Vec<String>,
     references: Option<Vec<String>>,
@@ -71,6 +77,38 @@ impl DirectoryTree {
         let idx = self.arena.len();
         self.arena.push(DirectoryItem::new(idx, val));
         idx
+    }
+}
+
+type EpistemicStatusLookup = HashMap<String, EpistemicStatus>;
+
+#[derive(Debug, Clone)]
+enum EpistemicStatus {
+    Seedling,
+    Duality,
+    Persistence,
+}
+
+impl Display for EpistemicStatus {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            EpistemicStatus::Seedling => write!(f, "{}", SEEDLING),
+            EpistemicStatus::Duality => write!(f, "{}", DUALITY),
+            EpistemicStatus::Persistence => write!(f, "{}", PERSISTENCE),
+        }
+    }
+}
+
+impl FromStr for EpistemicStatus {
+    type Err = ();
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s {
+            SEEDLING => Ok(EpistemicStatus::Seedling),
+            DUALITY => Ok(EpistemicStatus::Duality),
+            PERSISTENCE => Ok(EpistemicStatus::Persistence),
+            _ => Err(()),
+        }
     }
 }
 
@@ -154,6 +192,7 @@ lazy_static! {
     static ref MD_LINK_REGEX: Regex = Regex::new(r"\[(?P<title>.+?)\]\((?P<link>.+?)\)").unwrap();
     static ref HTML_TAG_REGEX: Regex = Regex::new(r"<[^>]*>").unwrap();
     static ref TAG_SRC_REGEX: Regex = Regex::new("src=\"(?P<src>.+?)\"").unwrap();
+    static ref EPISTEMIC_REGEX: Regex = Regex::new(r"epistemic=(?P<status>\w+)").unwrap();
 }
 
 /////////////
@@ -324,6 +363,24 @@ fn extract_recent_entries(entries: &mut Vec<Entry>) -> String {
         .join("\n");
 }
 
+fn extract_epistemic_status_from_content(content: &str) -> EpistemicStatus {
+    let epistemic_status = match EPISTEMIC_REGEX.captures(content) {
+        Some(cap) => cap
+            .name("status")
+            .expect("failed to extract epistemic status")
+            .as_str(),
+        _ => SEEDLING,
+    };
+
+    return EpistemicStatus::from_str(epistemic_status).expect(
+        format!(
+            "{}: {:?}",
+            "unable to parse epistemic status", epistemic_status
+        )
+        .as_str(),
+    );
+}
+
 ////////////
 // FORMAT //
 ////////////
@@ -417,7 +474,7 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
 // CONVERT //
 /////////////
 
-fn convert_internal_to_md(content: &str) -> String {
+fn convert_internal_to_md(epistemic_lookup: &EpistemicStatusLookup, content: &str) -> String {
     return INTERNAL_LINK_REGEX
         .replace_all(content, |caps: &Captures| {
             // must exist
@@ -428,7 +485,18 @@ fn convert_internal_to_md(content: &str) -> String {
                 None => link,
             };
 
-            format!("[{}]({}.html)", title, link,)
+            let status = epistemic_lookup.get(link);
+
+            if status.is_none() {
+                nope(format!("invalid link to missing internal page: {}", link));
+            }
+
+            let prefix = status.unwrap_or(&EpistemicStatus::Seedling);
+
+            format!(
+                "[<img class='epistemic-icon' src='resources/img/{}_white.png'/>{}]({}.html)",
+                prefix, title, link,
+            )
         })
         .to_string();
 }
@@ -465,6 +533,7 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
             .map(|(stem, content, path)| Entry {
                 id: String::from(stem.to_str().unwrap()),
                 content: content.clone(),
+                epistemic_status: extract_epistemic_status_from_content(content.as_str()),
                 links: extract_links_from_content(content.as_str()),
                 modification_date: extract_modification_date_from_path(path),
                 path: path.strip_prefix(content_path).unwrap().to_path_buf(),
@@ -524,8 +593,14 @@ fn make_template(item: &str) -> String {
     return format!("{{{{ {} }}}}", item);
 }
 
-fn replace_template<'a>(body: String, item: &str, replacement: &str, line_by_line: bool) -> String {
-    let repl = convert_internal_to_md(replacement);
+fn replace_template<'a>(
+    epistemic_lookup: &EpistemicStatusLookup,
+    body: String,
+    item: &str,
+    replacement: &str,
+    line_by_line: bool,
+) -> String {
+    let repl = convert_internal_to_md(epistemic_lookup, replacement);
     let html = match line_by_line {
         true => repl
             .split("\n")
@@ -537,9 +612,13 @@ fn replace_template<'a>(body: String, item: &str, replacement: &str, line_by_lin
     return body.replace(make_template(item).as_str(), &html);
 }
 
-fn replace_templates<'a>(mut body: String, mapping: Vec<(&str, &str, bool)>) -> String {
+fn replace_templates<'a>(
+    epistemic_lookup: &EpistemicStatusLookup,
+    mut body: String,
+    mapping: Vec<(&str, &str, bool)>,
+) -> String {
     for (key, value, line_by_line) in mapping.iter() {
-        body = replace_template(body, key, &value, *line_by_line)
+        body = replace_template(epistemic_lookup, body, key, &value, *line_by_line)
     }
     return String::from(body);
 }
@@ -665,6 +744,11 @@ fn build(
                 .filter(|x| x.id == "directory")
                 .for_each(|x| x.content = format_directory_page(&x.content, &directory));
 
+            let epistemic_status_lookup: EpistemicStatusLookup = entries
+                .iter()
+                .map(|e| (e.id.clone(), e.epistemic_status.clone()))
+                .collect();
+
             for entry in entries {
                 // get or set replacements
                 let contents = entry.content.as_str();
@@ -681,7 +765,11 @@ fn build(
                     ("toc", &outline, false),
                     ("recent", recents.as_str(), false),
                 ];
-                let html = replace_templates(base_template.clone(), replacements);
+                let html = replace_templates(
+                    &epistemic_status_lookup,
+                    base_template.clone(),
+                    replacements,
+                );
 
                 // write replacements
                 let fname = format!("{}/{}.html", destination_path, entry.id);
@@ -978,7 +1066,13 @@ mod tests {
     #[test]
     fn test_replace_template() {
         assert_eq!(
-            replace_template(String::from("{{ test }}"), "test", "fab", false),
+            replace_template(
+                HashMap::new(),
+                String::from("{{ test }}"),
+                "test",
+                "fab",
+                false
+            ),
             "<p>fab</p>\n"
         )
     }
@@ -987,6 +1081,7 @@ mod tests {
     fn test_replace_templates() {
         assert_eq!(
             replace_templates(
+                HashMap::new(),
                 String::from("{{ test }} {{ something }}"),
                 vec![("test", "fab", false), ("something", "replacement", false)],
             ),
@@ -1021,7 +1116,7 @@ mod tests {
 
     #[test]
     fn test_convert_internal_to_md() {
-        let converted = convert_internal_to_md("[[test]]");
+        let converted = convert_internal_to_md(HashMap::new(), "[[test]]");
         assert_eq!(converted, "[test](test.html)");
     }
 
