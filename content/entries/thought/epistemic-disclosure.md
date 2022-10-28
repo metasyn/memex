@@ -15,7 +15,7 @@ memexes. examples:
 
 Another approach I like is from a [[character|characters]] [xe iaso](https://xeiaso.net/blog/) who adds the following to many pages:
 
-> This article was posted on <date>. Facts and circumstances may have changed since publication. Please contact me before jumping to conclusions if something seems wrong or unclear.
+> This article was posted on YYYY-MM-DD. Facts and circumstances may have changed since publication. Please contact me before jumping to conclusions if something seems wrong or unclear.
 
 While a catchall like that does potentially help, I personally felt more drawn to symbols that relate to a combination of epistemic effort and epistemic status. For now, I've only
 added the naming to the first stage below. I was also inspired by [lizbeth poirier](https://ritualdust.com/folklore/sigils/)'s sigil related work for the simple designs below.
