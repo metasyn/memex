@@ -26,16 +26,20 @@ added the naming to the first stage below. I was also inspired by [lizbeth poiri
 
 <img src="resources/img/seedling_white.png" />
 
-- a seedling - a note, a collection of links, a concept i want to explore, or otherwise undeveloped information related to something. not guaranteed to grow, or survive in the long run.
+- a seedling - a note, a collection of links, a concept i want to explore, or otherwise undeveloped information related to something
+- not guaranteed to grow, or survive in the long run.
+- may be removed at any time
 
 ## ???
 
 <img src="resources/img/duality_white.png" />
 
-- something i've considered from multiple angles, had multiple conversations about, read about, or otherwise have grappled with others in conversations, reading, or research more generally.
+- something i've considered from multiple angles
+- something i've had multiple conversations about, read about, or otherwise have grappled with others in conversations, reading, or research more generally
 
 ## ???
 
 <img src="resources/img/persistence_white.png" />
 
 - a persistent concept, idea, belief, or interest
+- something that is less likely to be removed from the memex
