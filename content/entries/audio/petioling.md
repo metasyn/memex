@@ -5,7 +5,7 @@ the idea is that you're sitting under this tree, thinking about video games.
 but a leaf falls next to you and becomes alive, yet digitized.
 its not from this world. maybe its just a memory.
 
-mostly made on mother32, subharmonicon, and digitakt. see [[gear]].
+mostly made on mother32, subharmonicon, and digitakt. see [[audio-gear]].
 the samples come from [san soleil](https://en.wikipedia.org/wiki/Sans_Soleil).
 its an item in my [[collections]].
 
