@@ -45,11 +45,6 @@ pre {
 #directory-content {
   background-color: var(--background-color);
   color: var(--text-color);
-  border-color: var(--text-color);
-}
-
-#directory-content > details[open] {
-  border-color: var(--text-color);
 }
 
 /* Not sure I liked the light theme...
@@ -138,6 +133,7 @@ img {
 }
 
 details {
+  padding-right: 10px;
   padding-left: calc(10px * var(--depth) - (5px * (var(--depth) - 2)));
 }
 
