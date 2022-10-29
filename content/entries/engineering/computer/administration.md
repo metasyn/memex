@@ -4,19 +4,27 @@ below are some sites i use to check on whether a server is being configured corr
 
 ## domain / general
 
-- https://internet.nl/site/metasyn.pw/ - tests for IPV6 compatibility, signed domain name, HTTPS, security options, DNSSEC, route authorization
-- https://observatory.mozilla.org/analyze/metasyn.pw - has HTTP, TLS, and SSH tests - including HSTS, various headers, CORS, etc
+- [Internet NL](https://internet.nl/site/metasyn.pw/)
+  - tests for IPV6 compatibility, signed domain name, HTTPS, security options, DNSSEC, route authorization
+  - complaints:
+    - ipv6 connectivity
+    - dnssec is not supported by my VPS provider
+- [Mozilla Observatory](https://observatory.mozilla.org/analyze/metasyn.pw) - B
+  - has HTTP, TLS, and SSH tests - including HSTS, various headers, CORS, etc
+  - suggests I set `Content-Security-Policy`
 
 ## security
 
-- https://securityheaders.com/?followRedirects=on&hide=on&q=metasyn.pw
-- https://www.immuniweb.com/ssl/metasyn.pw/fvUEuDm8/
-- https://tls.imirhil.fr/https/metasyn.pw
+- [Security Headers](https://securityheaders.com/?followRedirects=on&hide=on&q=metasyn.pw) - A
+  - I still need to add a `Content-Security-Policy`
+- [Immuniweb](https://www.immuniweb.com/ssl/metasyn.pw/fvUEuDm8/) - A
+- [CryptCheck](https://tls.imirhil.fr/https/metasyn.pw) - B
+  - They suggest improving key exchange related things
 
 ## ssh
 
-- https://www.sshaudit.com/ - tests server configurations related to SSH - encryption ciphers, key exchanges, host key types, message authentication codes
-- https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/ - add fail2ban
+- [SSH Audit](https://www.sshaudit.com/) - tests server configurations related to SSH - encryption ciphers, key exchanges, host key types, message authentication codes
+- [fail2ban setup tutorial](https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/) - add fail2ban
 
 ## performance
 

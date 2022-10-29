@@ -38,6 +38,13 @@ Terminal=False
 Categories=Firmware
 ```
 
+## clean up
+
+```
+sudo apt-get clean
+sudo apt-get autoremove --purge
+```
+
 # arch linux
 
 These are some notes for myself when setting up arch.
