@@ -28,6 +28,12 @@ below are some sites i use to check on whether a server is being configured corr
 
 ## performance
 
-- https://tools.pingdom.com/#6104c94ab2000000m - simple page optimizations, page load speed/size
-- https://gtmetrix.com/reports/metasyn.pw/Mbto37Gk/ - dom loading, css, overall performance
-- https://pagespeed.web.dev/report?url=https%3A%2F%2Fmetasyn.pw%2 - diagnose performance issues, also has notes about accessibility
+- [Web Page Test](https://www.webpagetest.org/result/221030_BiDcB0_A7/)
+- [Pingdom](https://tools.pingdom.com/#6104c94ab2000000m) - simple page optimizations, page load speed/size
+- [GtMetrix](https://gtmetrix.com/reports/metasyn.pw/Mbto37Gk/) - dom loading, css, overall performance
+- [Pagespeed](https://pagespeed.web.dev/report?url=https%3A%2F%2Fmetasyn.pw%2) - diagnose performance issues, also has notes about accessibility
+
+## accessibility
+
+- [WAVE: Web Accessibility Evaluation](https://wave.webaim.org/report#/https://metasyn.pw/index.html)
+- [Experte Accessibilty Check](https://www.experte.com/accessibility)
