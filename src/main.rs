@@ -494,7 +494,7 @@ fn convert_internal_to_md(epistemic_lookup: &EpistemicStatusLookup, content: &st
             let prefix = status.unwrap_or(&EpistemicStatus::Seedling);
 
             format!(
-                "[<img class='epistemic-icon' src='resources/img/{}_white.png'/>{}]({}.html)",
+                "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/{}_white.png'/>{}]({}.html)",
                 prefix, title, link,
             )
         })
