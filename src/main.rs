@@ -725,6 +725,9 @@ fn build(
     hey("copying resources...");
     let dest_path = Path::new(destination_path);
     copy_dir_all(resources_path, dest_path.join(resources_path))?;
+    // favicon.ico needs to be at the top level
+    let ico_path = Path::new("rss.xml").to_path_buf();
+    fs::copy(ico_path, dest_path.join("favicon.ico"))?;
 
     return match collect_entries(content_path) {
         Ok(mut entries) => {
