@@ -10,3 +10,4 @@ permacomputing is fascinating. here i am collecting resources for learning more 
 - https://www.paritybit.ca/garden/arboretum/knowledge/permacomputing.html
 - [A pluriverse of local worlds: a review of Computing within Limits related terminology and practices](https://computingwithinlimits.org/2021/papers/limits21-devalk.pdf)
 - https://damaged.bleu255.com/Permacomputing/
+- https://ajroach42.com/the-small-things-manifesto/
