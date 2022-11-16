@@ -1,6 +1,6 @@
 # carbon capture
 
-below are notes and excerpts from howard j. herzog's book "carbon capture" (2018)
+below are notes and excerpts from howard j. herzog's book "carbon capture" (2018). i was mostly interested in learning what the systems were, how effective they are, and if there are any particular reasons to use one over the other.
 
 <details>
 
