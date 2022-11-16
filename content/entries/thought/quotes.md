@@ -62,5 +62,12 @@ the things we read, that somehow stick with us, more than they might.
 > science to life is impossible, all the sciences, all the branches of social
 > life.
 
-
 - mikhail bakunin - what is authority? 1870
+
+> if we are to investigate the class composition of climate change, the first and central proposition must be that capialism drives climate change, and the class that drives capitalism is the class of capitalists
+
+- nick dryer-witheford, struggles in the planet factory: class composition and global warming
+
+> there’s class warfare, all right, but it’s my class, the rich class, that’s making war, and we’re winning
+
+- warren buffett (2006)

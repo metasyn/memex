@@ -6,12 +6,16 @@ at one point, i realized how many different parts of my life were somehow
 intertwined with google's services. while i don't deny their usefulness, as
 they saying goes, if you don't pay for the product, you are the product. and i
 started thinking more about how to actually move my data and usage off their
-services. i'm far from being finished - because some of the services still make
+services. interestingly, this is part of a bigger grassroots movement: [degoogle](https://en.wikipedia.org/wiki/DeGoogle).
+i'm far from being finished - because some of the services still make
 sense for me to use. but i am attempting to at least slowly move my online self
 off of their services. if you have particular suggestions, please do [[contact]]
 me for how to continue getting off of google's services.
 
-here is a great list of [alternatives](https://degoogle.jmoore.dev/).
+there are lots of lists out there that go over alternatives:
+
+- https://degoogle.jmoore.dev/
+- https://restoreprivacy.com/google-alternatives/
 
 below, some notes on things i have and haven't switched off.
 
@@ -106,6 +110,8 @@ the time being. i also tried using DuckDuckGo for quite some time, and still
 use it sometimes, but am hoping that someday,
 [we can do better than DuckDuckGo](https://drewdevault.com/2020/11/17/Better-than-DuckDuckGo.html).
 
+recently, i was suggested to give [StartPage](https://www.startpage.com/en/about-us) a try.
+
 </details>
 
 ## google maps
@@ -151,7 +157,7 @@ general.
 
 one recent one that i saw that caught my eye was PGPP:
 
-* [INVISV: Pretty Good Phone Privacy (PGPP)](https://invisv.com/pgpp/)
+- [INVISV: Pretty Good Phone Privacy (PGPP)](https://invisv.com/pgpp/)
 
 </details>
 
@@ -162,10 +168,10 @@ one recent one that i saw that caught my eye was PGPP:
 google photos i think has been one of the harder ones for me. i've looked at
 some alternatives but simply organizing photos is such a royal pain imo.
 however, out of all the services, this is the one i'd like to tackle the most.
-i set up a sync to nextcloud using the nextcloud app from my phone, but it 
+i set up a sync to nextcloud using the nextcloud app from my phone, but it
 ends up failing quite a bit and isn't super reliable.
 
-i've considered running [photo prism](https://photoprism.app) but probably need to 
+i've considered running [photo prism](https://photoprism.app) but probably need to
 rent or run an additional server in order to run something like that.
 
 </details>
