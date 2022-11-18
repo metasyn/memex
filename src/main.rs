@@ -9,6 +9,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::str::FromStr;
 use std::sync::mpsc::channel;
+use std::sync::Arc;
 use std::time::Duration;
 use std::{fmt, thread};
 
@@ -474,7 +475,7 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
 // CONVERT //
 /////////////
 
-fn convert_internal_to_md(epistemic_lookup: &EpistemicStatusLookup, content: &str) -> String {
+fn convert_internal_to_md(epistemic_lookup: Arc<EpistemicStatusLookup>, content: &str) -> String {
     return INTERNAL_LINK_REGEX
         .replace_all(content, |caps: &Captures| {
             // must exist
@@ -594,8 +595,8 @@ fn make_template(item: &str) -> String {
 }
 
 fn replace_template<'a>(
-    epistemic_lookup: &EpistemicStatusLookup,
-    body: String,
+    epistemic_lookup: Arc<EpistemicStatusLookup>,
+    body: &str,
     item: &str,
     replacement: &str,
     line_by_line: bool,
@@ -613,14 +614,21 @@ fn replace_template<'a>(
 }
 
 fn replace_templates<'a>(
-    epistemic_lookup: &EpistemicStatusLookup,
-    mut body: String,
+    epistemic_lookup: Arc<EpistemicStatusLookup>,
+    body: &str,
     mapping: Vec<(&str, &str, bool)>,
 ) -> String {
+    let mut body = String::from(body);
     for (key, value, line_by_line) in mapping.iter() {
-        body = replace_template(epistemic_lookup, body, key, &value, *line_by_line)
+        body = replace_template(
+            Arc::clone(&epistemic_lookup),
+            body.as_str(),
+            key,
+            &value,
+            *line_by_line,
+        )
     }
-    return String::from(body);
+    return body;
 }
 
 fn render_gemtext(s: &str) -> String {
@@ -702,11 +710,11 @@ fn make_header_link(header: &str) -> String {
 
 fn build_entry(
     entry: Entry,
-    base_template: String,
-    destination_path: &str,
-    formatted_directory: &str,
-    recents: &str, // TODO: this only is needed on index page
-    epistemic_status_lookup: &EpistemicStatusLookup,
+    base_template: Arc<String>,
+    destination_path: Arc<String>,
+    formatted_directory: Arc<String>,
+    recents: Arc<String>, // TODO: this only is needed on index page
+    epistemic_status_lookup: Arc<EpistemicStatusLookup>,
 ) -> Result<()> {
     // get or set replacements
     let contents = entry.content.as_str();
@@ -716,14 +724,18 @@ fn build_entry(
 
     // make replacements
     let replacements = vec![
-        ("directory", formatted_directory, true),
+        ("directory", formatted_directory.as_str(), true),
         ("content", contents, false),
         ("references", &references, false),
         ("timestamp", timestamp.as_str(), false),
         ("toc", &outline, false),
-        ("recent", recents, false),
+        ("recent", recents.as_str(), false),
     ];
-    let html = replace_templates(epistemic_status_lookup, base_template.clone(), replacements);
+    let html = replace_templates(
+        epistemic_status_lookup,
+        base_template.as_str(),
+        replacements,
+    );
 
     // write replacements
     let fname = format!("{}/{}.html", destination_path, entry.id);
@@ -736,8 +748,11 @@ fn build_entry(
 
     // create gemtext files
     let gemtext = contents
-        .replace(make_template("directory").as_str(), formatted_directory)
-        .replace(make_template("recent").as_str(), recents);
+        .replace(
+            make_template("directory").as_str(),
+            formatted_directory.as_str(),
+        )
+        .replace(make_template("recent").as_str(), recents.as_str());
     let gemtext = render_gemtext(&gemtext);
 
     let fname = format!("{}/{}.gmi", destination_path, entry.id);
@@ -773,7 +788,6 @@ fn build(
     fs::copy(rss_path, dest_path.join("rss.xml"))?;
 
     hey("copying resources...");
-    let dest_path = Path::new(destination_path);
     copy_dir_all(resources_path, dest_path.join(resources_path))?;
 
     return match collect_entries(content_path) {
@@ -782,10 +796,21 @@ fn build(
                 "compiling {} entries...",
                 entries.len().to_string().bright_yellow()
             ));
-            let base_template = load_file(template_path).expect("couldn't load base template");
-            let directory = extract_directory(&entries, "pages");
-            let formatted_directory = format_directory(&directory);
-            let recents = extract_recent_entries(&mut entries.clone());
+
+            // These values are shared between threads so they have to be wrapped in atomic
+            // reference counters in order to be cleaned up appropriately at the end
+            let base_template =
+                Arc::new(load_file(template_path).expect("couldn't load base template"));
+            let directory = Arc::new(extract_directory(&entries, "pages"));
+            let formatted_directory = Arc::new(format_directory(&directory));
+            let recents = Arc::new(extract_recent_entries(&mut entries.clone()));
+            let destination_path_string = Arc::new(String::from(destination_path));
+            let epistemic_status_lookup = Arc::new(
+                entries
+                    .iter()
+                    .map(|e| (e.id.clone(), e.epistemic_status.clone()))
+                    .collect(),
+            );
 
             // handle special case for directory page
             entries
@@ -793,25 +818,34 @@ fn build(
                 .filter(|x| x.id == "directory")
                 .for_each(|x| x.content = format_directory_page(&x.content, &directory));
 
-            let epistemic_status_lookup: EpistemicStatusLookup = entries
-                .iter()
-                .map(|e| (e.id.clone(), e.epistemic_status.clone()))
-                .collect();
+            let mut thread_handles = vec![];
 
-            // let handle = thread::spawn(|| {
             for entry in entries {
-                build_entry(
-                    entry,
-                    base_template.clone(),
-                    destination_path,
-                    formatted_directory.as_str(),
-                    recents.as_str(),
-                    &epistemic_status_lookup,
-                )
-                .expect("couldn't build an entry");
+                let base_template_arc = Arc::clone(&base_template);
+                let destination_path_arc = Arc::clone(&destination_path_string);
+                let formatted_directory_arc = Arc::clone(&formatted_directory);
+                let recents_arc = Arc::clone(&recents);
+                let epistemic_status_lookup_arc = Arc::clone(&epistemic_status_lookup);
+
+                let handle = thread::spawn(move || {
+                    build_entry(
+                        entry,
+                        base_template_arc,
+                        destination_path_arc,
+                        formatted_directory_arc,
+                        recents_arc,
+                        epistemic_status_lookup_arc,
+                    )
+                    .expect("couldn't build an entry");
+                });
+
+                thread_handles.push(handle);
             }
-            // });
-            // handle.join().expect("issue during parallelization");
+
+            for handle in thread_handles {
+                handle.join().expect("issue joining thread");
+            }
+
             return Ok(());
         }
         Err(e) => {
@@ -1081,13 +1115,7 @@ mod tests {
     #[test]
     fn test_replace_template() {
         assert_eq!(
-            replace_template(
-                &HashMap::new(),
-                String::from("{{ test }}"),
-                "test",
-                "fab",
-                false
-            ),
+            replace_template(Arc::new(HashMap::new()), "{{ test }}", "test", "fab", false),
             "<p>fab</p>\n"
         )
     }
@@ -1096,8 +1124,8 @@ mod tests {
     fn test_replace_templates() {
         assert_eq!(
             replace_templates(
-                &HashMap::new(),
-                String::from("{{ test }} {{ something }}"),
+                Arc::new(HashMap::new()),
+                "{{ test }} {{ something }}",
                 vec![("test", "fab", false), ("something", "replacement", false)],
             ),
             "<p>fab</p>\n <p>replacement</p>\n"
@@ -1131,7 +1159,7 @@ mod tests {
 
     #[test]
     fn test_convert_internal_to_md() {
-        let converted = convert_internal_to_md(&HashMap::new(), "[[test]]");
+        let converted = convert_internal_to_md(Arc::new(HashMap::new()), "[[test]]");
         assert_eq!(converted, "[test](test.html)");
     }
 
