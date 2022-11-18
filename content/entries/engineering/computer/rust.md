@@ -7,4 +7,6 @@
 
 ## challenges
 
-- parallelism is the hardest part for me
+- parallelism/concurrency is the hardest part for me
+- understanding mutext, rc, cell, arc is maybe next
+- i'd like to understand rayon/tokio too for concurrency
