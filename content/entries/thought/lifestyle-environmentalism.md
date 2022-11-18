@@ -14,7 +14,7 @@ actions rather than actions that revolve around individual (often consumerist)
 behaviors.
 
 organizations ([1](https://www.cdc.gov/sustainability/lifestyle/index.htm),
-[2](https://www.theguardian.com/environment/2022/mar/07/six-key-lifestyle-changes-can-help-avert-the-climate-crisis-study-finds),
+[2](https://www.theguardian.com/environment/2022/mar/07/six-key-lifestyle-changes-can-help-avert-the-climate-crisis-study-finds)),
 often point to various versions of this: we all need to do our part, some
 actions are better than others, or maybe its really just the uber-wealthy that
 are the problem. however all of these approaches still focus on the actions of
