@@ -1,7 +1,6 @@
 use std::cmp::min;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsString;
-use std::fmt;
 use std::fmt::Display;
 use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
@@ -11,6 +10,7 @@ use std::process::Command;
 use std::str::FromStr;
 use std::sync::mpsc::channel;
 use std::time::Duration;
+use std::{fmt, thread};
 
 use chrono::{Local, NaiveDate, Utc};
 use clap::{App, Arg};
@@ -700,6 +700,56 @@ fn make_header_link(header: &str) -> String {
 // COMMANDS //
 //////////////
 
+fn build_entry(
+    entry: Entry,
+    base_template: String,
+    destination_path: &str,
+    formatted_directory: &str,
+    recents: &str, // TODO: this only is needed on index page
+    epistemic_status_lookup: &EpistemicStatusLookup,
+) -> Result<()> {
+    // get or set replacements
+    let contents = entry.content.as_str();
+    let timestamp = entry.modification_date.to_string();
+    let references = format_references(entry.references.unwrap_or(Vec::new()));
+    let outline = extract_outline_md(contents);
+
+    // make replacements
+    let replacements = vec![
+        ("directory", formatted_directory, true),
+        ("content", contents, false),
+        ("references", &references, false),
+        ("timestamp", timestamp.as_str(), false),
+        ("toc", &outline, false),
+        ("recent", recents, false),
+    ];
+    let html = replace_templates(epistemic_status_lookup, base_template.clone(), replacements);
+
+    // write replacements
+    let fname = format!("{}/{}.html", destination_path, entry.id);
+    hey(format!("{} => {}", entry.id.yellow(), fname.green()));
+    let mut fd = File::create(fname)?;
+    let res = fd.write_all(html.as_bytes());
+    if res.is_err() {
+        return Err(res.err().unwrap());
+    }
+
+    // create gemtext files
+    let gemtext = contents
+        .replace(make_template("directory").as_str(), formatted_directory)
+        .replace(make_template("recent").as_str(), recents);
+    let gemtext = render_gemtext(&gemtext);
+
+    let fname = format!("{}/{}.gmi", destination_path, entry.id);
+    hey(format!("{} => {}", entry.id.yellow(), fname.green()));
+    let mut fd = File::create(fname)?;
+    let res = fd.write_all(gemtext.as_bytes());
+    if res.is_err() {
+        return Err(res.err().unwrap());
+    }
+    return Ok(());
+}
+
 fn build(
     content_path: &str,
     template_path: &str,
@@ -732,8 +782,7 @@ fn build(
                 "compiling {} entries...",
                 entries.len().to_string().bright_yellow()
             ));
-            let base_template = load_file(template_path)?;
-
+            let base_template = load_file(template_path).expect("couldn't load base template");
             let directory = extract_directory(&entries, "pages");
             let formatted_directory = format_directory(&directory);
             let recents = extract_recent_entries(&mut entries.clone());
@@ -749,54 +798,20 @@ fn build(
                 .map(|e| (e.id.clone(), e.epistemic_status.clone()))
                 .collect();
 
+            // let handle = thread::spawn(|| {
             for entry in entries {
-                // get or set replacements
-                let contents = entry.content.as_str();
-                let timestamp = entry.modification_date.to_string();
-                let references = format_references(entry.references.unwrap_or(Vec::new()));
-                let outline = extract_outline_md(contents);
-
-                // make replacements
-                let replacements = vec![
-                    ("directory", formatted_directory.as_str(), true),
-                    ("content", contents, false),
-                    ("references", &references, false),
-                    ("timestamp", timestamp.as_str(), false),
-                    ("toc", &outline, false),
-                    ("recent", recents.as_str(), false),
-                ];
-                let html = replace_templates(
-                    &epistemic_status_lookup,
+                build_entry(
+                    entry,
                     base_template.clone(),
-                    replacements,
-                );
-
-                // write replacements
-                let fname = format!("{}/{}.html", destination_path, entry.id);
-                hey(format!("{} => {}", entry.id.yellow(), fname.green()));
-                let mut fd = File::create(fname)?;
-                let res = fd.write_all(html.as_bytes());
-                if res.is_err() {
-                    return Err(res.err().unwrap());
-                }
-
-                // create gemtext files
-                let gemtext = contents
-                    .replace(
-                        make_template("directory").as_str(),
-                        formatted_directory.as_str(),
-                    )
-                    .replace(make_template("recent").as_str(), recents.as_str());
-                let gemtext = render_gemtext(&gemtext);
-
-                let fname = format!("{}/{}.gmi", destination_path, entry.id);
-                hey(format!("{} => {}", entry.id.yellow(), fname.green()));
-                let mut fd = File::create(fname)?;
-                let res = fd.write_all(gemtext.as_bytes());
-                if res.is_err() {
-                    return Err(res.err().unwrap());
-                }
+                    destination_path,
+                    formatted_directory.as_str(),
+                    recents.as_str(),
+                    &epistemic_status_lookup,
+                )
+                .expect("couldn't build an entry");
             }
+            // });
+            // handle.join().expect("issue during parallelization");
             return Ok(());
         }
         Err(e) => {
