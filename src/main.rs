@@ -841,11 +841,11 @@ fn add_rss_post(rss_path: PathBuf) -> Result<()> {
     let rfc2822 = Utc::now().to_rfc2822();
 
     let item = ItemBuilder::default()
-        .title(title)
-        .link(link)
-        .description(description)
-        .guid(guid)
-        .pub_date(rfc2822.clone())
+        .title(Some(title))
+        .link(Some(link))
+        .description(Some(description))
+        .guid(Some(guid))
+        .pub_date(Some(rfc2822.clone()))
         .build()
         .expect("could not build item");
 
@@ -1067,7 +1067,7 @@ mod tests {
     fn test_replace_template() {
         assert_eq!(
             replace_template(
-                HashMap::new(),
+                &HashMap::new(),
                 String::from("{{ test }}"),
                 "test",
                 "fab",
@@ -1081,7 +1081,7 @@ mod tests {
     fn test_replace_templates() {
         assert_eq!(
             replace_templates(
-                HashMap::new(),
+                &HashMap::new(),
                 String::from("{{ test }} {{ something }}"),
                 vec![("test", "fab", false), ("something", "replacement", false)],
             ),
@@ -1116,7 +1116,7 @@ mod tests {
 
     #[test]
     fn test_convert_internal_to_md() {
-        let converted = convert_internal_to_md(HashMap::new(), "[[test]]");
+        let converted = convert_internal_to_md(&HashMap::new(), "[[test]]");
         assert_eq!(converted, "[test](test.html)");
     }
 
