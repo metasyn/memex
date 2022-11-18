@@ -787,6 +787,7 @@ fn build(
     let _channel = parse_rss(&rss_path);
     fs::copy(rss_path, dest_path.join("rss.xml"))?;
 
+    // TODO: copy resources in its own thread
     hey("copying resources...");
     copy_dir_all(resources_path, dest_path.join(resources_path))?;
 
