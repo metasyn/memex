@@ -10,6 +10,7 @@ use std::process::Command;
 use std::str::FromStr;
 use std::sync::mpsc::channel;
 use std::sync::Arc;
+use std::thread::JoinHandle;
 use std::time::Duration;
 use std::{fmt, thread};
 
@@ -132,23 +133,51 @@ where
 }
 
 fn load_file<P: AsRef<Path>>(path: P) -> Result<String> {
-    let file = File::open(path)?;
+    let file = File::open(path).expect("unable to open file path");
     let mut buf_reader = BufReader::new(file);
     let mut contents = String::new();
-    buf_reader.read_to_string(&mut contents)?;
+    buf_reader
+        .read_to_string(&mut contents)
+        .expect("unable to read file to string");
     return Ok(contents);
 }
 
 // see https://stackoverflow.com/questions/26958489/how-to-copy-a-folder-recursively-in-rust
-fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> Result<()> {
-    fs::create_dir_all(&dst)?;
-    for entry in fs::read_dir(src)? {
-        let entry = entry?;
-        let ty = entry.file_type()?;
+fn copy_dir_all(src_string: Arc<String>, dst_string: Arc<String>) -> Result<()> {
+    // Create paths
+    let src = Path::new(src_string.as_str());
+    let dst = Path::new(dst_string.as_str());
+
+    // Create target directory
+    fs::create_dir_all(&dst).expect("unable to create destination directory while copying");
+    let entries = fs::read_dir(src).expect("unable to read directory while copying");
+
+    for entry in entries {
+        let entry = entry.expect("unable to get entry from directory");
+        let ty = entry.file_type().expect("unable to get file type");
         if ty.is_dir() {
-            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
+            // Since the method is recrusive, we have to do this kind of insane
+            // translation between the string we've been given, and then the new
+            // item we want to utilize.
+            let new_src = Arc::new(String::from(
+                entry
+                    .path()
+                    .as_os_str()
+                    .to_str()
+                    .expect("unable to get source path as str while copying"),
+            ));
+            let new_dest = Arc::new(String::from(
+                dst.join(entry.file_name())
+                    .as_os_str()
+                    .to_str()
+                    .expect("unable to get dest path as str while copying"),
+            ));
+            // Finally can copy again
+            // I'm sure there is a much better way to do this
+            copy_dir_all(new_src, new_dest).expect("unable to copy recursively");
         } else {
-            fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
+            fs::copy(entry.path(), dst.join(entry.file_name()))
+                .expect("unable to copy single file");
         }
     }
     Ok(())
@@ -159,9 +188,7 @@ fn comrak_options() -> comrak::ComrakOptions {
     let mut options = comrak::ComrakOptions::default();
     options.render.unsafe_ = true;
     options.render.escape = false;
-
     options.parse.smart = true;
-
     options.extension.table = true;
     options.extension.autolink = true;
     options.extension.tagfilter = false;
@@ -173,8 +200,7 @@ fn setup() -> std::result::Result<(), Report> {
     if std::env::var("RUST_BACKTRACE").is_err() {
         std::env::set_var("RUST_BACKTRACE", "1")
     }
-    color_eyre::install()?;
-
+    color_eyre::install().expect("unable to install color_eyre");
     Ok(())
 }
 
@@ -740,7 +766,7 @@ fn build_entry(
     // write replacements
     let fname = format!("{}/{}.html", destination_path, entry.id);
     hey(format!("{} => {}", entry.id.yellow(), fname.green()));
-    let mut fd = File::create(fname)?;
+    let mut fd = File::create(fname).expect("unable to create file");
     let res = fd.write_all(html.as_bytes());
     if res.is_err() {
         return Err(res.err().unwrap());
@@ -757,12 +783,22 @@ fn build_entry(
 
     let fname = format!("{}/{}.gmi", destination_path, entry.id);
     hey(format!("{} => {}", entry.id.yellow(), fname.green()));
-    let mut fd = File::create(fname)?;
+    let mut fd = File::create(fname).expect("unable to create file");
     let res = fd.write_all(gemtext.as_bytes());
     if res.is_err() {
         return Err(res.err().unwrap());
     }
     return Ok(());
+}
+
+fn validate_and_copy_rss(dest_path_string: Arc<String>) -> JoinHandle<()> {
+    let handle = thread::spawn(move || {
+        let rss_path = Path::new("rss.xml").to_path_buf();
+        let _channel = parse_rss(&rss_path);
+        let dest_path = Path::new(dest_path_string.as_str());
+        fs::copy(rss_path, dest_path.join("rss.xml")).expect("unable to copy rss.xml file");
+    });
+    return handle;
 }
 
 fn build(
@@ -773,23 +809,38 @@ fn build(
 ) -> Result<()> {
     hey("building memex...");
 
-    let dest_path = Path::new(destination_path);
+    // Create a vec of thread handles to join later
+    let mut thread_handles = vec![];
+
+    // A bunch of shared strings and paths
+    let destination_path_string = Arc::new(String::from(destination_path));
+    let destination_path_arc = Arc::clone(&destination_path_string);
+    let resources_path_string = Arc::new(String::from(resources_path));
+    let resources_path_arc = Arc::clone(&resources_path_string);
+    let resources_dest_string = Arc::new(String::from(
+        Path::new(destination_path)
+            .join(resources_path)
+            .as_os_str()
+            .to_str()
+            .expect("unable to create resources destination path"),
+    ));
+    let resources_dest_arc = Arc::clone(&resources_dest_string);
 
     hey("cleaning destination dir...");
     let removal = remove_dir_all(destination_path);
     if removal.is_err() {
         hey("output destination doesn't exist...");
     }
-    create_dir_all(destination_path)?;
+    create_dir_all(destination_path).expect("unable to create destination path");
 
     hey("validating rss...");
-    let rss_path = Path::new("rss.xml").to_path_buf();
-    let _channel = parse_rss(&rss_path);
-    fs::copy(rss_path, dest_path.join("rss.xml"))?;
+    thread_handles.push(validate_and_copy_rss(destination_path_arc));
 
-    // TODO: copy resources in its own thread
     hey("copying resources...");
-    copy_dir_all(resources_path, dest_path.join(resources_path))?;
+    thread_handles.push(thread::spawn(move || {
+        copy_dir_all(resources_path_arc, resources_dest_arc)
+            .expect("unable to copy directory for resources");
+    }));
 
     return match collect_entries(content_path) {
         Ok(mut entries) => {
@@ -805,7 +856,6 @@ fn build(
             let directory = Arc::new(extract_directory(&entries, "pages"));
             let formatted_directory = Arc::new(format_directory(&directory));
             let recents = Arc::new(extract_recent_entries(&mut entries.clone()));
-            let destination_path_string = Arc::new(String::from(destination_path));
             let epistemic_status_lookup = Arc::new(
                 entries
                     .iter()
@@ -818,8 +868,6 @@ fn build(
                 .iter_mut()
                 .filter(|x| x.id == "directory")
                 .for_each(|x| x.content = format_directory_page(&x.content, &directory));
-
-            let mut thread_handles = vec![];
 
             for entry in entries {
                 let base_template_arc = Arc::clone(&base_template);
@@ -928,13 +976,20 @@ fn watch(
 
     // Automatically select the best implementation for your platform.
     // You can also access each implementation directly e.g. INotifyWatcher.
-    let mut watcher: RecommendedWatcher = Watcher::new(tx, Duration::from_secs(2))?;
+    let mut watcher: RecommendedWatcher =
+        Watcher::new(tx, Duration::from_secs(2)).expect("unable to create watcher");
 
     // Add a path to be watched. All files and directories at that path and
     // below will be monitored for changes.
-    watcher.watch(content_path, RecursiveMode::Recursive)?;
-    watcher.watch(resources_path, RecursiveMode::Recursive)?;
-    watcher.watch(template_path, RecursiveMode::Recursive)?;
+    watcher
+        .watch(content_path, RecursiveMode::Recursive)
+        .expect("unable to watch content path");
+    watcher
+        .watch(resources_path, RecursiveMode::Recursive)
+        .expect("unable to watch resources path");
+    watcher
+        .watch(template_path, RecursiveMode::Recursive)
+        .expect("unable to watch template path");
 
     // This is a simple loop, but you may want to use more complex logic here,
     // for example to handle I/O.
@@ -951,7 +1006,8 @@ fn watch(
                     template_path,
                     destination_path,
                     resources_path,
-                )?;
+                )
+                .expect("unable to build memex");
                 hey(&watching);
             }
             Err(e) => println!("watch error: {:?}", e),
