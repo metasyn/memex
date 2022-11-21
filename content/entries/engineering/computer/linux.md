@@ -105,6 +105,12 @@ rm -r ~/.config/pulse
 pulseaudio -k
 ```
 
+## inserting emojis
+
+I can _never_ remember this:
+
+- `Ctrl + Shift + E + Space`: then search via word tags
+
 # disk space
 
 ```
