@@ -10,13 +10,14 @@ i attended the diy synthesizer workshop from [dogbotic](https://dogbotic.com/). 
 
 # resources
 
-* Dogbotic DIY Synths Virtual Workshop [Dogbotic](https://dogbotic.com/diysynths)
-* Moritz Klein - Building DIY VCO, VCF, etc. [Youtube](https://www.youtube.com/channel/UCzfW6SlNEyxmAPtdr3n-_Og) - [Patreon](https://www.patreon.com/moritzklein/posts)
-* Look Mum No Computer - [Building your own modular synth](https://www.lookmumnocomputer.com/modular)
-* Niklas Ronnberg - [Synth DIY Schematics](http://familjenronnberg.se/~niklas/diy.php)
-* Natahn "Synthnerd" - [Synth DIY Schematics](https://synthnerd.wordpress.com/synth-diy/)
-* [sdiy.info](sdiy.info) - a wiki of various DIY synth information
-* Kristian Blåsol's [Youtube Channel](https://www.youtube.com/channel/UC9NeBnf-9pzDC3C86MeOJvA) - he has a "Modular In A Week" series
-* Winterbloom
-    * [Designing Castor and Pollux](https://blog.thea.codes/designing-castor-and-pollux/)
-    * [Designing Big Honking Button](https://blog.thea.codes/designing-big-honking-button/)
+- Dogbotic DIY Synths Virtual Workshop [Dogbotic](https://dogbotic.com/diysynths)
+- Moritz Klein - Building DIY VCO, VCF, etc. [Youtube](https://www.youtube.com/channel/UCzfW6SlNEyxmAPtdr3n-_Og) - [Patreon](https://www.patreon.com/moritzklein/posts)
+- Look Mum No Computer - [Building your own modular synth](https://www.lookmumnocomputer.com/modular)
+- Niklas Ronnberg - [Synth DIY Schematics](http://familjenronnberg.se/~niklas/diy.php)
+- Natahn "Synthnerd" - [Synth DIY Schematics](https://synthnerd.wordpress.com/synth-diy/)
+- [sdiy.info](sdiy.info) - a wiki of various DIY synth information
+- Kristian Blåsol's [Youtube Channel](https://www.youtube.com/channel/UC9NeBnf-9pzDC3C86MeOJvA) - he has a "Modular In A Week" series
+- Winterbloom
+  - [Designing Castor and Pollux](https://blog.thea.codes/designing-castor-and-pollux/)
+  - [Designing Big Honking Button](https://blog.thea.codes/designing-big-honking-button/)
+- [underscores.shop](https://underscores.shop) - for research and distribution of accessible open-source video-art making instruments

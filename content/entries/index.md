@@ -3,9 +3,6 @@
 </video>
 
 - this is a [[memex]] - many pages are in progress, incomplete, or even incorrect
-- see what is up [[now]] - i update this pagae semi regularly
+- see what is up [[now]] - i update this page semi regularly
 - see all pages in the [[directory]]
-
-# recent changes
-
-{{ recent }}
+- see [[recent-changes]]

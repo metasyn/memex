@@ -4,8 +4,9 @@ i update this page every so often. its contents are generally ephermal and i do 
 
 ## general
 
+- holidays
 - planning travels
-- riding my fixed gear lately
+- trying to learn more about [[intentional-communities]]
 
 ## listening
 
@@ -18,4 +19,4 @@ i update this page every so often. its contents are generally ephermal and i do 
 
 ## reading
 
-- [anarchism and political theory: contemporary problems](https://theanarchistlibrary.org/library/uri-gordon-anarchism-and-political-theory-contemporary-problems)
+- climate change as class war - matt huber

@@ -17,6 +17,7 @@
 - [synth history zine: issue 1](https://www.synthhistory.tv/shop/Synth-History-Zine-Issue-1-p368968067)
 - cats at the louvre - taiyo matsumoto
 - a frog in the fall (and later on) by linnea sterte (peow)
+- climate change as class war - matt huber
 
 # 2021
 

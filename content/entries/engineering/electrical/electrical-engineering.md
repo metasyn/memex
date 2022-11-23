@@ -29,12 +29,12 @@ a electromagnetic field, which is, electromagnetic induction
 
 # units
 
-* Voltage (volts): electric potential difference
-* Ampere (amps) = electrical current
-* Ohm (Ω) = electrical resistance
-* Farad = capacitance of electrical potential
-* K = shorthand for 1000 Ohms often
-  * also 2K8 means 2800 for example
+- Voltage (volts): electric potential difference
+- Ampere (amps) = electrical current
+- Ohm (Ω) = electrical resistance
+- Farad = capacitance of electrical potential
+- K = shorthand for 1000 Ohms often
+  - also 2K8 means 2800 for example
 
 # components
 
@@ -81,15 +81,16 @@ the pivot point is connected to the middle.
 side pins are the opposite sides.
 
 the terms are called:
-* nose of the potentiometer (middle)
-* cheek of the potentiometer (ends)
+
+- nose of the potentiometer (middle)
+- cheek of the potentiometer (ends)
 
 ## integrated circuit
 
 a specific set of capacitors, inductors, transistors, resistors in a circuit.
 
-these look like small "chips".  "living bug" position refers to it being with
-its legs down.  and the flat part is at the top.
+these look like small "chips". "living bug" position refers to it being with
+its legs down. and the flat part is at the top.
 
 the pins on an IC have numbers like so:
 
@@ -109,37 +110,38 @@ where the left side has a marker like a half circle
 
 ## voltage divider
 
-* passive linear circuit that reduces voltage from its input to its output
-* one way to create a voltage divider is to use a potentiometer - a resistive divider
-* If you set up two resistors - VoltageOut = Resistance2 / (Resistance1 + Resistance2) * VoltageIn
+- passive linear circuit that reduces voltage from its input to its output
+- one way to create a voltage divider is to use a potentiometer - a resistive divider
+- If you set up two resistors - VoltageOut = Resistance2 / (Resistance1 + Resistance2) \* VoltageIn
 
 ## BJT
 
-* biopolar junction transistor
-* uses the language of:
-  * emitter
-  * base
-  * collector
+- biopolar junction transistor
+- uses the language of:
+  - emitter
+  - base
+  - collector
 
 ## FET
 
-* field effect transistor
-* uses the language of:
-  * source
-  * gate
-  * drain
+- field effect transistor
+- uses the language of:
+  - source
+  - gate
+  - drain
 
 ## VCC VEE VDD VSS
 
-* terms for various voltage supplies on schematics
+- terms for various voltage supplies on schematics
 
-* Negative Voltage Supplies
-  * VCC: Voltage Collector Collector
-  * VDD: Voltage Drain Drain
+- Negative Voltage Supplies
 
-* Positive Voltage Supplies
-  * VEE: Voltage Emitter Emitter
-  * VSS: Voltage Source Source
+  - VCC: Voltage Collector Collector
+  - VDD: Voltage Drain Drain
+
+- Positive Voltage Supplies
+  - VEE: Voltage Emitter Emitter
+  - VSS: Voltage Source Source
 
 Read more about the history of these names [here](https://www.etechnog.com/2019/06/vcc-vss-vdd-vee-in-electronics.html).
 
@@ -149,10 +151,10 @@ short for Analog to Digital Converter
 
 ## op-amp
 
-* op-amp is short for operational amplifier
-* it can also be used as a buffer
-* if you connect the negative out back to the post gain out it can be negative feedback
-* using this buffer, we can add resistance to the feedback loop to control the total voltage added
+- op-amp is short for operational amplifier
+- it can also be used as a buffer
+- if you connect the negative out back to the post gain out it can be negative feedback
+- using this buffer, we can add resistance to the feedback loop to control the total voltage added
 
 # specific integrated circuits
 
@@ -160,9 +162,8 @@ i decided to start keeping track of specific ICs in the [[integrated-circuits]] 
 
 ## CMOS 4000 Series
 
-* there are a lot of CMOS 4000 series ICs to do various things
-* check [wikipedia](https://en.wikipedia.org/wiki/List_of_4000-series_integrated_circuits) for datasheets and descriptions
-
+- there are a lot of CMOS 4000 series ICs to do various things
+- check [wikipedia](https://en.wikipedia.org/wiki/List_of_4000-series_integrated_circuits) for datasheets and descriptions
 
 # schematics
 
@@ -181,17 +182,17 @@ BOM usually stands for bill of materials - a list of all the components or eletr
 
 ## I2C
 
-* Inter-Integrated Circuit
-* [Wikipedia](https://en.wikipedia.org/wiki/I%C2%B2C)
-* 1982
+- Inter-Integrated Circuit
+- [Wikipedia](https://en.wikipedia.org/wiki/I%C2%B2C)
+- 1982
 
 ## SPI
 
-* Serial Peripheral Interface
-* [Wikipedia](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface)
-* 1979
+- Serial Peripheral Interface
+- [Wikipedia](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface)
+- 1979
 
 ## UART
 
-* Universal Asynchonrous Receiver-Transmitter
-* [Wikipedia](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter)
+- Universal Asynchonrous Receiver-Transmitter
+- [Wikipedia](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter)
