@@ -17,3 +17,7 @@ acclaimed [values](https://merveilles.town/about/more) include:
 > this webring is an attempt to inspire artists & developers to build their websites and share traffic amongst each other. the ring welcomes hand-crafted wikis and portfolios.
 
 this site is one of many on the [merveilles webring](https://webring.xxiivv.com/). please enjoy exporing my co-inspirators' sites.
+
+## references
+
+see this wiley wiggins' essay: [merveilles sensibility](https://wileywiggins.com/merveilles.html)
