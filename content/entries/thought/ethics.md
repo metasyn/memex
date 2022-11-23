@@ -1,5 +1,7 @@
 # ethics
 
+<!--epistemic=dendroid-->
+
 - a set of moral principles
 - a theory or system of moral values
 - the principles of conduct governing an individual or group

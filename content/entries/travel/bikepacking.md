@@ -1,5 +1,7 @@
 # bikepacking
 
+<!--epistemic=sapling-->
+
 bikepacking and biketouring - it has to be one of the best ways to
 travel. like walking, you're limited by your own body and forced to take in a
 lot more of your natural surroundings. however, like a car, you can actually
@@ -42,8 +44,8 @@ ending in san francisco. i've started writing down some of the routes as ways
 of both documenting and planning the trip, but also sharing the route with
 others who might be interested before we depart:
 
-* [[sf-sc-sf]]: a route from SF -> santa cruz -> san jose -> SF
-* [[sf-pr-sf]]: a route from SF -> point reyes -> SF
+- [[sf-sc-sf]]: a route from SF -> santa cruz -> san jose -> SF
+- [[sf-pr-sf]]: a route from SF -> point reyes -> SF
 
 ## gear
 

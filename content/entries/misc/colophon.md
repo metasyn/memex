@@ -1,5 +1,7 @@
 # colophon
 
+<!--epistemic=sapling-->
+
 this iteration is my first attempt at sharing ideas in this manner. i spent a
 lot of time thinking about how i could plan for longevity while also keeping
 the writing process simple. in the [merveilles](https://merveilles.town)

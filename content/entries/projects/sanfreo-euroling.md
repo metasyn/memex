@@ -1,37 +1,41 @@
 # sanfreo euroling
 
+<!--epistemic=dendroid-->
+
 <img src="resources/img/dithered_sanfreo_3.png"></img>
 
 the sanfreo euroling is a [[diy-synthesizer]]. i made it as part of a [dogbotic](https://dogbotic.com/) course. it features:
 
-* a square oscillator
-* an internal clock
-* three low frequency oscillators (LFOs)
-* a binary divider for creating octaves
-* a multiplexer for creating rhythms
-* "chaos modes"
-* external clock sync
-* an exposed mini patchbay
+- a square oscillator
+- an internal clock
+- three low frequency oscillators (LFOs)
+- a binary divider for creating octaves
+- a multiplexer for creating rhythms
+- "chaos modes"
+- external clock sync
+- an exposed mini patchbay
 
 ## overview
 
 The layout is exposed into three components
 
-* the sonic engine: the oscillator and binary divider that creates octaves for sound
-* timing engine: the external clock, the internal clock, and three LFOs for sequencing
-* the interface: he the exposed breadboard for creating sequences and rhythms
+- the sonic engine: the oscillator and binary divider that creates octaves for sound
+- timing engine: the external clock, the internal clock, and three LFOs for sequencing
+- the interface: he the exposed breadboard for creating sequences and rhythms
 
 In the schematic below:
-* the sonic engine can be seen toward the top and top right.
-* the timing engine can be seen on the left and bottom left
-* the interface can be seen in the middle and right where the two meet
+
+- the sonic engine can be seen toward the top and top right.
+- the timing engine can be seen on the left and bottom left
+- the interface can be seen in the middle and right where the two meet
 
 ### sonic engine
 
 the sonic engine part of this synthesizer is an incredibly simple square wave generator. it utilizes only three components:
-* a NAND gate
-* a capacitor (0.33uf or so)
-* a potentiometer
+
+- a NAND gate
+- a capacitor (0.33uf or so)
+- a potentiometer
 
 the potentiometer functions as a way of changing the pitch as well. I originally wanted to add an active low pass filter but instead decided to embrace the intense, unfiltered sound created by this circuit.
 
@@ -40,8 +44,9 @@ this oscillator then feeds into a binary divider. it divides the signal by 2, 4,
 ### timing engine
 
 the timing engine has one of two inputs:
-* an oscillator (just like the sonic engine, but with a larger capacitor to slow down the rate)
-* an external clock (fed via a 1/8" or 3.5mm jack)
+
+- an oscillator (just like the sonic engine, but with a larger capacitor to slow down the rate)
+- an external clock (fed via a 1/8" or 3.5mm jack)
 
 these two inputs are selected via a switch. from there, this timing is fed into a binary divider which divides the clock by 2, 4, and 8 respectively so, from this, we end up with three different clocks. these, when treated as digital signals (that is, binary in this case), can be used to specify a number between 0 and 7 (or 8 steps total). for example, here is our clock value, and our divisions:
 
@@ -63,7 +68,6 @@ lastly, the audio out is a 1/4" (7mm) jack, and the whole thing is powered by a 
 
 <img src="resources/img/dithered_sanfreo_4.png"></img>
 
-
 ## schematic
 
 <img src="resources/img/dithered_sanfreo_1.png"></img>
@@ -71,7 +75,6 @@ lastly, the audio out is a 1/4" (7mm) jack, and the whole thing is powered by a 
 the schematic is missing one voltage divider with a potentiometer on the audio out. this is used to decrease the volume, because before the audio signal was way too high / loud /hot.
 
 <img src="resources/img/sanfreo_euroling.png"></img>
-
 
 ## enclosure
 
@@ -94,22 +97,21 @@ i think one of the interesting things about this synthesizer is the way you can 
 otherwise, i think the interface reminds me of a eurorack synthesizer. i also love the english suffix -ling, as in duckling, cutling.
 and so:
 
-* san = three
-* fre = frequency
-* o = oscillators
+- san = three
+- fre = frequency
+- o = oscillators
 
-* euro- (as in eurorack)
-* -ling (as in the diminutive)
-
+- euro- (as in eurorack)
+- -ling (as in the diminutive)
 
 ## learnings
 
-* triple check before soldering an IC to a board
-* quadruple check before desoldering anything - sometimes its easier to simply cut a wire somewhere...
-* go slow on your case / enclosure. way harder to replace than a resistor or random component!
+- triple check before soldering an IC to a board
+- quadruple check before desoldering anything - sometimes its easier to simply cut a wire somewhere...
+- go slow on your case / enclosure. way harder to replace than a resistor or random component!
 
 ## todo / in progress
 
-* add knobs!
-* add latch to ensure the case doesn't accidentally open
-* add rubber feet to the bottom
+- add knobs!
+- add latch to ensure the case doesn't accidentally open
+- add rubber feet to the bottom

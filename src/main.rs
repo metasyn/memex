@@ -27,8 +27,8 @@ use rss::validation::Validate;
 
 static DOMAIN: &str = "metasyn.pw";
 const SEEDLING: &str = "seedling";
-const DUALITY: &str = "duality";
-const PERSISTENCE: &str = "persistence";
+const SAPLING: &str = "sapling";
+const DENDROID: &str = "dendroid";
 
 /////////////
 // STRUCTS //
@@ -87,16 +87,16 @@ type EpistemicStatusLookup = HashMap<String, EpistemicStatus>;
 #[derive(Debug, Clone)]
 enum EpistemicStatus {
     Seedling,
-    Duality,
-    Persistence,
+    Sapling,
+    Dendroid,
 }
 
 impl Display for EpistemicStatus {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             EpistemicStatus::Seedling => write!(f, "{}", SEEDLING),
-            EpistemicStatus::Duality => write!(f, "{}", DUALITY),
-            EpistemicStatus::Persistence => write!(f, "{}", PERSISTENCE),
+            EpistemicStatus::Sapling => write!(f, "{}", SAPLING),
+            EpistemicStatus::Dendroid => write!(f, "{}", DENDROID),
         }
     }
 }
@@ -107,8 +107,8 @@ impl FromStr for EpistemicStatus {
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         match s {
             SEEDLING => Ok(EpistemicStatus::Seedling),
-            DUALITY => Ok(EpistemicStatus::Duality),
-            PERSISTENCE => Ok(EpistemicStatus::Persistence),
+            SAPLING => Ok(EpistemicStatus::Sapling),
+            DENDROID => Ok(EpistemicStatus::Dendroid),
             _ => Err(()),
         }
     }

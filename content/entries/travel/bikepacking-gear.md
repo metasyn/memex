@@ -1,5 +1,7 @@
 # bikepacking gear
 
+<!--epistemic=sapling-->
+
 i put this list together to share with friends who want to ride together on a
 [[bikepacking]] route! also to think out loud what i am planning on bringing on
 my next trip.

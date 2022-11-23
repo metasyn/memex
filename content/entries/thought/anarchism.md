@@ -1,5 +1,7 @@
 # anarchism
 
+<!--epistemic=dendroid-->
+
 > darling, i've told you several times before. i have no dream job. i do not dream of labor.
 
 ## readings

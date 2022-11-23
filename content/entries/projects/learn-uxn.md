@@ -1,5 +1,7 @@
 # learn-uxn
 
+<!--epistemic=sapling-->
+
 <img src="resources/img/dithered_learn-uxn.png"><img>
 
 the [learn-uxn](https://metasyn.github.io/learn-uxn) project is a project for taking the

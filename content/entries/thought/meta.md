@@ -13,6 +13,7 @@ this page is for things related to the making of the memex itself.
 code
 
 ```
+<!--epistemic=dendroid-->
 internal link: [[memex]]
 external link: [turtle.audio](https://turtle.audio)
 ```

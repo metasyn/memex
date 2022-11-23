@@ -1,5 +1,7 @@
 # Ex. Mag
 
+<!--epistemic=dendroid-->
+
 ex. mag is a publication from [peow studio](https://www.peowstudio.com). each volume is an anthology loosely centered around a theme, from various artists. at the end of each volume, there are list of artist interview cards. i wanted to assemble a list of all the artists in the magazines so i can reference them, as well as share their awesome work. check them out...
 
 peow studio was founded in 2012 by elliot alfredius, olle forsslöf and patrick crotty. ex. mag is produced by [patrick crotty](https://boysfantasy.tumblr.com/) and by [wren mcdonald](https://wrenmcdonald.com), amongst many others i'm sure. they have released their decision to close up shop. you can read their goodbye document [here](https://docs.google.com/document/d/192di4xzbka8eijeq7fnbg42ir8d9iyjtvej5gpkz6_s/edit).

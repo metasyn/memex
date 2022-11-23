@@ -22,24 +22,26 @@ added the naming to the first stage below. I was also inspired by [lizbeth poiri
 
 </style>
 
-## seedling
+## seedling - thesis
 
 <img src="resources/img/seedling_white.png" />
 
-- a seedling - a note, a collection of links, a concept i want to explore, or otherwise undeveloped information related to something
-- not guaranteed to grow, or survive in the long run.
-- may be removed at any time
+the _seedling_ represents undeveloped thoughts, snippets, collections of notes or links. generally used for pages that are just getting started, that may be removed at any time, and are more or less still just stubs for information to gather. in general i mean to show that i generaly am either just starting to collate information, or am less sure of the information itself. though it could be either. seedling pages generally will not be well-linked yet, and may not contribute meaningfully to development of notes across the memex. it could also represent a nascent project, or the beginning idea of a project.
 
-## ???
+## sapling - duality
 
-<img src="resources/img/duality_white.png" />
+<img src="resources/img/sapling_white.png" />
 
-- something i've considered from multiple angles
-- something i've had multiple conversations about, read about, or otherwise have grappled with others in conversations, reading, or research more generally
+the sapling is the next stage in development of the note. the sapling on some level represents _duality_, in some pages where i have _at least_ considered the inverse, the opposite, the alternative. by duality i don't mean that the note represents, or essential is a duality, but it at least exists past the level of seedling. the other part of the duality is internal dialogues, or from conversations with others, or reading or researching others' ideas on the topic. for projects, a sapling is in progress, not finished, or otherwise still feels incomplete on some level. it may also be "finished" but lacking something still.
 
-## ???
+## dendroid - persistence
 
-<img src="resources/img/persistence_white.png" />
+<img src="resources/img/dendroid_white.png" />
+
+one of the following:
 
 - a persistent concept, idea, belief, or interest
+- a finished project
+- something i've spent a non trivial amount of time on, in one way or another
 - something that is less likely to be removed from the memex
+- something that is more intrinsically linked to other pages in the link

@@ -1,5 +1,7 @@
 # learn orca
 
+<!--epistemic=dendroid-->
+
 [learn-orca](https://metasyn.github.io/learn-orca) is an attempt at making a tutorial for:
 
 - [Orca](https://github.com/hundredrabbits/Orca)
