@@ -469,7 +469,7 @@ fn format_references(references: Vec<String>) -> String {
         return String::new();
     }
 
-    let mut result = String::from("incoming links: ");
+    let mut result = String::from("referenced by: ");
     result.push_str(
         references
             .iter()
