@@ -37,11 +37,21 @@ underlying the concept of carbon guilt is an implicit belief in, and near
 moral reification of, [consumer sovereignty](https://en.wikipedia.org/wiki/Consumer_sovereignty).
 this, in conjunction with the belief in the "invisible hand of the market",
 dissolve us of needing to question or dismantle the systems the present our
-limited options: would you like spearmint or wintermint plastic toothpaste tubes?
-in contrast, we could be (correctly) blaming those that needlessly profit
-from our need to live, and our our requirements for housing, food,
-water, energy, and so on, rather than blaming ourselves.
+limited options.
+
+## professional class with respect to climate change
+
+in <i>climate change as class war</i> by matt huber, the professional class (a take on the [professional-managerial class](https://en.wikipedia.org/wiki/Professional%E2%80%93managerial_class) is broken down into three groups:
+
+| type                 | political goal                    | theory of change                                                                                 |
+| -------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| science communicator | spreading climate truth & science | knowledge informs political action & behavior                                                    |
+| policy technocrat    | implementing climate policy       | right-wing policymakers can be won over with smart policy designs that channel market incentives |
+| anti-system radical  | system change, not climate change | small-scale alternatives and anti-consumerism will erode capitalism                              |
+
+> what connects these three highly schematic "types" is the centrality of <i>knowledge systems</i> in shaping their political engagements with environmental problems
 
 ## further reading
 
+- climate change as class war: building socialism on a warming planet - by matthew t. huber
 - https://catalyst-journal.com/2019/07/ecological-politics-for-the-working-class
