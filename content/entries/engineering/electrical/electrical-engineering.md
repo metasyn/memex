@@ -3,7 +3,7 @@
 i never studied electrical engineering, and generally am a complete novice.
 below are some notes i've been taking as i learn. i'm also taking notes on
 specific [[integrated-circuits]] while learning about making a
-[[diy-synthesizer]].
+[[diy-synthesizer]]. i found that the [hydraulic analogy](https://en.wikipedia.org/wiki/Hydraulic_analogy) was useful for learning more about the concepts and having something to map them to.
 
 # laws
 

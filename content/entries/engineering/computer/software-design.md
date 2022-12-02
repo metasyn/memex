@@ -1,6 +1,6 @@
 # software design
 
-i enjoy learning about [[computer-science-history]], [[programming-languages]], and [[characters]] in computing, but also about how software can be built today to ensure robust, maintainable, usable systems.
+i enjoy learning about [[computer-science-history]], [[programming-languages]], and [[characters]] in computing, but also about how software can be built today to ensure robust, maintainable, usable systems. below are books, sites, and essays that have disproportionately affected my views.
 
 ## books
 
