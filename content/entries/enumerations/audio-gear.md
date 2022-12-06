@@ -6,40 +6,42 @@ My audio related gear is listed as below.
 
 ## eurorack
 
-* metropolix (intellijel)
-* ensemble oscillator (4ms)
-* plaits (mutable instruments)
-* maths (make noise)
+- working on this [rack](https://www.modulargrid.net/e/racks/view/1576049)
+- metropolix (intellijel)
+- ensemble oscillator (4ms)
+- plaits (mutable instruments)
+- maths (make noise)
 
 ## voices
 
-* DFAM  (Moog)
-* Mother-32 (Moog)
-* Subharmonicon (Moog)
-* Septavox (Critter & Guitari)
-* TB-03 Bass Line  (Roland)
+- DFAM (Moog)
+- Mother-32 (Moog)
+- Subharmonicon (Moog)
+- Septavox (Critter & Guitari)
+- TB-03 Bass Line (Roland)
 
 ## multipurpose
 
-* QY100 (Yamaha)
-* Organnelle M (Critter & Guitari)
-* ZOIA (Empress Effects)
+- QY100 (Yamaha)
+- Organnelle M (Critter & Guitari)
+- ZOIA (Empress Effects)
 
 ## control centers & samplers
 
-* Digitakt (Elektron)
-* Machine MK1 (Native Instruments)
+- Digitakt (Elektron)
+- Machine MK1 (Native Instruments)
 
 ## fx
-* daisy pedal (Electrosmith)
+
+- daisy pedal (Electrosmith)
 
 ## utility
 
-* Keystep (Arturia)
-* Ultrapatch Pro Patchbay PX3000 (Behringer)
-* Eurorack Pro Linemixer RX1602 (Behringer)
-* KOMMANDER Infrared CV Unit (Koma)
+- Keystep (Arturia)
+- Ultrapatch Pro Patchbay PX3000 (Behringer)
+- Eurorack Pro Linemixer RX1602 (Behringer)
+- KOMMANDER Infrared CV Unit (Koma)
 
 ## interface
 
-* U-PHORIA UMC1820 8-Channel Interface (Behringer)
+- U-PHORIA UMC1820 8-Channel Interface (Behringer)

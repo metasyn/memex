@@ -59,4 +59,5 @@ a list of notable games i've played that i enjoyed in particular. loosely groupe
 ## yer a detective, harry
 
 - disco elysium
+- citizen sleeper
 - return of the obra dinn

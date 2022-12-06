@@ -8,14 +8,14 @@ i update this page every so often. its contents are generally ephermal and i do 
 - planning travels
 - trying to learn more about [[intentional-communities]]
 
+## playing
+
+- deep rock galactic
+- citizen sleeper
+
 ## listening
 
 - [rev left radio](https://revolutionaryleftradio.libsyn.com/)
-
-## watching
-
-- i'm watching the sopranos
-- bee and puppy cat
 
 ## reading
 
