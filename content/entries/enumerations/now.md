@@ -5,13 +5,10 @@ i update this page every so often. its contents are generally ephermal and i do 
 ## general
 
 - holidays
-- planning travels
-- trying to learn more about [[intentional-communities]]
 
 ## playing
 
-- deep rock galactic
-- citizen sleeper
+- skyrim
 
 ## listening
 
