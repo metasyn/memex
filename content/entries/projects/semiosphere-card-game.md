@@ -1,9 +1,6 @@
 # semiosphere: a card game
 
-my partner and i are currently working on designing a card game called [[semiosphere]]. we aren't done designing it yet, so it may not be ready to play. it is inspired by:
-
-- [the illimat](https://www.illimat.com/) - designed by [keith baker](https://keith-baker.com/)
-- [donsol](https://wiki.xxiivv.com/site/donsol.html) - designed by john eternal
+my partner and i are currently working on designing a card game called [[semiosphere]]. we aren't done designing it yet, so it may not be ready to play.
 
 ## requirements
 
@@ -85,6 +82,8 @@ incubation is the trickiest of the actions, and the hardest to master as it invo
 
 - to incubate an idea, you place your card onto an _existing_ card
 - you may only do so _if_ you have the resulting sum present in your hand. for example: by placing a 3 on a 5, i must show that i have an 8 to do so. if the incubating cards are of matching value, you may choose to not add them and treat them as their value, e.g. incubating an 8 on another 8, and showing you have _another_ 8 in your hand to do so. if this happens, stack the top card perpendicular to show that it is not a sum of the ideas, but rather a reinforcement.
+- when incubating an idea, you can combine _any number of ideas in a zone_ as with your active card as long as your passive card matches up
+  - for example, say you have 10 and a 5 in your hand. in the zone, there is a 2, and 3. you could combine the
 - thereafter, the incubating idea is treated like a single idea for _other_ players, and they my culminate this idea before you if able
 - other players may also incubate on top of existing cards that are already incubating! this allows their value to mutate.
 
@@ -148,6 +147,15 @@ the frontier represents the positive combination of technology and nature - a ti
 - play until all players run out of cards
 
 # scoring
+
+# inspirations
+
+semiosphere is inspired by:
+
+- [the illimat](https://www.illimat.com/) - designed by [keith baker](https://keith-baker.com/) - the semiosphere heavily borrows from the core gameplay loop in illimat: harvest, sow, and stockpile. the general concept of having fields/zones in where to play, as well as generally gaining points to win, are also from the setup of the illimat. we really enjoyed playing this game but felt that some of the thematic content didn't exactly make sense: why were certain okus tokens chosen? why were certain luminaries chosen? they don't necessarily go with the rest of the game in my opinion. however, the core gameplay loop of harvest/sow/stockpile is really fun, and we wanted to play this game more often, but wanted to adapt the concept to something more thematic, and constrained to using standard decks of cards.
+- [donsol](https://wiki.xxiivv.com/site/donsol.html) - designed by john eternal - donsol is an incredible one player "dungeon solitaire". the way that donsol reinterprets the suits of the cards is a huge inspiration, as it make new something so familiar. while i don't really like classical solitaire so much, i feel that the simplicity and faster paced play of donsol lends itself to a more enjoyable experience. you really feel like "get on a roll" and then are crushed by an unsuspecting enemy, rather than just feeling stupid for having reached a "stalemate" of sorts in traditional solitaire. most importantly, this game also **only uses a standard card deck**.
+- [last dispatch](https://symboliccity.itch.io/last-dispatch) - by [symbolic city](https://symbolic.city/)- i was asking on the fediverse for inspiration for this game and @SymbolicCity@dice.camp generously gave me a free copy of their game, which also only uses a standard deck of cards. it is more of a role playing type of game, but is interesting as it is also single player (for the most part) like donsol. i appreciate the creative re-imagining of suits and the versatility of the game
+- [femtitva](https://boardgamegeek.com/thread/942367/so-heres-ten-games-i-made-please-have-them-all) by scott huntington - femtitva is a collection of games that all take mechanics and ideas from existing commericial games and reinterprets, remixes, or otherwise repurposes those mechanics into games that work with a standard deck of cards. i like this anticapitalist approach and also think it is cool that there was so many references to the influences involved in deciding how to make a particular game the way it is.
 
 # TODO
 
