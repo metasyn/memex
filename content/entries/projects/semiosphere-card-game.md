@@ -161,3 +161,5 @@ semiosphere is inspired by:
 
 - special cards
 - coin flipping, with positive / negative outcome per zone
+- read https://drive.google.com/file/d/1DB2YF46s0oVFUSIpR9vxoGIbhpTKz2jw/view
+- read https://boardgamegeek.com/geeklist/264858/modern-solitairesolo-games-using-only-52-card-stan

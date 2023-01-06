@@ -111,6 +111,7 @@ use it sometimes, but am hoping that someday,
 [we can do better than DuckDuckGo](https://drewdevault.com/2020/11/17/Better-than-DuckDuckGo.html).
 
 recently, i was suggested to give [StartPage](https://www.startpage.com/en/about-us) a try.
+i did give it a try but overall wasn't super impressed.
 
 </details>
 

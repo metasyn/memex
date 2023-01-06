@@ -1,6 +1,8 @@
-# 2022
-
 <!--epistemic=sapling-->
+
+# 2023
+
+# 2022
 
 - how to do nothing - jenny odell
 - [the relation between things in a continuum](https://www.flowerflowerpress.press/shop/the-relation-between-things-in-a-continuum) - [nicole lavelle](https://www.nicolelavelle.com/)
