@@ -18,9 +18,11 @@ internal link: [[memex]]
 external link: [turtle.audio](https://turtle.audio)
 ```
 
+```
 internal link: [[memex]]
-internal link with alt text: [[something else|memex]]
+internal link with alt text: {something else}[[memex]]
 external link: [turtle.audio](https://turtle.audio)
+```
 
 # todo
 

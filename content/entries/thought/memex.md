@@ -88,7 +88,7 @@ more like learning, and documenting your ideas, in public.
 
 ## at your own pace, in your own way
 
-as an [[anarchist|anarchism]], there is a lot of the above that makes sense in
+as an {anarchist}[[anarchism]], there is a lot of the above that makes sense in
 particular: write at your own pace, in your own way, to create something unique
 to your own needs. if your memex doesn't do something you want it to, the sky's
 your limit - you can change whatever it is you want. it might take a little

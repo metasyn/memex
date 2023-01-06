@@ -38,4 +38,4 @@ see the site at gemini://metasyn.pw using a [gemini client](https://gemini.circu
 over time, i also worked on trying to reduce the size of the site and improve
 the accessibilty. later i added images, which are by far the biggest impact to
 performance. if you have suggestions on accessibility, i would be open to
-[[hearing about them|contact]].
+{hearing about them}[[contact]].

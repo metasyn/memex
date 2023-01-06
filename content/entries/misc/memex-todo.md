@@ -4,7 +4,7 @@ notes on memex modification
 
 ## markup
 
-- [x] standardize itnternal links with `[[something|memex]]` syntax
+- [x] standardize itnternal links with `{something}[[memex]]` syntax
 
 ## compiling
 

@@ -13,7 +13,7 @@ memexes. examples:
 - [jake bauer](https://www.paritybit.ca/garden/digital-garden-philosophy.html)
 - [maggie appleton](https://maggieappleton.com/epistemic-disclosure)
 
-Another approach I like is from a [[character|characters]] [xe iaso](https://xeiaso.net/blog/) who adds the following to many pages:
+Another approach I like is from a {character}[[characters]] [xe iaso](https://xeiaso.net/blog/) who adds the following to many pages:
 
 > This article was posted on YYYY-MM-DD. Facts and circumstances may have changed since publication. Please contact me before jumping to conclusions if something seems wrong or unclear.
 

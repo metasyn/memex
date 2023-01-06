@@ -212,7 +212,7 @@ fn setup() -> std::result::Result<(), Report> {
 lazy_static! {
     static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
     static ref INTERNAL_LINK_REGEX: Regex =
-        Regex::new("\\[\\[((?P<title>.*)\\|)?(?P<link>.+?)]]").unwrap();
+        Regex::new("(\\{(?P<title>.*)})?\\[\\[(?P<link>.+?)]]").unwrap();
     static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();
     static ref NON_WORD_REGEX: Regex = Regex::new(r"[^\w-]+").unwrap();
     static ref DITHERED_IMG_REGEX: Regex =

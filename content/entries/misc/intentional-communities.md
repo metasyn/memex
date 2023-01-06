@@ -34,7 +34,7 @@ i spent the majority of college living in a [student housing cooperatative](http
 
 ### mondragon
 
-the [mondragon corporation](https://en.wikipedia.org/wiki/mondragon_corporation) is one of the world's larges cooperative federation, in the basque region of spain. it operates across finance, industry, retail and knowledge sectors and employs ~75,000 people. it is a worker owned cooperative,, which [noam chomsky](https://www.youtube.com/watch?v=l9sv6peqguk) called an example of "partial" and "pieces" of [[social anarchist|anarchism]] enterprise, when viewed as a type of worker owned syndicalist approach to organizing. coming out of the spanish civil war, a catholic priest named josé maría arizmendiarrieta help found the federation of cooperatives (see video [here](https://www.youtube.com/watch?v=QPhk-ljfpdI).
+the [mondragon corporation](https://en.wikipedia.org/wiki/mondragon_corporation) is one of the world's larges cooperative federation, in the basque region of spain. it operates across finance, industry, retail and knowledge sectors and employs ~75,000 people. it is a worker owned cooperative,, which [noam chomsky](https://www.youtube.com/watch?v=l9sv6peqguk) called an example of "partial" and "pieces" of {social anarchist}[[anarchism]] enterprise, when viewed as a type of worker owned syndicalist approach to organizing. coming out of the spanish civil war, a catholic priest named josé maría arizmendiarrieta help found the federation of cooperatives (see video [here](https://www.youtube.com/watch?v=QPhk-ljfpdI).
 
 # inspiration
 
