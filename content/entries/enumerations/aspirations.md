@@ -18,7 +18,7 @@
 
 ## travel
 
-- bikepacking basho's narrow road the interior[^1]
+- bikepacking basho's narrow road the interior [^1]
 - british columbia, vancouver island
 - argentina, patagonia
 - japan, hokkaido
@@ -32,4 +32,6 @@
 - record a focused album of tracks around a theme
 - learn piano
 
-[^1]: i have no idea if this is even possible still
+<hr>
+
+[^1]: i don't know how plausible this is

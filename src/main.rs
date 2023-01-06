@@ -193,7 +193,6 @@ fn comrak_options() -> comrak::ComrakOptions {
     options.extension.autolink = true;
     options.extension.tagfilter = false;
     options.extension.footnotes = true;
-    options.extension.superscript = true;
     return options;
 }
 
