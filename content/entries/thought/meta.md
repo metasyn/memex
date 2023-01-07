@@ -1,6 +1,7 @@
 # meta
 
 this page is for things related to the making of the memex itself.
+its also a reference for the markup language i use.
 
 # h1
 
@@ -14,14 +15,15 @@ code
 
 ```
 <!--epistemic=dendroid-->
-internal link: [[memex]]
-external link: [turtle.audio](https://turtle.audio)
-```
+template replacement: {{something}}
 
-```
 internal link: [[memex]]
 internal link with alt text: {something else}[[memex]]
 external link: [turtle.audio](https://turtle.audio)
+
+Proposed:
+
+image: &petioling.png&
 ```
 
 # todo

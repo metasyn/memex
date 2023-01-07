@@ -281,6 +281,10 @@ summary *:focus {
   min-width: inherit;
 }
 
+#directory-content p {
+  margin: 0px;
+}
+
 #toc {
   position: fixed;
   max-width: var(--toc-width);

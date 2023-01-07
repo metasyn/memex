@@ -18,6 +18,8 @@ use chrono::{Local, NaiveDate, Utc};
 use clap::{App, Arg};
 use color_eyre::Report;
 use colored::*;
+use comrak::nodes::{AstNode, NodeValue};
+use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 use regex::{Captures, Regex};
@@ -184,8 +186,8 @@ fn copy_dir_all(src_string: Arc<String>, dst_string: Arc<String>) -> Result<()> 
 }
 
 // set the comrak html -> md settings
-fn comrak_options() -> comrak::ComrakOptions {
-    let mut options = comrak::ComrakOptions::default();
+fn comrak_options() -> ComrakOptions {
+    let mut options = ComrakOptions::default();
     options.render.unsafe_ = true;
     options.render.escape = false;
     options.parse.smart = true;
@@ -210,7 +212,7 @@ fn setup() -> std::result::Result<(), Report> {
 ///////////
 
 lazy_static! {
-    static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
+    static ref COMRAK_OPTIONS: ComrakOptions = comrak_options();
     static ref INTERNAL_LINK_REGEX: Regex =
         Regex::new("(\\{(?P<title>.*)})?\\[\\[(?P<link>.+?)]]").unwrap();
     static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();
@@ -430,7 +432,7 @@ fn format_directory(tree: &DirectoryTree) -> String {
 
             res.push_str("</details>\n");
         } else {
-            res.push_str(format!("* [[{}]]\n", item.val).as_str());
+            res.push_str(format!("\n* [[{}]]\n", item.val).as_str());
         }
     }
 
@@ -592,15 +594,33 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
 // TEMPLATES //
 ///////////////
 
-fn render_md(s: &str) -> String {
-    // TODO: figure out why this didn't work with replace_all on the entire string
-    // it seems weird to have to split the string first, then rejoin it.
-    // whatever. this is for making the header links work in the outline.
-    let prerender = s
-        .split("\n")
-        .map(|x| {
-            HEADER_REGEX
-                .replace_all(&x, |caps: &Captures| {
+fn render_contents(s: &str) -> String {
+    // The returned nodes are created in the supplied Arena, and are bound by its lifetime.
+    let arena = Arena::new();
+
+    // Parse the entire MD document
+    let root = parse_document(&arena, s, &ComrakOptions::default());
+
+    // Write a vistor that lets us pass a func to mutate with lifetime
+    fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
+    where
+        F: Fn(&'a AstNode<'a>),
+    {
+        f(node);
+        for c in node.children() {
+            iter_nodes(c, f);
+        }
+    }
+
+    // Do the Work
+    iter_nodes(root, &|node| match &mut node.data.borrow_mut().value {
+        &mut NodeValue::Text(ref mut text) => {
+            let orig = std::mem::replace(text, vec![]);
+            let contents = String::from_utf8(orig).expect("unable to read data in visitor");
+
+            // DO ANY REPLACEMENTS ON TEXT NODES HERE
+            let prerender = HEADER_REGEX
+                .replace_all(contents.as_str(), |caps: &Captures| {
                     format!(
                         "{} <a name='{}'>{}</a>",
                         &caps[1],
@@ -608,13 +628,21 @@ fn render_md(s: &str) -> String {
                         &caps[2]
                     )
                 })
-                .to_string()
-        })
-        .collect::<Vec<String>>()
-        .join("\n");
+                .to_string();
 
-    let wrapped = format_img_dither_wrap_anchor(prerender.as_str());
-    return comrak::markdown_to_html(&wrapped, &COMRAK_OPTIONS);
+            let wrapped = format_img_dither_wrap_anchor(prerender.as_str());
+
+            // Update text node in place
+            *text = wrapped.as_bytes().to_vec();
+        }
+        // Handle other node types if needed in particular
+        _ => (),
+    });
+
+    let mut html = vec![];
+    format_html(root, &COMRAK_OPTIONS, &mut html).expect("unable to format html");
+    let body = String::from_utf8(html).expect("Unable to convert html from bytes");
+    return body;
 }
 
 fn make_template(item: &str) -> String {
@@ -626,34 +654,20 @@ fn replace_template<'a>(
     body: &str,
     item: &str,
     replacement: &str,
-    line_by_line: bool,
 ) -> String {
     let repl = convert_internal_to_md(epistemic_lookup, replacement);
-    let html = match line_by_line {
-        true => repl
-            .split("\n")
-            .map(|x| render_md(x))
-            .collect::<Vec<String>>()
-            .join("\n"),
-        false => render_md(&repl),
-    };
+    let html = render_contents(&repl);
     return body.replace(make_template(item).as_str(), &html);
 }
 
 fn replace_templates<'a>(
     epistemic_lookup: Arc<EpistemicStatusLookup>,
     body: &str,
-    mapping: Vec<(&str, &str, bool)>,
+    mapping: Vec<(&str, &str)>,
 ) -> String {
     let mut body = String::from(body);
-    for (key, value, line_by_line) in mapping.iter() {
-        body = replace_template(
-            Arc::clone(&epistemic_lookup),
-            body.as_str(),
-            key,
-            &value,
-            *line_by_line,
-        )
+    for (key, value) in mapping.iter() {
+        body = replace_template(Arc::clone(&epistemic_lookup), body.as_str(), key, &value)
     }
     return body;
 }
@@ -751,20 +765,21 @@ fn build_entry(
 
     // make replacements
     let replacements = vec![
-        ("directory", formatted_directory.as_str(), true),
-        ("content", contents, false),
-        ("references", &references, false),
-        ("timestamp", timestamp.as_str(), false),
-        ("toc", &outline, false),
-        ("recent", recents.as_str(), false),
+        ("directory", formatted_directory.as_str()),
+        ("content", contents),
+        ("references", &references),
+        ("timestamp", timestamp.as_str()),
+        ("toc", &outline),
+        ("recent", recents.as_str()),
     ];
+
+    // write replacements
     let html = replace_templates(
         epistemic_status_lookup,
         base_template.as_str(),
         replacements,
     );
 
-    // write replacements
     let fname = format!("{}/{}.html", destination_path, entry.id);
     hey(format!("{} => {}", entry.id.yellow(), fname.green()));
     let mut fd = File::create(fname).expect("unable to create file");
@@ -789,6 +804,7 @@ fn build_entry(
     if res.is_err() {
         return Err(res.err().unwrap());
     }
+
     return Ok(());
 }
 
@@ -1173,7 +1189,7 @@ mod tests {
     #[test]
     fn test_replace_template() {
         assert_eq!(
-            replace_template(Arc::new(HashMap::new()), "{{ test }}", "test", "fab", false),
+            replace_template(Arc::new(HashMap::new()), "{{ test }}", "test", "fab"),
             "<p>fab</p>\n"
         )
     }
@@ -1184,7 +1200,7 @@ mod tests {
             replace_templates(
                 Arc::new(HashMap::new()),
                 "{{ test }} {{ something }}",
-                vec![("test", "fab", false), ("something", "replacement", false)],
+                vec![("test", "fab"), ("something", "replacement")],
             ),
             "<p>fab</p>\n <p>replacement</p>\n"
         )

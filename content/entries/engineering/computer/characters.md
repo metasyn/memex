@@ -60,3 +60,14 @@ are people i have never met.
   incredibly fun to go through. i learn something interesting everytime i read
   amos's posts and particularly enjoyed his video on
   [how he learned to love build systems](https://www.youtube.com/watch?v=7_DExGdUw7w)
+
+- [justine tunney](https://en.wikipedia.org/wiki/Justine_Tunney) - justine's
+  projects are incredibly inspiring to me. many of them deal with very low
+  level application binary interfaces in unixes. i highly recommend looking
+  through her projects: https://justine.lol/ - some of the more interesting
+  ones to me include [redbean](https://redbean.dev/), a single file web server,
+  [cosmopolitican libc](https://justine.lol/cosmopolitan/) - an alternative
+  libc, and [αcτµαlly pδrταblε εxεcµταblε](https://justine.lol/ape.html) - an
+  absolutely mind blowing hack to make executables work on many different
+  operating systems with the same source code by (ab)using the linux ABI and
+  quirks of the thompson shell.
