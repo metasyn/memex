@@ -18,8 +18,6 @@ use chrono::{Local, NaiveDate, Utc};
 use clap::{App, Arg};
 use color_eyre::Report;
 use colored::*;
-use comrak::nodes::{AstNode, NodeValue};
-use comrak::{format_html, parse_document, Arena, ComrakOptions};
 use lazy_static::lazy_static;
 use notify::{RecommendedWatcher, RecursiveMode, Watcher};
 use regex::{Captures, Regex};
@@ -186,8 +184,8 @@ fn copy_dir_all(src_string: Arc<String>, dst_string: Arc<String>) -> Result<()> 
 }
 
 // set the comrak html -> md settings
-fn comrak_options() -> ComrakOptions {
-    let mut options = ComrakOptions::default();
+fn comrak_options() -> comrak::ComrakOptions {
+    let mut options = comrak::ComrakOptions::default();
     options.render.unsafe_ = true;
     options.render.escape = false;
     options.parse.smart = true;
@@ -212,7 +210,7 @@ fn setup() -> std::result::Result<(), Report> {
 ///////////
 
 lazy_static! {
-    static ref COMRAK_OPTIONS: ComrakOptions = comrak_options();
+    static ref COMRAK_OPTIONS: comrak::ComrakOptions = comrak_options();
     static ref INTERNAL_LINK_REGEX: Regex =
         Regex::new("(\\{(?P<title>.*)})?\\[\\[(?P<link>.+?)]]").unwrap();
     static ref HEADER_REGEX: Regex = Regex::new(r"^\s*(?P<level>#+)\s*(?P<heading>.*)").unwrap();
@@ -594,33 +592,12 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
 // TEMPLATES //
 ///////////////
 
-fn render_contents(s: &str) -> String {
-    // The returned nodes are created in the supplied Arena, and are bound by its lifetime.
-    let arena = Arena::new();
-
-    // Parse the entire MD document
-    let root = parse_document(&arena, s, &ComrakOptions::default());
-
-    // Write a vistor that lets us pass a func to mutate with lifetime
-    fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
-    where
-        F: Fn(&'a AstNode<'a>),
-    {
-        f(node);
-        for c in node.children() {
-            iter_nodes(c, f);
-        }
-    }
-
-    // Do the Work
-    iter_nodes(root, &|node| match &mut node.data.borrow_mut().value {
-        &mut NodeValue::Text(ref mut text) => {
-            let orig = std::mem::replace(text, vec![]);
-            let contents = String::from_utf8(orig).expect("unable to read data in visitor");
-
-            // DO ANY REPLACEMENTS ON TEXT NODES HERE
-            let prerender = HEADER_REGEX
-                .replace_all(contents.as_str(), |caps: &Captures| {
+fn render_md(s: &str) -> String {
+    let prerender = s
+        .split("\n")
+        .map(|x| {
+            HEADER_REGEX
+                .replace_all(&x, |caps: &Captures| {
                     format!(
                         "{} <a name='{}'>{}</a>",
                         &caps[1],
@@ -628,21 +605,13 @@ fn render_contents(s: &str) -> String {
                         &caps[2]
                     )
                 })
-                .to_string();
+                .to_string()
+        })
+        .collect::<Vec<String>>()
+        .join("\n");
 
-            let wrapped = format_img_dither_wrap_anchor(prerender.as_str());
-
-            // Update text node in place
-            *text = wrapped.as_bytes().to_vec();
-        }
-        // Handle other node types if needed in particular
-        _ => (),
-    });
-
-    let mut html = vec![];
-    format_html(root, &COMRAK_OPTIONS, &mut html).expect("unable to format html");
-    let body = String::from_utf8(html).expect("Unable to convert html from bytes");
-    return body;
+    let wrapped = format_img_dither_wrap_anchor(prerender.as_str());
+    return comrak::markdown_to_html(&wrapped, &COMRAK_OPTIONS);
 }
 
 fn make_template(item: &str) -> String {
@@ -656,7 +625,7 @@ fn replace_template<'a>(
     replacement: &str,
 ) -> String {
     let repl = convert_internal_to_md(epistemic_lookup, replacement);
-    let html = render_contents(&repl);
+    let html = render_md(&repl);
     return body.replace(make_template(item).as_str(), &html);
 }
 
