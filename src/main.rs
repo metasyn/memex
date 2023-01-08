@@ -19,7 +19,7 @@ use clap::{App, Arg};
 use color_eyre::Report;
 use colored::*;
 use lazy_static::lazy_static;
-use notify::{RecommendedWatcher, RecursiveMode, Watcher};
+use notify::{DebouncedEvent, RecommendedWatcher, RecursiveMode, Watcher};
 use regex::{Captures, Regex};
 use rss::{Channel, GuidBuilder, ItemBuilder};
 
@@ -413,6 +413,196 @@ fn extract_epistemic_status_from_content(content: &str) -> EpistemicStatus {
 // FORMAT //
 ////////////
 
+fn may_have_custom_markup(s: &str) -> bool {
+    return s.matches("[").count() >= 2 || s.matches("&").count() >= 2;
+}
+
+fn may_have_alt_internal_link(s: &str) -> bool {
+    return s.matches("[").count() % 2 == 0
+        && s.matches("{").count() >= 1
+        && s.matches("}").count() >= 1;
+}
+
+fn is_valid_link_char(c: char) -> bool {
+    return c.is_ascii() && !c.is_ascii_punctuation() && (c == '\n' || c == '\r');
+}
+
+fn is_valid_alttext_char(c: char) -> bool {
+    return is_valid_link_char(c) || c == ' ';
+}
+
+fn format_parse(epistemic_lookup: Arc<EpistemicStatusLookup>, input: &str) -> String {
+    return input
+        .lines()
+        .map(|x| format_parse_line(Arc::clone(&epistemic_lookup), x))
+        .collect::<Vec<String>>()
+        .join("\n");
+}
+
+/**
+ * This is a very unecessary approach to character level parsing for the memex markup.
+ * However, it can now do all markup changes in more-or-less a single pass over the line.
+ *
+ * It handles converting things like:
+ *
+ * some text [[internal-link]] -> some text [internal-link](internal-link.html]
+ * some text {alt text}[[foo]] -> some text [alt text](foo.html)
+ *
+ */
+fn format_parse_line(epistemic_lookup: Arc<EpistemicStatusLookup>, s: &str) -> String {
+    // Early return
+    if !may_have_custom_markup(s) {
+        return String::from(s);
+    }
+
+    // Create an iterator for the line
+    let mut it = s.chars().peekable();
+
+    // Create output for the line
+    let mut out = String::new();
+
+    // Temp for title value
+    let mut alttext: Option<String> = None;
+
+    while let Some(&c) = it.peek() {
+        match c {
+            // Handle internal links, which have [[something]]
+            '[' => {
+                // Consume first bracket
+                it.next();
+                let next = it.peek();
+
+                // Ending signal
+                let mut matched = false;
+
+                if next.is_some() && next.unwrap() == &'[' {
+                    // We now are _maybe_ matching against
+                    // an internal link like so [[so]]
+
+                    // Clone the iterator in case we need the original again
+                    let mut temp_it = it.clone();
+
+                    // Allocate buffer
+                    let mut temp = String::new();
+
+                    // Consume the bracket
+                    temp_it.next();
+
+                    // Consume while scanning for double ending
+                    'consumer: while let Some(&x) = temp_it.peek() {
+                        match x {
+                            ']' => {
+                                // Consume ending brackets
+                                // Naively assume there are two in a row
+                                // since a broken link like [[something]
+                                // will be easily found elsewhere
+                                temp_it.next();
+                                temp_it.next();
+
+                                // Break loop
+                                matched = true;
+                                break 'consumer;
+                            }
+                            t if is_valid_link_char(t) => {
+                                temp.push(x);
+                                temp_it.next();
+                            }
+                            _ => break 'consumer,
+                        }
+                    }
+
+                    // If we've matched, update the existing iterator to the new one
+                    // which has consumed the link syntax
+                    if matched {
+                        it = temp_it;
+
+                        // Here is where we actually rewrite the internal reference
+                        let title = alttext.get_or_insert(temp.clone());
+
+                        let status = epistemic_lookup.get(temp.as_str());
+
+                        if status.is_none() {
+                            nope(format!("invalid link to missing internal page: {}", temp));
+                        }
+
+                        let prefix = status.unwrap_or(&EpistemicStatus::Seedling);
+
+                        out.push_str(format!(
+                            "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/{}_white.png'/>{}]({}.html)",
+                            prefix, title, temp.as_str(),
+                        ).as_str());
+
+                        //  Reset alttext
+                        alttext = None;
+                    }
+                }
+
+                if !matched {
+                    // Otherwise, we can just push the [
+                    out.push(c);
+                    it.next();
+                }
+            }
+            '{' => {
+                // Ending signal
+                let mut matched = false;
+
+                // Make sure we have a potential matched line
+                if may_have_alt_internal_link(s) {
+                    // Clone iterator in case in case we don't match
+                    let mut temp_it = it.clone();
+
+                    temp_it.next();
+                    let mut maybe_alttext = String::new();
+
+                    // consume while scanning for ending curly bracket
+                    'consumer: while let Some(&x) = temp_it.peek() {
+                        match x {
+                            '}' => {
+                                temp_it.next();
+                                let next = temp_it.peek();
+
+                                if next.is_some() && next.unwrap() == &'[' {
+                                    // Good enough - we've now hit
+                                    // { something }[
+                                    // and we will naively assume this will match
+                                    matched = true;
+
+                                    // Update main iterator to our current position
+                                    it = temp_it;
+
+                                    // Assign to top level for usage
+                                    alttext = Some(maybe_alttext);
+                                }
+                                break 'consumer;
+                            }
+                            t if is_valid_alttext_char(t) => {
+                                // Consume any text we run into
+                                maybe_alttext.push(x);
+                                temp_it.next();
+                            }
+                            _ => break 'consumer,
+                        }
+                    }
+                }
+
+                if !matched {
+                    // If we didn't match, push the original bracket and move on
+                    out.push(c);
+                    it.next();
+                }
+            }
+            // Standard character behavior, just copy
+            _ => {
+                out.push(c);
+                it.next();
+            }
+        };
+    }
+
+    return out;
+}
+
 fn format_directory(tree: &DirectoryTree) -> String {
     fn traverse(tree: &DirectoryTree, item: &DirectoryItem, res: &mut String, depth: u8) {
         if item.children.len() > 0 {
@@ -502,7 +692,7 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
 // CONVERT //
 /////////////
 
-fn convert_internal_to_md(epistemic_lookup: Arc<EpistemicStatusLookup>, content: &str) -> String {
+fn _convert_internal_to_md(epistemic_lookup: Arc<EpistemicStatusLookup>, content: &str) -> String {
     return INTERNAL_LINK_REGEX
         .replace_all(content, |caps: &Captures| {
             // must exist
@@ -624,7 +814,7 @@ fn replace_template<'a>(
     item: &str,
     replacement: &str,
 ) -> String {
-    let repl = convert_internal_to_md(epistemic_lookup, replacement);
+    let repl = format_parse(epistemic_lookup, replacement);
     let html = render_md(&repl);
     return body.replace(make_template(item).as_str(), &html);
 }
@@ -984,18 +1174,21 @@ fn watch(
     hey(&watching);
     loop {
         match rx.recv() {
-            Ok(event) => {
-                hey("updating...");
-                println!("{:#?}", event);
-                build(
-                    content_path,
-                    template_path,
-                    destination_path,
-                    resources_path,
-                )
-                .expect("unable to build memex");
-                hey(&watching);
-            }
+            Ok(event) => match event {
+                DebouncedEvent::NoticeRemove(_) => (),
+                _ => {
+                    hey("updating...");
+                    println!("{:#?}", event);
+                    build(
+                        content_path,
+                        template_path,
+                        destination_path,
+                        resources_path,
+                    )
+                    .expect("unable to build memex");
+                    hey(&watching);
+                }
+            },
             Err(e) => println!("watch error: {:?}", e),
         }
     }
@@ -1202,8 +1395,8 @@ mod tests {
 
     #[test]
     fn test_convert_internal_to_md() {
-        let converted = convert_internal_to_md(Arc::new(HashMap::new()), "[[test]]");
-        assert_eq!(converted, "[test](test.html)");
+        let converted = _convert_internal_to_md(Arc::new(HashMap::new()), "[[test]]");
+        assert_eq!(converted, "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>test](test.html)");
     }
 
     #[test]
@@ -1211,5 +1404,11 @@ mod tests {
         let entries = collect_entries("content/entries").unwrap();
         let directory = extract_directory(&entries, "pages");
         assert!(directory.arena.len() > 10);
+    }
+
+    #[test]
+    fn test_format_parse_internal_link() {
+        let parse = format_parse(Arc::new(HashMap::new()), "[[test]]");
+        assert_eq!(parse, "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>test](test.html)");
     }
 }
