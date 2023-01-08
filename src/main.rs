@@ -424,7 +424,7 @@ fn may_have_alt_internal_link(s: &str) -> bool {
 }
 
 fn is_valid_link_char(c: char) -> bool {
-    return c.is_ascii() && !c.is_ascii_punctuation() && (c == '\n' || c == '\r');
+    return c.is_alphabetic() || c == '-' || c == '\n' || c == '\r';
 }
 
 fn is_valid_alttext_char(c: char) -> bool {
@@ -441,9 +441,9 @@ fn format_parse(epistemic_lookup: Arc<EpistemicStatusLookup>, input: &str) -> St
 
 /**
  * This is a very unecessary approach to character level parsing for the memex markup.
- * However, it can now do all markup changes in more-or-less a single pass over the line.
  *
- * It handles converting things like:
+ * However, I wanted to learn more about character level parsing. It handles converting things
+ * like:
  *
  * some text [[internal-link]] -> some text [internal-link](internal-link.html]
  * some text {alt text}[[foo]] -> some text [alt text](foo.html)
