@@ -1,3 +1,5 @@
+mod parser;
+
 use std::cmp::min;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsString;
@@ -5,6 +7,7 @@ use std::fmt::Display;
 use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
 use std::io::{stdin, BufReader, Error, ErrorKind, Read, Result};
+use std::iter::Peekable;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::str::FromStr;
@@ -439,6 +442,19 @@ fn format_parse(epistemic_lookup: Arc<EpistemicStatusLookup>, input: &str) -> St
         .join("\n");
 }
 
+trait CharIterator<'a>: Iterator<Item = &'a char> {
+    fn peek(&mut self) -> Option<&'a char>;
+}
+
+impl<'a, I> CharIterator<'a> for Peekable<I>
+where
+    I: Iterator<Item = &'a char>,
+{
+    fn peek(&mut self) -> Option<&'a char> {
+        self.peek().map(|t| *t)
+    }
+}
+
 /**
  * This is a very unecessary approach to character level parsing for the memex markup.
  *
@@ -783,6 +799,8 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
 ///////////////
 
 fn render_md(s: &str) -> String {
+    // TODO: move to format_parse function by checking
+    // for line initial # character
     let prerender = s
         .split("\n")
         .map(|x| {
@@ -800,7 +818,9 @@ fn render_md(s: &str) -> String {
         .collect::<Vec<String>>()
         .join("\n");
 
+    // TODO: move to format_parse function by checking
     let wrapped = format_img_dither_wrap_anchor(prerender.as_str());
+
     return comrak::markdown_to_html(&wrapped, &COMRAK_OPTIONS);
 }
 
