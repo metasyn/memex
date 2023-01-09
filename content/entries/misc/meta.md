@@ -23,7 +23,9 @@ external link: [turtle.audio](https://turtle.audio)
 
 Proposed:
 
+
 image: &petioling.png&
+image: <img src="resources/img/petioling.png" />
 ```
 
 # todo

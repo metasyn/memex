@@ -118,41 +118,41 @@ impl FromStr for EpiStatus {
 // SCANNER //
 /////////////
 
-pub struct Scanner {
+struct Scanner {
     cursor: usize,
     characters: Vec<char>,
 }
 
 #[derive(Debug)]
-pub enum ScannerError {
+enum ScannerError {
     EndOfLine,
 }
 
 /// Heavily inspired by https://depth-first.com/articles/2021/12/16/a-beginners-guide-to-parsing-in-rust/
 impl Scanner {
-    pub fn new(string: &str) -> Self {
+    fn new(string: &str) -> Self {
         Self {
             cursor: 0,
             characters: string.chars().collect(),
         }
     }
 
-    pub fn worth_scanning(s: &str) -> bool {
+    fn worth_scanning(s: &str) -> bool {
         return s.matches("[").count() >= 2 || s.matches("&").count() >= 2;
     }
 
-    pub fn advance(&mut self) {
+    fn advance(&mut self) {
         self.cursor += 1
     }
 
     /// Returns the next character without advancing the cursor.
     /// AKA "lookahead"
-    pub fn peek(&self) -> Option<&char> {
+    fn peek(&self) -> Option<&char> {
         self.characters.get(self.cursor)
     }
 
     /// Returns the next character (if available) and advances the cursor.
-    pub fn pop(&mut self) -> Option<&char> {
+    fn pop(&mut self) -> Option<&char> {
         match self.characters.get(self.cursor) {
             Some(character) => {
                 self.cursor += 1;
@@ -166,12 +166,11 @@ impl Scanner {
     /// Returns true if the char matches the logic at the current cursor position,
     /// and advances the cursor.
     /// Otherwise, returns false leaving the cursor unchanged.
-    pub fn take_with_validator(&mut self, validator: &dyn Fn(&char) -> bool) -> bool {
+    fn take_with_validator(&mut self, validator: &dyn Fn(&char) -> bool) -> bool {
         match self.characters.get(self.cursor) {
             Some(character) => {
                 if validator(character) {
                     self.cursor += 1;
-
                     true
                 } else {
                     false
@@ -184,7 +183,7 @@ impl Scanner {
     /// Returns true if the `target` is found at the current cursor position,
     /// and advances the cursor.
     /// Otherwise, returns false leaving the cursor unchanged.
-    pub fn take_char(&mut self, target: &char) -> bool {
+    fn take_char(&mut self, target: &char) -> bool {
         let t = |c: &char| -> bool {
             return c == target;
         };
@@ -194,9 +193,9 @@ impl Scanner {
     /// Returns a string if we can match characters (using the validator) until they
     /// terminal characters. If the terminal characters are not matched, the cursor
     /// is reset, making this lookahead idempotent in the case of failure.
-    pub fn take_if_until(
+    fn take_if_until(
         &mut self,
-        validator: &dyn Fn(&char) -> bool,
+        validator: &impl Validator,
         terminal: &str,
     ) -> std::result::Result<String, ScannerError> {
         // Buf to return in positive case
@@ -209,7 +208,7 @@ impl Scanner {
         let term = &terminal.chars().nth(0).expect("invalid terminal string");
 
         while let Some(&c) = self.peek() {
-            match validator(&c) {
+            match validator.check(&c) {
                 true => {
                     // We've already peeked
                     self.advance();
@@ -659,6 +658,35 @@ fn format_md_link_epistemic(
     );
 }
 
+////////////////
+// VALIDATORS //
+////////////////
+
+trait Validator {
+    fn check(&self, c: &char) -> bool;
+}
+
+struct ImageValidator {}
+impl Validator for ImageValidator {
+    fn check(&self, c: &char) -> bool {
+        return c != &'&' && !c.is_whitespace();
+    }
+}
+
+struct AltTitleValidator {}
+impl Validator for AltTitleValidator {
+    fn check(&self, c: &char) -> bool {
+        return c.is_alphabetic() || c == &' ' || c == &'-';
+    }
+}
+
+struct LinkValidator {}
+impl Validator for LinkValidator {
+    fn check(&self, c: &char) -> bool {
+        return c.is_alphabetic() || c == &'-';
+    }
+}
+
 /////////////
 // CONVERT //
 /////////////
@@ -680,13 +708,6 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
     let mut scanner = Scanner::new(s);
     let mut out = String::new();
 
-    let alt_title_validator =
-        |c: &char| -> bool { return c.is_alphabetic() || c == &' ' || c == &'-' };
-
-    let link_validator = |x: &char| -> bool { return x.is_alphabetic() || x == &'-' };
-
-    let image_validator = |x: &char| -> bool { return !x.is_whitespace() };
-
     while let Some(&c) = scanner.pop() {
         match c {
             '{' => {
@@ -696,8 +717,8 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
                 let original_cursor = scanner.cursor;
 
                 // Check for title
-                let title_res = scanner.take_if_until(&alt_title_validator, "}[[");
-                let link_res = scanner.take_if_until(&link_validator, "]]");
+                let title_res = scanner.take_if_until(&AltTitleValidator {}, "}[[");
+                let link_res = scanner.take_if_until(&LinkValidator {}, "]]");
 
                 match (title_res, link_res) {
                     (Ok(title), Ok(link)) => {
@@ -718,7 +739,7 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
                     false => out.push(c),
                     true => {
                         // Check for link
-                        match scanner.take_if_until(&link_validator, "]]") {
+                        match scanner.take_if_until(&LinkValidator {}, "]]") {
                             Ok(val) => out.push_str(
                                 format_md_link_epistemic(
                                     Arc::clone(&epistemic_lookup),
@@ -736,7 +757,7 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
                     }
                 }
             }
-            '&' => match scanner.take_if_until(&image_validator, "&") {
+            '&' => match scanner.take_if_until(&ImageValidator {}, "&") {
                 Ok(val) => out.push_str(format!("<img src='resources/img/{}'/>", val).as_str()),
                 _ => {
                     out.push(c);
@@ -1468,8 +1489,7 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_single_term() {
         let mut s = Scanner::new("asdf ");
-        let logic = |x: &char| -> bool { return x.is_alphabetic() };
-        let r = s.take_if_until(&logic, " ");
+        let r = s.take_if_until(&LinkValidator {}, " ");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
@@ -1477,8 +1497,7 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_double_term() {
         let mut s = Scanner::new("asdf]]");
-        let logic = |x: &char| -> bool { return x.is_alphabetic() };
-        let r = s.take_if_until(&logic, "]]");
+        let r = s.take_if_until(&ImageValidator {}, "]]");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
@@ -1486,17 +1505,15 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_many_term() {
         let mut s = Scanner::new("asdf1234567890");
-        let logic = |x: &char| -> bool { return x.is_alphabetic() };
-        let r = s.take_if_until(&logic, "1234567890");
+        let r = s.take_if_until(&LinkValidator {}, "1234567890");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
 
     #[test]
     fn test_parser_take_if_until_error() {
-        let logic = |x: &char| -> bool { return x.is_alphabetic() };
         let mut s = Scanner::new(" asdf]]");
-        let r = s.take_if_until(&logic, "]]");
+        let r = s.take_if_until(&ImageValidator {}, "]]");
         assert!(r.is_err());
     }
 
