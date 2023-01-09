@@ -1,20 +1,6 @@
 pub struct Scanner {
     cursor: usize,
     characters: Vec<char>,
-    output: String,
-}
-
-pub enum Action<T> {
-    /// If next iteration returns None, return T without advancing
-    /// the cursor.
-    Request(T),
-
-    /// If the next iteration returns None, return None without advancing
-    /// the cursor.
-    Require,
-
-    /// Immediately advance the cursor and return T.
-    Return(T),
 }
 
 #[derive(Debug)]
@@ -28,24 +14,17 @@ impl Scanner {
         Self {
             cursor: 0,
             characters: string.chars().collect(),
-            output: String::new(),
         }
     }
 
-    /// Returns the current cursor. Useful for reporting errors.
-    pub fn cursor(&self) -> usize {
-        self.cursor
+    pub fn advance(&mut self) {
+        self.cursor += 1
     }
 
     /// Returns the next character without advancing the cursor.
     /// AKA "lookahead"
     pub fn peek(&self) -> Option<&char> {
         self.characters.get(self.cursor)
-    }
-
-    /// Returns true if further progress is not possible.
-    pub fn is_done(&self) -> bool {
-        self.cursor == self.characters.len()
     }
 
     /// Returns the next character (if available) and advances the cursor.
@@ -102,26 +81,25 @@ impl Scanner {
 
         // First character of terminal sequence to stop on
         let term = &terminal.chars().nth(0).expect("invalid terminal string");
-        let mut matched_terminal = false;
 
-        'taker: while self.peek().is_some() && validator(self.peek().unwrap()) {
+        while self.peek().is_some() && validator(self.peek().unwrap()) {
             let char = self.pop();
-
-            if char.is_some() && char.unwrap() == term {
-                matched_terminal = true;
-                break 'taker;
-            }
-
             out.push(*char.unwrap());
         }
 
-        if matched_terminal {
+        // Determining point; do we have a terminal value at the end here?
+        let char = self.peek();
+
+        if char.is_some() && char.unwrap() == term {
             // We've extracted up to the first terminal character
+            self.advance();
+
+            // Early exit
             if terminal.len() == 1 {
                 return Ok(out);
             }
 
-            // Iterate but skip first
+            // Iterate but skip first, since we already checked
             let mut it = terminal.chars();
             it.next();
 
@@ -131,8 +109,8 @@ impl Scanner {
 
                 // If we 're out of text, we didn't match
                 if next.is_none() || &t != next.unwrap() {
-                    // Advance one and continue from where we started
-                    self.cursor = original_cursor + 1;
+                    // Reset cursor, no match
+                    self.cursor = original_cursor;
                     return Err(Error::EndOfLine);
                 }
             }
@@ -140,54 +118,72 @@ impl Scanner {
             return Ok(out);
         }
 
-        // Advance one and continue from where we started
-        self.cursor = original_cursor + 1;
+        // Reset cursor, no match
+        self.cursor = original_cursor;
         return Err(Error::EndOfLine);
     }
+}
 
-    pub fn scan<T>(&mut self, cb: impl Fn(&str) -> Option<Action<T>>) -> Result<Option<T>, Error> {
-        let mut sequence = String::new();
-        let mut require = false;
-        let mut request = None;
+fn parse(s: &str) -> String {
+    let mut scanner = Scanner::new(s);
+    let mut out = String::new();
 
-        loop {
-            match self.characters.get(self.cursor) {
-                Some(target) => {
-                    sequence.push(*target);
+    let alt_title_validator = |c: &char| -> bool { c.is_alphabetic() || c == &' ' };
+    let link_validator = |x: &char| -> bool { return x.is_alphabetic() };
 
-                    match cb(&sequence) {
-                        Some(Action::Return(result)) => {
-                            self.cursor += 1;
-                            break Ok(Some(result));
-                        }
-                        Some(Action::Request(result)) => {
-                            self.cursor += 1;
-                            require = false;
-                            request = Some(result);
-                        }
-                        Some(Action::Require) => {
-                            self.cursor += 1;
-                            require = true;
-                        }
-                        None => {
-                            if require {
-                                break Err(Error::Character(self.cursor));
-                            } else {
-                                break Ok(request);
-                            }
-                        }
-                    }
-                }
-                None => {
-                    if require {
-                        break Err(Error::EndOfLine);
+    while let Some(&c) = scanner.pop() {
+        match c {
+            '{' => {
+                // We need double consumption so keep track of cursor
+                let original_cursor = scanner.cursor;
+                let mut reset = false;
+
+                // Check for title
+                let title = scanner.take_if_until(&alt_title_validator, "}[[");
+                if title.is_ok() {
+                    // Check for link
+                    let link = scanner.take_if_until(&alt_title_validator, "]]");
+                    if link.is_ok() {
+                        // Add to buffer
+                        out.push_str(
+                            format!("[{}]({}.html)", title.unwrap(), link.unwrap(),).as_str(),
+                        );
                     } else {
-                        break Ok(request);
+                        reset = true;
                     }
+                } else {
+                    reset = true;
                 }
+
+                if reset {
+                    // No match, reset cursor
+                    scanner.cursor = original_cursor;
+                    out.push(c);
+                }
+            }
+            '[' => {
+                // Second match
+                if scanner.take_char(&c) {
+                    // Check for link
+                    match scanner.take_if_until(&link_validator, "]]") {
+                        Ok(val) => out.push_str(format!("[{}]({}.html)", val, val).as_str()),
+                        _ => {
+                            // Inital match and second take
+                            out.push(c);
+                            out.push(c);
+                        }
+                    }
+                } else {
+                    // No second match; just add first match
+                    out.push(c);
+                }
+            }
+            _ => {
+                out.push(c);
             }
         }
     }
+    return out;
 }
 
 #[cfg(test)]
@@ -198,8 +194,8 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_single_term() {
         let mut s = Scanner::new("asdf ");
-        let t = |c: &char| -> bool { c != &'z' };
-        let r = s.take_if_until(&t, " ");
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let r = s.take_if_until(&logic, " ");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
@@ -207,17 +203,78 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_double_term() {
         let mut s = Scanner::new("asdf]]");
-        let t = |c: &char| -> bool { c != &'z' };
-        let r = s.take_if_until(&t, "]]");
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let r = s.take_if_until(&logic, "]]");
+        assert!(r.is_ok());
+        assert_eq!(r.unwrap(), String::from("asdf"));
+    }
+
+    #[test]
+    fn test_parser_take_if_until_many_term() {
+        let mut s = Scanner::new("asdf1234567890");
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let r = s.take_if_until(&logic, "1234567890");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
 
     #[test]
     fn test_parser_take_if_until_error() {
-        let mut s = Scanner::new("asdf");
-        let t = |c: &char| -> bool { c != &'a' };
-        let r = s.take_if_until(&t, "]]");
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let mut s = Scanner::new(" asdf]]");
+        let r = s.take_if_until(&logic, "]]");
         assert!(r.is_err());
+    }
+
+    #[test]
+    fn test_parser_parse_basic() {
+        assert_eq!(parse("[[something]]"), "[something](something.html)");
+    }
+
+    #[test]
+    fn test_parser_parse_basic_noop() {
+        assert_eq!(parse("[something]"), "[something]");
+    }
+
+    #[test]
+    fn test_parser_parse_unique_title() {
+        assert_eq!(parse("{test}[[foo]]"), "[test](foo.html)");
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_partial_link() {
+        let s = "something [[test";
+        assert_eq!(parse(s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_partial_link_alt() {
+        let s = "something {alt";
+        assert_eq!(parse(s), s);
+    }
+
+    // Its trash time, bitches
+    #[test]
+    fn test_parser_parse_ignore_trash_1() {
+        let s = "something {alt}[[test";
+        assert_eq!(parse(s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_trash_2() {
+        let s = "something {alt}[[test]";
+        assert_eq!(parse(s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_trash_3() {
+        let s = "something {alt}[[test}]]";
+        assert_eq!(parse(s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_trash_4() {
+        let s = "{test this}[[seems like it]{cshould][{}[{]} work";
+        assert_eq!(parse(s), s);
     }
 }
