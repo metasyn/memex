@@ -685,6 +685,8 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
 
     let link_validator = |x: &char| -> bool { return x.is_alphabetic() || x == &'-' };
 
+    let image_validator = |x: &char| -> bool { return !x.is_whitespace() };
+
     while let Some(&c) = scanner.pop() {
         match c {
             '{' => {
@@ -734,6 +736,12 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
                     }
                 }
             }
+            '&' => match scanner.take_if_until(&image_validator, "&") {
+                Ok(val) => out.push_str(format!("<img src='resources/img/{}'/>", val).as_str()),
+                _ => {
+                    out.push(c);
+                }
+            },
             // Default veahior
             _ => {
                 out.push(c);
@@ -1497,6 +1505,14 @@ mod tests {
         assert_eq!(
             convert_memex_line_to_md(Arc::new(HashMap::new()), "[[something]]"),
             "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>something](something.html)"
+        );
+    }
+
+    #[test]
+    fn test_parser_parse_image_basic() {
+        assert_eq!(
+            convert_memex_line_to_md(Arc::new(HashMap::new()), "&test.png&"),
+            "<img src='resources/img/test.png'/>",
         );
     }
 
