@@ -1,5 +1,3 @@
-mod parser;
-
 use std::cmp::min;
 use std::collections::{HashMap, HashSet};
 use std::ffi::OsString;
@@ -7,7 +5,6 @@ use std::fmt::Display;
 use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
 use std::io::{stdin, BufReader, Error, ErrorKind, Read, Result};
-use std::iter::Peekable;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::str::FromStr;
@@ -41,7 +38,7 @@ const DENDROID: &str = "dendroid";
 struct Entry {
     id: String,
     content: String,
-    epistemic_status: EpistemicStatus,
+    epistemic_status: EpiStatus,
     modification_date: String,
     links: Vec<String>,
     references: Option<Vec<String>>,
@@ -85,35 +82,177 @@ impl DirectoryTree {
     }
 }
 
-type EpistemicStatusLookup = HashMap<String, EpistemicStatus>;
+type EpiStatusLookup = HashMap<String, EpiStatus>;
 
 #[derive(Debug, Clone)]
-enum EpistemicStatus {
+enum EpiStatus {
     Seedling,
     Sapling,
     Dendroid,
 }
 
-impl Display for EpistemicStatus {
+impl Display for EpiStatus {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            EpistemicStatus::Seedling => write!(f, "{}", SEEDLING),
-            EpistemicStatus::Sapling => write!(f, "{}", SAPLING),
-            EpistemicStatus::Dendroid => write!(f, "{}", DENDROID),
+            EpiStatus::Seedling => write!(f, "{}", SEEDLING),
+            EpiStatus::Sapling => write!(f, "{}", SAPLING),
+            EpiStatus::Dendroid => write!(f, "{}", DENDROID),
         }
     }
 }
 
-impl FromStr for EpistemicStatus {
+impl FromStr for EpiStatus {
     type Err = ();
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         match s {
-            SEEDLING => Ok(EpistemicStatus::Seedling),
-            SAPLING => Ok(EpistemicStatus::Sapling),
-            DENDROID => Ok(EpistemicStatus::Dendroid),
+            SEEDLING => Ok(EpiStatus::Seedling),
+            SAPLING => Ok(EpiStatus::Sapling),
+            DENDROID => Ok(EpiStatus::Dendroid),
             _ => Err(()),
         }
+    }
+}
+
+/////////////
+// SCANNER //
+/////////////
+
+pub struct Scanner {
+    cursor: usize,
+    characters: Vec<char>,
+}
+
+#[derive(Debug)]
+pub enum ScannerError {
+    EndOfLine,
+}
+
+/// Heavily inspired by https://depth-first.com/articles/2021/12/16/a-beginners-guide-to-parsing-in-rust/
+impl Scanner {
+    pub fn new(string: &str) -> Self {
+        Self {
+            cursor: 0,
+            characters: string.chars().collect(),
+        }
+    }
+
+    pub fn worth_scanning(s: &str) -> bool {
+        return s.matches("[").count() >= 2 || s.matches("&").count() >= 2;
+    }
+
+    pub fn advance(&mut self) {
+        self.cursor += 1
+    }
+
+    /// Returns the next character without advancing the cursor.
+    /// AKA "lookahead"
+    pub fn peek(&self) -> Option<&char> {
+        self.characters.get(self.cursor)
+    }
+
+    /// Returns the next character (if available) and advances the cursor.
+    pub fn pop(&mut self) -> Option<&char> {
+        match self.characters.get(self.cursor) {
+            Some(character) => {
+                self.cursor += 1;
+
+                Some(character)
+            }
+            None => None,
+        }
+    }
+
+    /// Returns true if the char matches the logic at the current cursor position,
+    /// and advances the cursor.
+    /// Otherwise, returns false leaving the cursor unchanged.
+    pub fn take_with_validator(&mut self, validator: &dyn Fn(&char) -> bool) -> bool {
+        match self.characters.get(self.cursor) {
+            Some(character) => {
+                if validator(character) {
+                    self.cursor += 1;
+
+                    true
+                } else {
+                    false
+                }
+            }
+            None => false,
+        }
+    }
+
+    /// Returns true if the `target` is found at the current cursor position,
+    /// and advances the cursor.
+    /// Otherwise, returns false leaving the cursor unchanged.
+    pub fn take_char(&mut self, target: &char) -> bool {
+        let t = |c: &char| -> bool {
+            return c == target;
+        };
+        return self.take_with_validator(&t);
+    }
+
+    /// Returns a string if we can match characters (using the validator) until they
+    /// terminal characters. If the terminal characters are not matched, the cursor
+    /// is reset, making this lookahead idempotent in the case of failure.
+    pub fn take_if_until(
+        &mut self,
+        validator: &dyn Fn(&char) -> bool,
+        terminal: &str,
+    ) -> std::result::Result<String, ScannerError> {
+        // Buf to return in positive case
+        let mut out = String::new();
+
+        // Backup to restore in negative case
+        let original_cursor = self.cursor;
+
+        // First character of terminal sequence to stop on
+        let term = &terminal.chars().nth(0).expect("invalid terminal string");
+
+        while let Some(&c) = self.peek() {
+            match validator(&c) {
+                true => {
+                    // We've already peeked
+                    self.advance();
+                    out.push(c);
+                }
+                false => break,
+            }
+        }
+
+        // Determining point; do we have a terminal value at the end here?
+        match self.peek() {
+            Some(&char) if &char == term => {
+                self.advance();
+
+                // Early exit
+                if terminal.len() == 1 {
+                    return Ok(out);
+                }
+
+                // Iterate but skip first, since we already checked
+                let mut it = terminal.chars();
+                it.next();
+
+                // Loop through remaining chars(
+                while let Some(t) = it.next() {
+                    let next = self.pop();
+
+                    // If we 're out of text, we didn't match
+                    if next.is_none() || &t != next.unwrap() {
+                        // Reset cursor, no match
+                        self.cursor = original_cursor;
+                        return Err(ScannerError::EndOfLine);
+                    }
+                }
+                // The fall through means all terminal chars were matched
+                return Ok(out);
+            }
+            _ => {
+                // Reset cursor, no match
+                self.cursor = original_cursor;
+                return Err(ScannerError::EndOfLine);
+            }
+        };
     }
 }
 
@@ -394,7 +533,7 @@ fn extract_recent_entries(entries: &mut Vec<Entry>) -> String {
         .join("\n");
 }
 
-fn extract_epistemic_status_from_content(content: &str) -> EpistemicStatus {
+fn extract_epistemic_status_from_content(content: &str) -> EpiStatus {
     let epistemic_status = match EPISTEMIC_REGEX.captures(content) {
         Some(cap) => cap
             .name("status")
@@ -403,7 +542,7 @@ fn extract_epistemic_status_from_content(content: &str) -> EpistemicStatus {
         _ => SEEDLING,
     };
 
-    return EpistemicStatus::from_str(epistemic_status).expect(
+    return EpiStatus::from_str(epistemic_status).expect(
         format!(
             "{}: {:?}",
             "unable to parse epistemic status", epistemic_status
@@ -415,209 +554,6 @@ fn extract_epistemic_status_from_content(content: &str) -> EpistemicStatus {
 ////////////
 // FORMAT //
 ////////////
-
-fn may_have_custom_markup(s: &str) -> bool {
-    return s.matches("[").count() >= 2 || s.matches("&").count() >= 2;
-}
-
-fn may_have_alt_internal_link(s: &str) -> bool {
-    return s.matches("[").count() % 2 == 0
-        && s.matches("{").count() >= 1
-        && s.matches("}").count() >= 1;
-}
-
-fn is_valid_link_char(c: char) -> bool {
-    return c.is_alphabetic() || c == '-' || c == '\n' || c == '\r';
-}
-
-fn is_valid_alttext_char(c: char) -> bool {
-    return is_valid_link_char(c) || c == ' ';
-}
-
-fn format_parse(epistemic_lookup: Arc<EpistemicStatusLookup>, input: &str) -> String {
-    return input
-        .lines()
-        .map(|x| format_parse_line(Arc::clone(&epistemic_lookup), x))
-        .collect::<Vec<String>>()
-        .join("\n");
-}
-
-trait CharIterator<'a>: Iterator<Item = &'a char> {
-    fn peek(&mut self) -> Option<&'a char>;
-}
-
-impl<'a, I> CharIterator<'a> for Peekable<I>
-where
-    I: Iterator<Item = &'a char>,
-{
-    fn peek(&mut self) -> Option<&'a char> {
-        self.peek().map(|t| *t)
-    }
-}
-
-/**
- * This is a very unecessary approach to character level parsing for the memex markup.
- *
- * However, I wanted to learn more about character level parsing. It handles converting things
- * like:
- *
- * some text [[internal-link]] -> some text [internal-link](internal-link.html]
- * some text {alt text}[[foo]] -> some text [alt text](foo.html)
- *
- */
-fn format_parse_line(epistemic_lookup: Arc<EpistemicStatusLookup>, s: &str) -> String {
-    // Early return
-    if !may_have_custom_markup(s) {
-        return String::from(s);
-    }
-
-    // Create an iterator for the line
-    let mut it = s.chars().peekable();
-
-    // Create output for the line
-    let mut out = String::new();
-
-    // Temp for title value
-    let mut alttext: Option<String> = None;
-
-    while let Some(&c) = it.peek() {
-        match c {
-            // Handle internal links, which have [[something]]
-            '[' => {
-                // Consume first bracket
-                it.next();
-                let next = it.peek();
-
-                // Ending signal
-                let mut matched = false;
-
-                if next.is_some() && next.unwrap() == &'[' {
-                    // We now are _maybe_ matching against
-                    // an internal link like so [[so]]
-
-                    // Clone the iterator in case we need the original again
-                    let mut temp_it = it.clone();
-
-                    // Allocate buffer
-                    let mut temp = String::new();
-
-                    // Consume the bracket
-                    temp_it.next();
-
-                    // Consume while scanning for double ending
-                    'consumer: while let Some(&x) = temp_it.peek() {
-                        match x {
-                            ']' => {
-                                // Consume ending brackets
-                                // Naively assume there are two in a row
-                                // since a broken link like [[something]
-                                // will be easily found elsewhere
-                                temp_it.next();
-                                temp_it.next();
-
-                                // Break loop
-                                matched = true;
-                                break 'consumer;
-                            }
-                            t if is_valid_link_char(t) => {
-                                temp.push(x);
-                                temp_it.next();
-                            }
-                            _ => break 'consumer,
-                        }
-                    }
-
-                    // If we've matched, update the existing iterator to the new one
-                    // which has consumed the link syntax
-                    if matched {
-                        it = temp_it;
-
-                        // Here is where we actually rewrite the internal reference
-                        let title = alttext.get_or_insert(temp.clone());
-
-                        let status = epistemic_lookup.get(temp.as_str());
-
-                        if status.is_none() {
-                            nope(format!("invalid link to missing internal page: {}", temp));
-                        }
-
-                        let prefix = status.unwrap_or(&EpistemicStatus::Seedling);
-
-                        out.push_str(format!(
-                            "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/{}_white.png'/>{}]({}.html)",
-                            prefix, title, temp.as_str(),
-                        ).as_str());
-
-                        //  Reset alttext
-                        alttext = None;
-                    }
-                }
-
-                if !matched {
-                    // Otherwise, we can just push the [
-                    out.push(c);
-                    it.next();
-                }
-            }
-            '{' => {
-                // Ending signal
-                let mut matched = false;
-
-                // Make sure we have a potential matched line
-                if may_have_alt_internal_link(s) {
-                    // Clone iterator in case in case we don't match
-                    let mut temp_it = it.clone();
-
-                    temp_it.next();
-                    let mut maybe_alttext = String::new();
-
-                    // consume while scanning for ending curly bracket
-                    'consumer: while let Some(&x) = temp_it.peek() {
-                        match x {
-                            '}' => {
-                                temp_it.next();
-                                let next = temp_it.peek();
-
-                                if next.is_some() && next.unwrap() == &'[' {
-                                    // Good enough - we've now hit
-                                    // { something }[
-                                    // and we will naively assume this will match
-                                    matched = true;
-
-                                    // Update main iterator to our current position
-                                    it = temp_it;
-
-                                    // Assign to top level for usage
-                                    alttext = Some(maybe_alttext);
-                                }
-                                break 'consumer;
-                            }
-                            t if is_valid_alttext_char(t) => {
-                                // Consume any text we run into
-                                maybe_alttext.push(x);
-                                temp_it.next();
-                            }
-                            _ => break 'consumer,
-                        }
-                    }
-                }
-
-                if !matched {
-                    // If we didn't match, push the original bracket and move on
-                    out.push(c);
-                    it.next();
-                }
-            }
-            // Standard character behavior, just copy
-            _ => {
-                out.push(c);
-                it.next();
-            }
-        };
-    }
-
-    return out;
-}
 
 fn format_directory(tree: &DirectoryTree) -> String {
     fn traverse(tree: &DirectoryTree, item: &DirectoryItem, res: &mut String, depth: u8) {
@@ -704,11 +640,110 @@ fn format_img_dither_wrap_anchor(body: &str) -> String {
         .to_string();
 }
 
+fn format_md_link_epistemic(
+    epistemic_lookup: Arc<EpiStatusLookup>,
+    title: String,
+    link: String,
+) -> String {
+    let status = epistemic_lookup.get(link.as_str());
+
+    if status.is_none() {
+        nope(format!("invalid link to missing internal page: {}", link));
+    }
+
+    let prefix = status.unwrap_or(&EpiStatus::Seedling);
+
+    return format!(
+        "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/{}_white.png'/>{}]({}.html)",
+        prefix, title, link,
+    );
+}
+
 /////////////
 // CONVERT //
 /////////////
 
-fn _convert_internal_to_md(epistemic_lookup: Arc<EpistemicStatusLookup>, content: &str) -> String {
+fn convert_memex_to_md(epistemic_lookup: Arc<EpiStatusLookup>, input: &str) -> String {
+    return input
+        .lines()
+        .map(|x| convert_memex_line_to_md(Arc::clone(&epistemic_lookup), x))
+        .collect::<Vec<String>>()
+        .join("\n");
+}
+
+fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> String {
+    // Check to see fi we can just skip converting the entire line
+    if !Scanner::worth_scanning(s) {
+        return String::from(s);
+    }
+
+    let mut scanner = Scanner::new(s);
+    let mut out = String::new();
+
+    let alt_title_validator =
+        |c: &char| -> bool { return c.is_alphabetic() || c == &' ' || c == &'-' };
+
+    let link_validator = |x: &char| -> bool { return x.is_alphabetic() || x == &'-' };
+
+    while let Some(&c) = scanner.pop() {
+        match c {
+            '{' => {
+                // We need double consumption so keep track of cursor manually
+                // because the first one could update the first successfully
+                // and the second one could fail, resulting in an updated cursor
+                let original_cursor = scanner.cursor;
+
+                // Check for title
+                let title_res = scanner.take_if_until(&alt_title_validator, "}[[");
+                let link_res = scanner.take_if_until(&link_validator, "]]");
+
+                match (title_res, link_res) {
+                    (Ok(title), Ok(link)) => {
+                        out.push_str(
+                            format_md_link_epistemic(Arc::clone(&epistemic_lookup), title, link)
+                                .as_str(),
+                        );
+                    }
+                    _ => {
+                        scanner.cursor = original_cursor;
+                        out.push(c);
+                    }
+                }
+            }
+            '[' => {
+                // Second match
+                match scanner.take_char(&c) {
+                    false => out.push(c),
+                    true => {
+                        // Check for link
+                        match scanner.take_if_until(&link_validator, "]]") {
+                            Ok(val) => out.push_str(
+                                format_md_link_epistemic(
+                                    Arc::clone(&epistemic_lookup),
+                                    val.clone(),
+                                    val.clone(),
+                                )
+                                .as_str(),
+                            ),
+                            _ => {
+                                // Inital match and second take
+                                out.push(c);
+                                out.push(c);
+                            }
+                        }
+                    }
+                }
+            }
+            // Default veahior
+            _ => {
+                out.push(c);
+            }
+        }
+    }
+    return out;
+}
+
+fn _convert_internal_to_md(epistemic_lookup: Arc<EpiStatusLookup>, content: &str) -> String {
     return INTERNAL_LINK_REGEX
         .replace_all(content, |caps: &Captures| {
             // must exist
@@ -725,7 +760,7 @@ fn _convert_internal_to_md(epistemic_lookup: Arc<EpistemicStatusLookup>, content
                 nope(format!("invalid link to missing internal page: {}", link));
             }
 
-            let prefix = status.unwrap_or(&EpistemicStatus::Seedling);
+            let prefix = status.unwrap_or(&EpiStatus::Seedling);
 
             format!(
                 "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/{}_white.png'/>{}]({}.html)",
@@ -829,18 +864,18 @@ fn make_template(item: &str) -> String {
 }
 
 fn replace_template<'a>(
-    epistemic_lookup: Arc<EpistemicStatusLookup>,
+    epistemic_lookup: Arc<EpiStatusLookup>,
     body: &str,
     item: &str,
     replacement: &str,
 ) -> String {
-    let repl = format_parse(epistemic_lookup, replacement);
+    let repl = convert_memex_to_md(epistemic_lookup, replacement);
     let html = render_md(&repl);
     return body.replace(make_template(item).as_str(), &html);
 }
 
 fn replace_templates<'a>(
-    epistemic_lookup: Arc<EpistemicStatusLookup>,
+    epistemic_lookup: Arc<EpiStatusLookup>,
     body: &str,
     mapping: Vec<(&str, &str)>,
 ) -> String {
@@ -934,7 +969,7 @@ fn build_entry(
     destination_path: Arc<String>,
     formatted_directory: Arc<String>,
     recents: Arc<String>, // TODO: this only is needed on index page
-    epistemic_status_lookup: Arc<EpistemicStatusLookup>,
+    epistemic_lookup: Arc<EpiStatusLookup>,
 ) -> Result<()> {
     // get or set replacements
     let contents = entry.content.as_str();
@@ -953,11 +988,7 @@ fn build_entry(
     ];
 
     // write replacements
-    let html = replace_templates(
-        epistemic_status_lookup,
-        base_template.as_str(),
-        replacements,
-    );
+    let html = replace_templates(epistemic_lookup, base_template.as_str(), replacements);
 
     let fname = format!("{}/{}.html", destination_path, entry.id);
     hey(format!("{} => {}", entry.id.yellow(), fname.green()));
@@ -1052,7 +1083,7 @@ fn build(
             let directory = Arc::new(extract_directory(&entries, "pages"));
             let formatted_directory = Arc::new(format_directory(&directory));
             let recents = Arc::new(extract_recent_entries(&mut entries.clone()));
-            let epistemic_status_lookup = Arc::new(
+            let epistemic_lookup = Arc::new(
                 entries
                     .iter()
                     .map(|e| (e.id.clone(), e.epistemic_status.clone()))
@@ -1070,7 +1101,7 @@ fn build(
                 let destination_path_arc = Arc::clone(&destination_path_string);
                 let formatted_directory_arc = Arc::clone(&formatted_directory);
                 let recents_arc = Arc::clone(&recents);
-                let epistemic_status_lookup_arc = Arc::clone(&epistemic_status_lookup);
+                let epistemic_lookup_arc = Arc::clone(&epistemic_lookup);
 
                 let handle = thread::spawn(move || {
                     build_entry(
@@ -1079,7 +1110,7 @@ fn build(
                         destination_path_arc,
                         formatted_directory_arc,
                         recents_arc,
-                        epistemic_status_lookup_arc,
+                        epistemic_lookup_arc,
                     )
                     .expect("couldn't build an entry");
                 });
@@ -1427,8 +1458,98 @@ mod tests {
     }
 
     #[test]
-    fn test_format_parse_internal_link() {
-        let parse = format_parse(Arc::new(HashMap::new()), "[[test]]");
-        assert_eq!(parse, "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>test](test.html)");
+    fn test_parser_take_if_until_single_term() {
+        let mut s = Scanner::new("asdf ");
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let r = s.take_if_until(&logic, " ");
+        assert!(r.is_ok());
+        assert_eq!(r.unwrap(), String::from("asdf"));
+    }
+
+    #[test]
+    fn test_parser_take_if_until_double_term() {
+        let mut s = Scanner::new("asdf]]");
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let r = s.take_if_until(&logic, "]]");
+        assert!(r.is_ok());
+        assert_eq!(r.unwrap(), String::from("asdf"));
+    }
+
+    #[test]
+    fn test_parser_take_if_until_many_term() {
+        let mut s = Scanner::new("asdf1234567890");
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let r = s.take_if_until(&logic, "1234567890");
+        assert!(r.is_ok());
+        assert_eq!(r.unwrap(), String::from("asdf"));
+    }
+
+    #[test]
+    fn test_parser_take_if_until_error() {
+        let logic = |x: &char| -> bool { return x.is_alphabetic() };
+        let mut s = Scanner::new(" asdf]]");
+        let r = s.take_if_until(&logic, "]]");
+        assert!(r.is_err());
+    }
+
+    #[test]
+    fn test_parser_parse_basic() {
+        assert_eq!(
+            convert_memex_line_to_md(Arc::new(HashMap::new()), "[[something]]"),
+            "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>something](something.html)"
+        );
+    }
+
+    #[test]
+    fn test_parser_parse_basic_noop() {
+        assert_eq!(
+            convert_memex_line_to_md(Arc::new(HashMap::new()), "[something]"),
+            "[something]"
+        );
+    }
+
+    #[test]
+    fn test_parser_parse_unique_title() {
+        assert_eq!(
+            convert_memex_line_to_md(Arc::new(HashMap::new()), "{test}[[foo]]"),
+            "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>test](foo.html)"
+        );
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_partial_link() {
+        let s = "something [[test";
+        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_partial_link_alt() {
+        let s = "something {alt";
+        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+    }
+
+    // Its trash time, bitches
+    #[test]
+    fn test_parser_parse_ignore_trash_1() {
+        let s = "something {alt}[[test";
+        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_trash_2() {
+        let s = "something {alt}[[test]";
+        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_trash_3() {
+        let s = "something {alt}[[test}]]";
+        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+    }
+
+    #[test]
+    fn test_parser_parse_ignore_trash_4() {
+        let s = "{test this}[[seems like it]{cshould][{}[{]} work";
+        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
     }
 }
