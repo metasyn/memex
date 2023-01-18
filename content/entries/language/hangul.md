@@ -11,26 +11,26 @@ below are my notes on hangul, the korean alphabet, and some korean linguistics.
 mostly, i'm taking notes to solidify my understanding . there are already lots
 of resources online for learning korean and hangul and you should use those -
 however, these were patterns that i found helpful to note and write down while
-i learned.  maybe they will help someone else, too ^__^
+i learned. maybe they will help someone else, too ^\_\_^
 
 ---
 
 hangul was created in 1443 by king sejong the great. it was created in order to
-*specifically combat* illteracy and make reading and writing easier for the
+_specifically combat_ illteracy and make reading and writing easier for the
 korean people. i think its a beautiful script.
 
 [wikipedia](https://en.wikipedia.org/wiki/hangul) tells us that modern hangul
 orthography uses:
 
-* 24 basic letters:
-  * 14 consonant letters (ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㅇ ㅈ ㅊ ㅋ ㅌ ㅍ ㅎ)
-  * 10 vowel letters (ㅏ ㅑ ㅓ ㅕ ㅗ ㅛ ㅜ ㅠ ㅡ ㅣ)
+- 24 basic letters:
 
-* 27 complex letters formed by combining the basic letters
-  * 5 tense consonant letters (ㄲ ㄸ ㅃ ㅆ ㅉ)
-  * 11 complex consonant letters (ㄳ ㄵ ㄶ ㄺ ㄻ ㄼ ㄽ ㄾ ㄿ ㅀ ㅄ)
-  * 11 complex vowel letters (ㅐ ㅒ ㅔ ㅖ ㅘ ㅙ ㅚ ㅝ ㅞ ㅟ ㅢ)
+  - 14 consonant letters (ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㅇ ㅈ ㅊ ㅋ ㅌ ㅍ ㅎ)
+  - 10 vowel letters (ㅏ ㅑ ㅓ ㅕ ㅗ ㅛ ㅜ ㅠ ㅡ ㅣ)
 
+- 27 complex letters formed by combining the basic letters
+  - 5 tense consonant letters (ㄲ ㄸ ㅃ ㅆ ㅉ)
+  - 11 complex consonant letters (ㄳ ㄵ ㄶ ㄺ ㄻ ㄼ ㄽ ㄾ ㄿ ㅀ ㅄ)
+  - 11 complex vowel letters (ㅐ ㅒ ㅔ ㅖ ㅘ ㅙ ㅚ ㅝ ㅞ ㅟ ㅢ)
 
 ## an alphabet
 
@@ -45,14 +45,13 @@ what does it mean to be an alphabet? our comrade wikipedia says:
 interestingly, hangul really is an **alphabet** and not a syllabary (like japanese kana).
 each character is called a _jamo_.the language also features a number of beautiful design choices:
 
-* orthographic symbols are grouped [homorganically](https://en.wikipedia.org/wiki/homorganic_consonant) (by place of articulation)
-* jamo (characters) are grouped into visually distinct morpho-syllabic units
-
+- orthographic symbols are grouped [homorganically](https://en.wikipedia.org/wiki/homorganic_consonant) (by place of articulation)
+- jamo (characters) are grouped into visually distinct morpho-syllabic units
 
 ## contrastivity
 
 when learning a new language, at least for me, i always try to pay attention to
-the aspects of the phonological inventory that *are* contrastive in the target
+the aspects of the phonological inventory that _are_ contrastive in the target
 language, but are not in my native tongue. these are the types of sounds that
 are the hardest to hear and master. often you just need to mentally remember to
 move your mouth a different way, because the difference itself is very hard to
@@ -62,8 +61,9 @@ perceive when first learning.
 
 in english, we have [minimal pairs](https://en.wikipedia.org/wiki/minimal_pair)
 that utilize consonants that differ in voicing - i.e. compare:
-* beach, peach
-* kill, gill
+
+- beach, peach
+- kill, gill
 
 in korean, this voicing isn't contrastive. rather, the voicing aspect comes
 about phonotactically, or based on systematic combinations of sounds. in korean,
@@ -88,18 +88,16 @@ phonological rule, for example:
 
 (from [here](http://web.pdx.edu/~connjc/rule%20for%20english%20aspiration.pdf))
 
-
-in contrast, korean uses aspiration as a *contrastive* difference. this
+in contrast, korean uses aspiration as a _contrastive_ difference. this
 contrastive difference, as expected, is also represented orthographically. in
 the [IPA](https://en.wikipedia.org/wiki/international_phonetic_alphabet) above
-(and below) - aspiration is marked by a superscript _h_ like pʰ.  generally, we just see the
+(and below) - aspiration is marked by a superscript _h_ like pʰ. generally, we just see the
 character getting an extra stroke: ㄱ (plain k sound) becomes ㅋ (aspirated k
 sound).
 
-
 ### tenseness
 
-korean consonants are *also* contrastive in relation to tenseness. this is extra
+korean consonants are _also_ contrastive in relation to tenseness. this is extra
 hard for english speakers because we do not have the concept of tenseness in
 our phonological inventory. i've read various things about how to imagine
 pronouncing these, from pretending you are in a pressure chamber, pretending
@@ -123,33 +121,33 @@ to be easy to learn.
 these are all [velar](https://en.wikipedia.org/wiki/velar_consonant) [stops](https://en.wikipedia.org/wiki/plosive).
 we get three variants: plain, aspirated, and tense
 
-|character|IPA|name|romanized name|
-|-|-|-|-|
-| ㄱ | k | 기역    | giyeok |
-| ㄲ | k͈ | 쌍기역  | ssanggiyeok |
-| ㅋ | kʰ| 키읔    | kieuk |
+| character | IPA | name   | romanized name |
+| --------- | --- | ------ | -------------- |
+| ㄱ        | k   | 기역   | giyeok         |
+| ㄲ        | k͈   | 쌍기역 | ssanggiyeok    |
+| ㅋ        | kʰ  | 키읔   | kieuk          |
 
 ## alveolars
 
 these are all [alveolar](https://en.wikipedia.org/wiki/alveolar_consonant) [stops](https://en.wikipedia.org/wiki/plosive).
 we get three variants: plain, aspirated, and tense
 
-|character|IPA|name|romanized name|
-|-|-|-|-|
-| ㄷ| t | 디귿     | digeut |
-| ㄸ| t͈ | 쌍디귿   | ssangdigeut |
-| ㅌ| tʰ| 티읕     | tieut |
+| character | IPA | name   | romanized name |
+| --------- | --- | ------ | -------------- |
+| ㄷ        | t   | 디귿   | digeut         |
+| ㄸ        | t͈   | 쌍디귿 | ssangdigeut    |
+| ㅌ        | tʰ  | 티읕   | tieut          |
 
 after that, we have a new manner of articulation in the same location.
 these are all [alveolar](https://en.wikipedia.org/wiki/alveolar_consonant) [siblants](https://en.wikipedia.org/wiki/sibilant):
 
-|character|IPA|name|romanized name|
-|-|-|-|-|
-| ㅅ | s  | 시옷    | siot |
-| ㅆ | s͈  | 쌍시옷  | ssangsiot |
-| ㅈ | tɕ | 지읒    | jieut |
-| ㅊ | tɕ | 치읓    | chieut |
-| ㅉ | t͈ɕ | 쌍지읒  | ssangjieut |
+| character | IPA | name   | romanized name |
+| --------- | --- | ------ | -------------- |
+| ㅅ        | s   | 시옷   | siot           |
+| ㅆ        | s͈   | 쌍시옷 | ssangsiot      |
+| ㅈ        | tɕ  | 지읒   | jieut          |
+| ㅊ        | tɕ  | 치읓   | chieut         |
+| ㅉ        | t͈ɕ  | 쌍지읒 | ssangjieut     |
 
 in this section , there is a plcae of articulation that doesn't exist in most
 english dialects:
@@ -160,35 +158,33 @@ means:
 > its place of articulation is postalveolar, meaning that the tongue contacts
 > the roof of the mouth in the area behind the alveolar ridge (the gum line).
 > its tongue shape is laminal, meaning that it is the tongue blade that
-> contacts the roof of the mouth.  it is heavily palatalized, meaning that the
+> contacts the roof of the mouth. it is heavily palatalized, meaning that the
 > middle of the tongue is bowed and raised towards the hard palate.
 
 ## labials
 
-
 these are all [alveolar](https://en.wikipedia.org/wiki/labial_consonant) [stops](https://en.wikipedia.org/wiki/plosive).
 we get three variants: plain, aspirated, and tense, as well as a voiced bilabial stop (m).
 
-|character|IPA|name|romanized name|
-|-|-|-|-|
-| ㅂ | b  | 비읍    | bieup |
-| ㅃ | p͈  |	쌍비읍  | ssangbieup |
-| ㅍ | pʰ | 피읖    | pieup |
-| ㅁ | m  |	미음    | mieum |
-
+| character | IPA | name   | romanized name |
+| --------- | --- | ------ | -------------- |
+| ㅂ        | b   | 비읍   | bieup          |
+| ㅃ        | p͈   | 쌍비읍 | ssangbieup     |
+| ㅍ        | pʰ  | 피읖   | pieup          |
+| ㅁ        | m   | 미음   | mieum          |
 
 ## dorsals
 
 these are all [dorsal](https://en.wikipedia.org/wiki/dorsal_consonant) consonants.
 
-|character|IPA|name|romanized name|
-|-|-|-|-|
-ㄹ | ɾ  | 리을   | rieul |
-ㄴ | n  | 니은   | nieun |
-ㅎ | h  | 히읗   | hieut |
-ㅇ | ŋ  | 이응   | ieung |
+| character | IPA | name | romanized name |
+| --------- | --- | ---- | -------------- |
+| ㄹ        | ɾ   | 리을 | rieul          |
+| ㄴ        | n   | 니은 | nieun          |
+| ㅎ        | h   | 히읗 | hieut          |
+| ㅇ        | ŋ   | 이응 | ieung          |
 
-the ㅇ (ieung) character is *extra special* - it can also denote _absence of a sound_.
+the ㅇ (ieung) character is _extra special_ - it can also denote _absence of a sound_.
 
 ## complex consonants
 
@@ -202,7 +198,7 @@ is generally romanized with all b characters, but only the middle b is actually
 pronounced as a b due to intervocalic voicing. there are lots of examples of this!
 
 a more general rule is that the sounds ㄱ, ㄷ, and ㅂ are transcribed as g, d,
-and b before a vowel.  they are transcribed as k, t, and p when they appear
+and b before a vowel. they are transcribed as k, t, and p when they appear
 before another consonant or as the last sound of a word. despite this rule
 listed on [the national institute of korean
 language](https://www.korean.go.kr/front_eng/roman/roman_01.do) page on
@@ -211,7 +207,6 @@ since they're at this point, more of a loan word
 
 i'm sure there are a lot more: to learn more, research "korean consonant
 assimilation".
-
 
 # vowels
 
@@ -222,26 +217,26 @@ there are basic vowels
 
 ## monopthongs
 
-|character|IPA|romanization|english word with vowel|
-|-|-|-|-|
-| ㅡ | ɯ | eu | ~goose
-| ㅗ | o | o  | hoe
-| ㅜ | u | u  | who
-| ㅣ | i | i  | free
-| ㅓ | ʌ | eo | gut
-| ㅏ | a | a  | bra
+| character | IPA | romanization | english word with vowel |
+| --------- | --- | ------------ | ----------------------- |
+| ㅡ        | ɯ   | eu           | ~goose                  |
+| ㅗ        | o   | o            | hoe                     |
+| ㅜ        | u   | u            | who                     |
+| ㅣ        | i   | i            | free                    |
+| ㅓ        | ʌ   | eo           | gut                     |
+| ㅏ        | a   | a            | bra                     |
 
 there are two more, which orthographically look like two vowels, but are
 pronounced as a single vowel. you can see some that where ㅣ (i) is being
 re-used:
 
-* ㅓ + ㅣ= ㅔ
-* ㅏ + ㅣ =  ㅐ
+- ㅓ + ㅣ= ㅔ
+- ㅏ + ㅣ = ㅐ
 
-|character|IPA|romanization|english word with vowel|
-|-|-|-|-|
-| ㅔ | e | e  | may
-| ㅐ | ɛ | ae | head
+| character | IPA | romanization | english word with vowel |
+| --------- | --- | ------------ | ----------------------- |
+| ㅔ        | e   | e            | may                     |
+| ㅐ        | ɛ   | ae           | head                    |
 
 historically these last two are pronounced different, but from what i
 [read](https://www.howtostudykorean.com/unit0/unit-0-lesson-3/), most people
@@ -254,53 +249,52 @@ one group of diphthongs are all ways of turning one vowel into a y- variant
 vowels all you need to do is add the extra line next to the existing one that
 is protruding, and now its a y sound.
 
-|character|IPA|romanization|
-|-|-|-|-|
-| ㅑ | ja | ya  |
-| ㅕ | jʌ | yeo |
-| ㅛ | jo | yo  |
-| ㅠ | ju | yu  |
-| ㅒ | jɛ | yae |
-| ㅖ | je | ye  |
-
+| character | IPA | romanization |
+| --------- | --- | ------------ |
+| ㅑ        | ja  | ya           |
+| ㅕ        | jʌ  | yeo          |
+| ㅛ        | jo  | yo           |
+| ㅠ        | ju  | yu           |
+| ㅒ        | jɛ  | yae          |
+| ㅖ        | je  | ye           |
 
 here are a few that all share a w-like sound prefix. while they look more
 complicated, it can actually be seen that each one is just a combination of
 the simpler vowels we already learned. for example:
 
-* ㅘ wa = ㅗ o + ㅏ a
-* ㅙ wae = ㅘ wa + ㅣ i
+- ㅘ wa = ㅗ o + ㅏ a
+- ㅙ wae = ㅘ wa + ㅣ i
 
 and so on.
 
-|character|IPA|romanization|
-|-|-|-|-|
-| ㅟ | ɥi | wi  |
-| ㅞ | we | we  |
-| ㅙ | wɛ | wae |
-| ㅘ | wa | wa  |
-| ㅝ | wʌ | wo  |
-| ㅢ | ɰi | ui  |
+| character | IPA | romanization |
+| --------- | --- | ------------ |
+| ㅟ        | ɥi  | wi           |
+| ㅞ        | we  | we           |
+| ㅙ        | wɛ  | wae          |
+| ㅘ        | wa  | wa           |
+| ㅝ        | wʌ  | wo           |
+| ㅢ        | ɰi  | ui           |
 
 # syllables
 
 now that we know vowels and consonants, we can start adding them together to
 make syllables. the morpho-syllabic blocks are made up of three parts:
 
-* initial onset consonant: 초성 (choseong)
-* medial vowel: 중성 (jungseong)
-* syllable coda: 종성 (jongseong)
+- initial onset consonant: 초성 (choseong)
+- medial vowel: 중성 (jungseong)
+- syllable coda: 종성 (jongseong)
 
 when no initial consonant is present, one writes the ㅇ (ieung) (like zero!) -
-which means each block has a *minimum* of two letters - a n initial and a
-medial. in general - *blocks are read top left to bottom right*
+which means each block has a _minimum_ of two letters - a n initial and a
+medial. in general - _blocks are read top left to bottom right_
 
 blocks come in a variety of shapes, but not too many: for the following, i will use:
 
-* i = initial (choseong)
-* m = medial (jungseong)
-* m2 = medial (second part, orthographically)
-* f = final  (jongseong)
+- i = initial (choseong)
+- m = medial (jungseong)
+- m2 = medial (second part, orthographically)
+- f = final (jongseong)
 
 the base blocks have two components basically and look like this:
 

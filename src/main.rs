@@ -151,6 +151,12 @@ impl Scanner {
         self.characters.get(self.cursor)
     }
 
+    /// Returns the previous character without advancing the cursor.
+    /// AKA "lookabehind"
+    fn peekback(&self) -> Option<&char> {
+        self.characters.get(self.cursor - 1)
+    }
+
     /// Returns the next character (if available) and advances the cursor.
     fn pop(&mut self) -> Option<&char> {
         match self.characters.get(self.cursor) {
@@ -666,24 +672,100 @@ trait Validator {
     fn check(&self, c: &char) -> bool;
 }
 
-struct ImageValidator {}
-impl Validator for ImageValidator {
+fn validate(c: &char, validators: Vec<&dyn Validator>, invalidators: Vec<&dyn Validator>) -> bool {
+    let mut passed_validators = true;
+    let mut failed_invalidators = false;
+
+    if !validators.is_empty() {
+        passed_validators = validators.iter().map(|v| v.check(c)).any(|x| x);
+    }
+
+    if !invalidators.is_empty() {
+        failed_invalidators = invalidators.iter().map(|v| v.check(c)).any(|x| x);
+    }
+
+    return passed_validators && !failed_invalidators;
+}
+
+struct CharMatcher {
+    character: char,
+}
+impl Validator for CharMatcher {
     fn check(&self, c: &char) -> bool {
-        return c != &'&' && !c.is_whitespace();
+        return c == &self.character;
     }
 }
 
-struct AltTitleValidator {}
-impl Validator for AltTitleValidator {
+struct WhitespaceMatcher {}
+impl Validator for WhitespaceMatcher {
     fn check(&self, c: &char) -> bool {
-        return c.is_alphabetic() || c == &' ' || c == &'-';
+        return c.is_whitespace();
     }
 }
 
-struct LinkValidator {}
-impl Validator for LinkValidator {
+struct AlphabeticMatcher {}
+impl Validator for AlphabeticMatcher {
     fn check(&self, c: &char) -> bool {
-        return c.is_alphabetic() || c == &'-';
+        return c.is_alphabetic();
+    }
+}
+
+struct EOLMatcher {}
+impl Validator for EOLMatcher {
+    fn check(&self, c: &char) -> bool {
+        return c == &'\n' || c == &'\r';
+    }
+}
+
+struct StandardMatcher {}
+impl Validator for StandardMatcher {
+    fn check(&self, c: &char) -> bool {
+        return validate(
+            c,
+            vec![&AlphabeticMatcher {}, &CharMatcher { character: '-' }],
+            vec![&WhitespaceMatcher {}, &EOLMatcher {}],
+        );
+    }
+}
+
+struct ImageMatcher {}
+impl Validator for ImageMatcher {
+    fn check(&self, c: &char) -> bool {
+        return validate(
+            c,
+            vec![],
+            vec![
+                &CharMatcher { character: '&' },
+                &WhitespaceMatcher {},
+                &EOLMatcher {},
+            ],
+        );
+    }
+}
+
+struct AltTitleMatcher {}
+impl Validator for AltTitleMatcher {
+    fn check(&self, c: &char) -> bool {
+        return validate(
+            c,
+            vec![&StandardMatcher {}, &WhitespaceMatcher {}],
+            vec![
+                &CharMatcher { character: '}' },
+                &CharMatcher { character: '{' },
+                &EOLMatcher {},
+            ],
+        );
+    }
+}
+
+struct InternalLinkMatcher {}
+impl Validator for InternalLinkMatcher {
+    fn check(&self, c: &char) -> bool {
+        return validate(
+            c,
+            vec![&StandardMatcher {}],
+            vec![&WhitespaceMatcher {}, &EOLMatcher {}],
+        );
     }
 }
 
@@ -691,15 +773,7 @@ impl Validator for LinkValidator {
 // CONVERT //
 /////////////
 
-fn convert_memex_to_md(epistemic_lookup: Arc<EpiStatusLookup>, input: &str) -> String {
-    return input
-        .lines()
-        .map(|x| convert_memex_line_to_md(Arc::clone(&epistemic_lookup), x))
-        .collect::<Vec<String>>()
-        .join("\n");
-}
-
-fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> String {
+fn convert_memex_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> String {
     // Check to see fi we can just skip converting the entire line
     if !Scanner::worth_scanning(s) {
         return String::from(s);
@@ -710,6 +784,7 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
 
     while let Some(&c) = scanner.pop() {
         match c {
+            // Alt link text handler
             '{' => {
                 // We need double consumption so keep track of cursor manually
                 // because the first one could update the first successfully
@@ -717,8 +792,8 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
                 let original_cursor = scanner.cursor;
 
                 // Check for title
-                let title_res = scanner.take_if_until(&AltTitleValidator {}, "}[[");
-                let link_res = scanner.take_if_until(&LinkValidator {}, "]]");
+                let title_res = scanner.take_if_until(&AltTitleMatcher {}, "}[[");
+                let link_res = scanner.take_if_until(&InternalLinkMatcher {}, "]]");
 
                 match (title_res, link_res) {
                     (Ok(title), Ok(link)) => {
@@ -733,13 +808,14 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
                     }
                 }
             }
+            // Internal link handler
             '[' => {
                 // Second match
                 match scanner.take_char(&c) {
                     false => out.push(c),
                     true => {
                         // Check for link
-                        match scanner.take_if_until(&LinkValidator {}, "]]") {
+                        match scanner.take_if_until(&InternalLinkMatcher {}, "]]") {
                             Ok(val) => out.push_str(
                                 format_md_link_epistemic(
                                     Arc::clone(&epistemic_lookup),
@@ -757,12 +833,32 @@ fn convert_memex_line_to_md(epistemic_lookup: Arc<EpiStatusLookup>, s: &str) -> 
                     }
                 }
             }
-            '&' => match scanner.take_if_until(&ImageValidator {}, "&") {
+            // Image link handler
+            '&' => match scanner.take_if_until(&ImageMatcher {}, "&") {
                 Ok(val) => out.push_str(format!("<img src='resources/img/{}'/>", val).as_str()),
                 _ => {
                     out.push(c);
                 }
             },
+            //            '#' => {
+            //                match scanner.peekback() {
+            //                    Some('\n') => {
+            //                        // Matched header
+            //                        out.push(c);
+            //
+            //                        // In case of ##, ###, and so on
+            //                        let more = scanner.take_if_until(&StandardMatcher {}, " ");
+            //                        if more.is_ok() {
+            //                            out.push_str(more.unwrap().as_str());
+            //                        }
+            //
+            //                        let text = scanner.take_if_until(&AnythingButEOLMatcher {}, "\n");
+            //
+            //                        let link = "{} <a name='{}'>{}</a>";
+            //                    }
+            //                    _ => out.push(c),
+            //                }
+            //            }
             // Default veahior
             _ => {
                 out.push(c);
@@ -1480,6 +1576,103 @@ mod tests {
     }
 
     #[test]
+    fn test_char_matcher() {
+        assert!(CharMatcher { character: 'c' }.check(&'c'));
+        assert!(!CharMatcher { character: 'c' }.check(&'d'));
+    }
+
+    #[test]
+    fn test_whitespace_matcher() {
+        assert!(WhitespaceMatcher {}.check(&' '));
+        assert!(!WhitespaceMatcher {}.check(&'a'));
+    }
+
+    #[test]
+    fn test_alphabetic_matcher() {
+        assert!(AlphabeticMatcher {}.check(&'a'));
+        assert!(!AlphabeticMatcher {}.check(&' '));
+    }
+
+    #[test]
+    fn test_eol_matcher() {
+        assert!(!EOLMatcher {}.check(&'a'));
+        assert!(EOLMatcher {}.check(&'\n'));
+        assert!(EOLMatcher {}.check(&'\r'));
+    }
+
+    #[test]
+    fn test_validate() {
+        // Empty
+        assert!(validate(&'c', vec![], vec![]));
+        // Single match
+        assert!(validate(
+            &'c',
+            vec![&CharMatcher { character: 'c' }],
+            vec![]
+        ));
+        // Match both
+        assert!(validate(
+            &'c',
+            vec![&CharMatcher { character: 'c' }],
+            vec![&WhitespaceMatcher {}]
+        ));
+
+        // Match second only - passes
+        assert!(validate(
+            &' ',
+            vec![],
+            vec![&CharMatcher { character: 'c' }],
+        ));
+
+        // Match second only - fails
+        assert!(!validate(
+            &'c',
+            vec![],
+            vec![&CharMatcher { character: 'c' }],
+        ));
+
+        // Disagree - fails
+        assert!(!validate(
+            &'c',
+            vec![&CharMatcher { character: 'c' }],
+            vec![&CharMatcher { character: 'c' }],
+        ));
+    }
+
+    #[test]
+    fn test_standard_matcher() {
+        assert!(StandardMatcher {}.check(&'a'));
+        assert!(StandardMatcher {}.check(&'-'));
+        assert!(!StandardMatcher {}.check(&' '));
+        assert!(!StandardMatcher {}.check(&'\n'));
+    }
+
+    #[test]
+    fn test_image_matcher() {
+        assert!(ImageMatcher {}.check(&'a'));
+        assert!(ImageMatcher {}.check(&'-'));
+        assert!(!ImageMatcher {}.check(&'&'));
+    }
+
+    #[test]
+    fn test_alttitle_matcher() {
+        assert!(AltTitleMatcher {}.check(&'a'));
+        assert!(AltTitleMatcher {}.check(&' '));
+        assert!(!AltTitleMatcher {}.check(&'}'));
+        assert!(!AltTitleMatcher {}.check(&'{'));
+    }
+
+    #[test]
+    fn test_internal_link_matcher() {
+        assert!(InternalLinkMatcher {}.check(&'a'));
+        assert!(InternalLinkMatcher {}.check(&'-'));
+
+        for char in vec![' ', '[', ']', '{', '}', '\n'] {
+            assert!(!InternalLinkMatcher {}.check(&char));
+        }
+    }
+
+    #[test]
     fn test_directory() {
         let entries = collect_entries("content/entries").unwrap();
         let directory = extract_directory(&entries, "pages");
@@ -1489,7 +1682,7 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_single_term() {
         let mut s = Scanner::new("asdf ");
-        let r = s.take_if_until(&LinkValidator {}, " ");
+        let r = s.take_if_until(&InternalLinkMatcher {}, " ");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
@@ -1497,7 +1690,7 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_double_term() {
         let mut s = Scanner::new("asdf]]");
-        let r = s.take_if_until(&ImageValidator {}, "]]");
+        let r = s.take_if_until(&InternalLinkMatcher {}, "]]");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
@@ -1505,7 +1698,7 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_many_term() {
         let mut s = Scanner::new("asdf1234567890");
-        let r = s.take_if_until(&LinkValidator {}, "1234567890");
+        let r = s.take_if_until(&InternalLinkMatcher {}, "1234567890");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
@@ -1513,14 +1706,14 @@ mod tests {
     #[test]
     fn test_parser_take_if_until_error() {
         let mut s = Scanner::new(" asdf]]");
-        let r = s.take_if_until(&ImageValidator {}, "]]");
+        let r = s.take_if_until(&ImageMatcher {}, "]]");
         assert!(r.is_err());
     }
 
     #[test]
     fn test_parser_parse_basic() {
         assert_eq!(
-            convert_memex_line_to_md(Arc::new(HashMap::new()), "[[something]]"),
+            convert_memex_to_md(Arc::new(HashMap::new()), "[[something]]"),
             "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>something](something.html)"
         );
     }
@@ -1528,7 +1721,7 @@ mod tests {
     #[test]
     fn test_parser_parse_image_basic() {
         assert_eq!(
-            convert_memex_line_to_md(Arc::new(HashMap::new()), "&test.png&"),
+            convert_memex_to_md(Arc::new(HashMap::new()), "&test.png&"),
             "<img src='resources/img/test.png'/>",
         );
     }
@@ -1536,7 +1729,7 @@ mod tests {
     #[test]
     fn test_parser_parse_basic_noop() {
         assert_eq!(
-            convert_memex_line_to_md(Arc::new(HashMap::new()), "[something]"),
+            convert_memex_to_md(Arc::new(HashMap::new()), "[something]"),
             "[something]"
         );
     }
@@ -1544,7 +1737,7 @@ mod tests {
     #[test]
     fn test_parser_parse_unique_title() {
         assert_eq!(
-            convert_memex_line_to_md(Arc::new(HashMap::new()), "{test}[[foo]]"),
+            convert_memex_to_md(Arc::new(HashMap::new()), "{test}[[foo]]"),
             "[<img alt='icon representing the epistemic certainty of the linked page' class='epistemic-icon' src='resources/img/seedling_white.png'/>test](foo.html)"
         );
     }
@@ -1552,37 +1745,37 @@ mod tests {
     #[test]
     fn test_parser_parse_ignore_partial_link() {
         let s = "something [[test";
-        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+        assert_eq!(convert_memex_to_md(Arc::new(HashMap::new()), s), s);
     }
 
     #[test]
     fn test_parser_parse_ignore_partial_link_alt() {
         let s = "something {alt";
-        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+        assert_eq!(convert_memex_to_md(Arc::new(HashMap::new()), s), s);
     }
 
     // Its trash time, bitches
     #[test]
     fn test_parser_parse_ignore_trash_1() {
         let s = "something {alt}[[test";
-        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+        assert_eq!(convert_memex_to_md(Arc::new(HashMap::new()), s), s);
     }
 
     #[test]
     fn test_parser_parse_ignore_trash_2() {
         let s = "something {alt}[[test]";
-        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+        assert_eq!(convert_memex_to_md(Arc::new(HashMap::new()), s), s);
     }
 
     #[test]
     fn test_parser_parse_ignore_trash_3() {
         let s = "something {alt}[[test}]]";
-        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+        assert_eq!(convert_memex_to_md(Arc::new(HashMap::new()), s), s);
     }
 
     #[test]
     fn test_parser_parse_ignore_trash_4() {
         let s = "{test this}[[seems like it]{cshould][{}[{]} work";
-        assert_eq!(convert_memex_line_to_md(Arc::new(HashMap::new()), s), s);
+        assert_eq!(convert_memex_to_md(Arc::new(HashMap::new()), s), s);
     }
 }
