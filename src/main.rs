@@ -265,104 +265,103 @@ impl Scanner {
         };
     }
 
+    fn handle_left_square_bracket(&mut self, c: char) {
+        // Second match
+        match self.take_char(&c) {
+            false => self.output.push(c),
+            true => {
+                // Check for link
+                match self.take_if_until(&InternalLinkMatcher {}, "]]") {
+                    Ok(val) => self.output.push_str(
+                        format_md_link_epistemic(
+                            Arc::clone(&self.epistemic_lookup),
+                            val.clone(),
+                            val.clone(),
+                        )
+                        .as_str(),
+                    ),
+                    _ => {
+                        // Inital match and second take
+                        self.output.push(c);
+                        self.output.push(c);
+                    }
+                }
+            }
+        }
+    }
+
+    fn handle_left_curly_bracket(&mut self, c: char) {
+        // We need double consumption so keep track of cursor manually
+        // because the first one could update the first successfully
+        // and the second one could fail, resulting in an updated cursor
+        let original_cursor = self.cursor;
+
+        // Check for title
+        let title_res = self.take_if_until(&AltTitleMatcher {}, "}[[");
+        let link_res = self.take_if_until(&InternalLinkMatcher {}, "]]");
+
+        match (title_res, link_res) {
+            (Ok(title), Ok(link)) => {
+                self.output.push_str(
+                    format_md_link_epistemic(Arc::clone(&self.epistemic_lookup), title, link)
+                        .as_str(),
+                );
+            }
+            _ => {
+                self.cursor = original_cursor;
+                self.output.push(c);
+            }
+        }
+    }
+
+    fn handle_ampersand(&mut self, c: char) {
+        match self.take_if_until(&ImageMatcher {}, "&") {
+            Ok(val) => self
+                .output
+                .push_str(format!("<img src='resources/img/{}'/>", val).as_str()),
+            _ => {
+                self.output.push(c);
+            }
+        }
+    }
+
+    fn handle_octothrope(&mut self, c: char) {
+        match self.peekback() {
+            Some('\n') => {
+                // Matched header
+                self.output.push(c);
+
+                // In case of ##, ###, and so on
+                let more = self.take_if_until(&CharMatcher { character: '#' }, " ");
+
+                if more.is_ok() {
+                    self.output.push_str(more.unwrap().as_str());
+                }
+
+                let text = self.take_if_until(&AltTitleMatcher {}, "\n");
+
+                if text.is_ok() {
+                    let content = text.unwrap();
+                    let clean = NON_WORD_REGEX
+                        .replace_all(&content.trim(), "-")
+                        .to_lowercase();
+
+                    self.output
+                        .push_str(format!(" <a name='{}'>{}</a>\n", clean, &content).as_str());
+                }
+            }
+            _ => self.output.push(c),
+        }
+    }
+
     fn convert(&mut self) -> String {
         while let Some(&c) = self.pop() {
             match c {
-                // Alt link text handler
-                '{' => {
-                    // We need double consumption so keep track of cursor manually
-                    // because the first one could update the first successfully
-                    // and the second one could fail, resulting in an updated cursor
-                    let original_cursor = self.cursor;
-
-                    // Check for title
-                    let title_res = self.take_if_until(&AltTitleMatcher {}, "}[[");
-                    let link_res = self.take_if_until(&InternalLinkMatcher {}, "]]");
-
-                    match (title_res, link_res) {
-                        (Ok(title), Ok(link)) => {
-                            self.output.push_str(
-                                format_md_link_epistemic(
-                                    Arc::clone(&self.epistemic_lookup),
-                                    title,
-                                    link,
-                                )
-                                .as_str(),
-                            );
-                        }
-                        _ => {
-                            self.cursor = original_cursor;
-                            self.output.push(c);
-                        }
-                    }
-                }
-                // Internal link handler
-                '[' => {
-                    // Second match
-                    match self.take_char(&c) {
-                        false => self.output.push(c),
-                        true => {
-                            // Check for link
-                            match self.take_if_until(&InternalLinkMatcher {}, "]]") {
-                                Ok(val) => self.output.push_str(
-                                    format_md_link_epistemic(
-                                        Arc::clone(&self.epistemic_lookup),
-                                        val.clone(),
-                                        val.clone(),
-                                    )
-                                    .as_str(),
-                                ),
-                                _ => {
-                                    // Inital match and second take
-                                    self.output.push(c);
-                                    self.output.push(c);
-                                }
-                            }
-                        }
-                    }
-                }
-                // Image link handler
-                '&' => match self.take_if_until(&ImageMatcher {}, "&") {
-                    Ok(val) => self
-                        .output
-                        .push_str(format!("<img src='resources/img/{}'/>", val).as_str()),
-                    _ => {
-                        self.output.push(c);
-                    }
-                },
-                // Header anchor handler
-                '#' => {
-                    match self.peekback() {
-                        Some('\n') => {
-                            // Matched header
-                            self.output.push(c);
-
-                            // In case of ##, ###, and so on
-                            let more = self.take_if_until(&CharMatcher { character: '#' }, " ");
-
-                            if more.is_ok() {
-                                self.output.push_str(more.unwrap().as_str());
-                            }
-
-                            let text = self.take_if_until(&AltTitleMatcher {}, "\n");
-
-                            if text.is_ok() {
-                                let content = text.unwrap();
-                                let clean = NON_WORD_REGEX
-                                    .replace_all(&content.trim(), "-")
-                                    .to_lowercase();
-
-                                self.output.push_str(
-                                    format!(" <a name='{}'>{}</a>\n", clean, &content).as_str(),
-                                );
-                            }
-                        }
-                        _ => self.output.push(c),
-                    }
-                }
-                _ => {
-                    self.output.push(c);
-                }
+                '{' => self.handle_left_curly_bracket(c),
+                '[' => self.handle_left_square_bracket(c),
+                '&' => self.handle_ampersand(c),
+                '#' => self.handle_octothrope(c),
+                _ => self.output.push(c),
             }
         }
         return self.output.clone();
