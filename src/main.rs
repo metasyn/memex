@@ -148,7 +148,11 @@ impl Scanner {
     /// Returns the next character without advancing the cursor.
     /// AKA "lookahead"
     fn peek(&self) -> Option<&char> {
-        self.characters.get(self.cursor)
+        return self.peek_n(0);
+    }
+
+    fn peek_n(&self, n: usize) -> Option<&char> {
+        return self.characters.get(self.cursor + n);
     }
 
     /// Returns the previous character without advancing the cursor.
@@ -204,6 +208,8 @@ impl Scanner {
     /// Returns a string if we can match characters (using the validator) until they
     /// terminal characters. If the terminal characters are not matched, the cursor
     /// is reset, making this lookahead idempotent in the case of failure.
+    /// TODO: add version of this function that also returns the terminal char
+    /// sequence and updates the cursor. This is needed for octothrope and backtick.
     fn take_if_until(
         &mut self,
         validator: &impl Validator,
@@ -246,8 +252,7 @@ impl Scanner {
                 // Loop through remaining chars(
                 while let Some(t) = it.next() {
                     let next = self.pop();
-
-                    // If we 're out of text, we didn't match
+                    // If we're out of text, we didn't match
                     if next.is_none() || &t != next.unwrap() {
                         // Reset cursor, no match
                         self.cursor = original_cursor;
@@ -327,6 +332,7 @@ impl Scanner {
 
     fn handle_octothrope(&mut self, c: char) {
         match self.peekback() {
+            // Will _not_ match the first character
             Some('\n') => {
                 // Matched header
                 self.output.push(c);
@@ -354,6 +360,46 @@ impl Scanner {
         }
     }
 
+    fn handle_backtick(&mut self, c: char) {
+        let original_cursor = self.cursor;
+        match self.peekback() {
+            // Will _not_ match the first character
+            Some('\n') => match (self.peek(), self.peek_n(1), self.peek_n(2)) {
+                (Some('`'), Some('`'), Some('\n')) => {
+                    // Advance cursor 3 chars, for what we've peeked.
+                    // we'll add them manually later if we match.
+                    self.cursor += 3;
+
+                    // Look for the text + ending sequence
+                    match self.take_if_until(&CodeFenceMatcher {}, "```\n") {
+                        Ok(text) => {
+                            // Original matched character
+                            self.output.push(c);
+                            // Peeked characters
+                            self.output.push_str("``\n");
+                            // The above is advanced already for the cursor
+
+                            // Captured content - also advancved
+                            self.output.push_str(text.as_str());
+
+                            // Ending - this ending isn't advanced
+                            // however I don't want it to match again
+                            // so we manually add it and advance the cursor
+                            self.output.push_str("```\n");
+                            self.cursor += 4;
+                        }
+                        _ => {
+                            self.cursor = original_cursor;
+                            self.output.push(c);
+                        }
+                    }
+                }
+                _ => self.output.push(c),
+            },
+            _ => self.output.push(c),
+        }
+    }
+
     fn convert(&mut self) -> String {
         while let Some(&c) = self.pop() {
             match c {
@@ -361,6 +407,7 @@ impl Scanner {
                 '[' => self.handle_left_square_bracket(c),
                 '&' => self.handle_ampersand(c),
                 '#' => self.handle_octothrope(c),
+                '`' => self.handle_backtick(c),
                 _ => self.output.push(c),
             }
         }
@@ -810,10 +857,10 @@ impl Validator for WhitespaceMatcher {
     }
 }
 
-struct AlphabeticMatcher {}
-impl Validator for AlphabeticMatcher {
+struct AlphanumericMatcher {}
+impl Validator for AlphanumericMatcher {
     fn check(&self, c: &char) -> bool {
-        return c.is_alphabetic();
+        return c.is_numeric() || c.is_alphabetic();
     }
 }
 
@@ -829,9 +876,16 @@ impl Validator for StandardMatcher {
     fn check(&self, c: &char) -> bool {
         return validate(
             c,
-            vec![&AlphabeticMatcher {}, &CharMatcher { character: '-' }],
+            vec![&AlphanumericMatcher {}, &CharMatcher { character: '-' }],
             vec![&WhitespaceMatcher {}, &EOLMatcher {}],
         );
+    }
+}
+
+struct CodeFenceMatcher {}
+impl Validator for CodeFenceMatcher {
+    fn check(&self, c: &char) -> bool {
+        return c != &'`';
     }
 }
 
@@ -1564,8 +1618,9 @@ mod tests {
 
     #[test]
     fn test_alphabetic_matcher() {
-        assert!(AlphabeticMatcher {}.check(&'a'));
-        assert!(!AlphabeticMatcher {}.check(&' '));
+        assert!(AlphanumericMatcher {}.check(&'a'));
+        assert!(!AlphanumericMatcher {}.check(&' '));
+        assert!(AlphanumericMatcher {}.check(&'9'));
     }
 
     #[test]
@@ -1672,8 +1727,8 @@ mod tests {
 
     #[test]
     fn test_scanner_take_if_until_many_term() {
-        let mut s = Scanner::new("asdf1234567890", None);
-        let r = s.take_if_until(&InternalLinkMatcher {}, "1234567890");
+        let mut s = Scanner::new("asdf}1234567890", None);
+        let r = s.take_if_until(&InternalLinkMatcher {}, "}");
         assert!(r.is_ok());
         assert_eq!(r.unwrap(), String::from("asdf"));
     }
@@ -1756,7 +1811,13 @@ mod tests {
         let s = "\n# Hello World\n";
         let e = "\n# <a name='hello-world'>Hello World</a>\n";
         let o = Scanner::new(s, None).convert();
-        println!("{}", o);
         assert_eq!(o, e);
+    }
+
+    #[test]
+    fn test_scanner_convert_code_fence() {
+        let s = "\n```\n[[test]]\n```\n";
+        let o = Scanner::new(s, None).convert();
+        assert_eq!(s, o);
     }
 }
