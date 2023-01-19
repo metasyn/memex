@@ -995,25 +995,6 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
 
 fn render_md(s: &str) -> String {
     // TODO: move to format_parse function by checking
-    // for line initial # character
-    let _prerender = s
-        .split("\n")
-        .map(|x| {
-            HEADER_REGEX
-                .replace_all(&x, |caps: &Captures| {
-                    format!(
-                        "{} <a name='{}'>{}</a>",
-                        &caps[1],
-                        make_header_link(&caps[2]),
-                        &caps[2]
-                    )
-                })
-                .to_string()
-        })
-        .collect::<Vec<String>>()
-        .join("\n");
-
-    // TODO: move to format_parse function by checking
     let wrapped = format_img_dither_wrap_anchor(s);
 
     return comrak::markdown_to_html(&wrapped, &COMRAK_OPTIONS);

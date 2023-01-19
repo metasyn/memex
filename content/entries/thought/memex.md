@@ -18,7 +18,7 @@ this memex is part of a [webring](https://webring.xxiivv.com/)
 
 ## zettelkasten
 
-however, the idea, more generally, apepars in many forma.s
+however, the idea, more generally, appears in many forms.
 another similar one, also analog, but more methodological:
 
 > A zettelkasten consists of many individual notes with ideas and other short
@@ -60,7 +60,7 @@ where rather than a museum, a gallery,
 a portfolio, or a journal - it's a place where you can tend to ideas to watch them
 grow, and share with other's if they want to visit. i like the idea more generally,
 as it seems like it strikes a really reasonable balance between the external and
-internal worlds we live in. futher more, the concept of coming back to the same
+internal worlds we live in. furthermore, the concept of coming back to the same
 idea (i.e. page, theory, writing, notes, etc) and adding to that at a later date
 is also antithetical to the fast consumption we're used to online. the same
 essay doesn't have to stay the same. it's ok to update things - or to rip things
