@@ -7,9 +7,10 @@ notes on memex modification
 - [x] standardize itnternal links with `{something}[[memex]]` syntax
 - [x] rewrite regular expression based converter with character level parser
 - [x] add image markup syntax
-- [ ] dont convert line by line, do the whole thing as a group
-- [ ] add newline breaks to all the validators
-- [ ] add validator to skip markup conversion in codefences
+- [x] dont convert line by line, do the whole thing as a group
+- [x] add newline breaks to all the validators
+- [x] add validator to skip markup conversion in codefences
+- [ ] remove more/most regular expressions
 
 ## compiling
 
