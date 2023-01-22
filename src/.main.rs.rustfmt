@@ -1,8 +1,9 @@
 use std::cmp::min;
 use std::collections::{HashMap, HashSet};
+
 use std::fs::{self, create_dir_all, remove_dir_all, File};
 use std::io::prelude::Write;
-use std::io::{stdin, BufReader, Error, ErrorKind, Result};
+use std::io::{stdin, BufReader, Error, ErrorKind, Read, Result};
 use std::path::{Path, PathBuf};
 use std::sync::mpsc::channel;
 use std::sync::Arc;
@@ -17,31 +18,36 @@ use colored::*;
 use lazy_static::lazy_static;
 use notify::{DebouncedEvent, RecommendedWatcher, RecursiveMode, Watcher};
 use regex::{Captures, Regex};
-use rss::validation::Validate;
 use rss::{Channel, GuidBuilder, ItemBuilder};
 
-mod common;
-mod directory_tree;
-mod entry;
-mod regexes;
-mod scanner;
+use rss::validation::Validate;
 
-use common::{hey, load_file, nope, EpiStatus, EpiStatusLookup, DOMAIN, SEEDLING};
-use directory_tree::DirectoryTree;
-use entry::Entry;
+mod scanner;
 use scanner::Scanner;
+
+mod directory_tree;
+use directory_tree::DirectoryTree;
+
+mod common;
+use common::{hey, nope, EpiStatus, EpiStatusLookup, DOMAIN, SEEDLING};
+
+mod regexes;
+
+mod entry;
+use entry::Entry;
 
 ///////////
 // UTILS //
 ///////////
 
-// pretty much always want this backtrace on
-fn setup() -> std::result::Result<(), Report> {
-    if std::env::var("RUST_BACKTRACE").is_err() {
-        std::env::set_var("RUST_BACKTRACE", "1")
-    }
-    color_eyre::install().expect("unable to install color_eyre");
-    Ok(())
+fn load_file<P: AsRef<Path>>(path: P) -> Result<String> {
+    let file = File::open(path).expect("unable to open file path");
+    let mut buf_reader = BufReader::new(file);
+    let mut contents = String::new();
+    buf_reader
+        .read_to_string(&mut contents)
+        .expect("unable to read file to string");
+    return Ok(contents);
 }
 
 // see https://stackoverflow.com/questions/26958489/how-to-copy-a-folder-recursively-in-rust
@@ -100,6 +106,15 @@ fn comrak_options() -> comrak::ComrakOptions {
     options.extension.tagfilter = false;
     options.extension.footnotes = true;
     return options;
+}
+
+// pretty much always want this backtrace on
+fn setup() -> std::result::Result<(), Report> {
+    if std::env::var("RUST_BACKTRACE").is_err() {
+        std::env::set_var("RUST_BACKTRACE", "1")
+    }
+    color_eyre::install().expect("unable to install color_eyre");
+    Ok(())
 }
 
 /////////////
