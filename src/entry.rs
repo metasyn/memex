@@ -115,6 +115,10 @@ impl Entry {
                 .filter(|x| x.starts_with("#"))
                 .collect::<Vec<&str>>();
 
+            if headers.len() < 2 {
+                return String::new();
+            }
+
             for line in headers {
                 // calculate indent before cleaning
                 let indent = "  ".repeat(line.matches("#").count());
