@@ -9,13 +9,13 @@ i am figuring out what my balance will be with setting intentions. my birthday c
 
 ## playing
 
-- skyrim
+- factorio!
 
 ## listening
 
+- dominique dumont - https://domeniquedumont.bandcamp.com/album/people-on-sunday
 - [rev left radio](https://revolutionaryleftradio.libsyn.com/)
 
 ## reading
 
-- just finished climate change as class war - matt huber
-- figuring out some fiction to tackle next i think
+- ursula k le guinn: earthsea

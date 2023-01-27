@@ -50,6 +50,7 @@ impl DirectoryTree {
             .collect::<Vec<Vec<String>>>();
 
         paths.sort();
+        println!("{:?}", paths);
 
         let mut tree: DirectoryTree = DirectoryTree::default();
         let directory = tree.node(root_name.to_string());

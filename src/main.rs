@@ -219,6 +219,17 @@ fn collect_entries(content_path: &str) -> Result<Vec<Entry>> {
             Some(refs) => Some(refs.to_vec()),
             None => None,
         };
+        // We're only interested in the path that isn't the content path
+        // otherwise those get calculated as part of the directory tree
+        x.path = PathBuf::from(
+            x.path
+                .as_os_str()
+                .to_str()
+                .expect("unable to unwrap path for entry")
+                .replace(content_path, "")
+                .strip_prefix("/")
+                .expect("unable to strip slash prefix"),
+        )
     });
 
     return Ok(result);
