@@ -409,7 +409,7 @@ impl Scanner {
                             // however I don't want it to match again
                             // so we manually add it and advance the cursor
                             self.output.push_str("```\n");
-                            self.cursor += 4;
+                            // self.cursor += 4;
                         }
                         _ => {
                             self.cursor = original_cursor;

@@ -59,7 +59,7 @@ before you can use the package manager `pacman` you need to run:
 pacman-key --init
 ```
 
-This sets up your abilit to set some keys and then use them to check the fingerprints on packages you're going to install.
+This sets up your ability to set some keys and then use them to check the fingerprints on packages you're going to install.
 
 If you're on a raspberry pi, you'll need to add the keys for `archlinuxarm` in particular:
 
@@ -95,7 +95,7 @@ cd yay
 makepkg -si
 ```
 
-# Pop!\_OS
+# PopOS
 
 Sometimes my system76 laptop's audio just stops working. This seems to fix it:
 
@@ -137,4 +137,23 @@ snap
 
 ```
 snap set system refresh.retain=2
+```
+
+# memory
+
+sometimes you run out of memory on tiny machines. don't forget to use swap!
+
+```shell
+sudo fallocate -l 1G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+
+sudo swapon /swapfile
+sudo swapon --show
+
+sudo cp /etc/fstab /etc/fstab.bak
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+cat /proc/sys/vm/swappiness
+sudo sysctl vm.swappiness=10
 ```
