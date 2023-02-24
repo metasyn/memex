@@ -6,7 +6,7 @@ mapping underground music shows in the bay area since 2014. see it [here](https:
 
 <img src="resources/img/dithered_show-mapper.png" alt="screenshot of shows.metasyn.pw"><img>
 
-## background
+## the list
 
 [https://shows.metasyn.pw](https://shows.metasyn.pw) was a project i started
 around 2014 to show where various venues are in the san francisco bay area. i
@@ -29,12 +29,12 @@ of an impromptu decision to go to one.
 
 <img src="resources/img/dithered_foopee.png" alt="screenshot of foopee.com"></img>
 
-however, i found myself forgetting which venues where which, and more
-importantly, which ones were on my side of the bay (in san francisco usually).
-in order to map these resources, i've manually entered all of the latitude and
-longitudes of various venues over the years. eventually this became
-unsustainable, and i figured out a way to semi automate looking them up with
-relatively reasonable accuracy.
+for a long time, i had manually entered all of the latitude and longitudes of
+various venues. this worked pretty well, and i'd just update the list of
+venues a few times a year. eventually this became unsustainable, and i
+figured out a way to semi automate looking them up with relatively
+reasonable accuracy. i think i could probably use more automation here,
+but i like to double check that the place is correct before mapping it.
 
 ## parsing
 
