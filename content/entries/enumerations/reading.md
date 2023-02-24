@@ -2,6 +2,8 @@
 
 # 2023
 
+- a wizard of earthsea - ursula k le guinn
+
 # 2022
 
 - how to do nothing - jenny odell

@@ -15,6 +15,7 @@ below are some of my favorites.
 - anthropocene (2019)
 - wristcutters: a love story (2006)
 - millenium actress (2001)
+- kwaidan (1964)
 
 ### books
 
