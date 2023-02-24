@@ -4,12 +4,12 @@ i update this page every so often. its contents are generally ephermal and i do 
 
 ## general
 
-a new year. i generally dislike setting too many goals, but some part of loves it too.
-i am figuring out what my balance will be with setting intentions. my birthday comes soon, and thats when it feels finalized.
+i have adopted two kittens.
 
 ## playing
 
-- factorio!
+- factorio
+- replaying skyrim
 
 ## listening
 
@@ -18,4 +18,4 @@ i am figuring out what my balance will be with setting intentions. my birthday c
 
 ## reading
 
-- ursula k le guinn: earthsea
+- blockchain chicken farm
