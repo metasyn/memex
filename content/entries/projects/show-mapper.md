@@ -19,12 +19,13 @@ href="mailto:skoepke@calweb.com"> Steve Koepke's</a> excellent aggregation,
 which you can subscribe to [here](https://stevelist.com/). there are a few
 other versions out there, like jon luini's version
 [here](http://jon.luini.com/thelist/date.html), or the mobile friendly version
-[here](https://www.riotlist.com/sf/). despite the multiplicity, none of them
-put the shows on a map. usually when i'm looking up shows, i know two things:
-when i'll be free to go to one, and how far i'm interested in traveling. the
-map is useful for me since i often want to know about shows in a particular
-area in particular, especially when its more of an impromptu decision to go to
-one.
+[here](https://www.riotlist.com/sf/). if you're interested, you can read more about
+[the history of the list](https://bayareapunk.com/blog/what-is-the-list.html).
+despite the multiplicity, none of them put the shows on a map. usually when i'm
+looking up shows, i know two things: when i'll be free to go to one, and how
+far i'm interested in traveling. the map is useful for me since i often want to
+know about shows in a particular area in particular, especially when its more
+of an impromptu decision to go to one.
 
 <img src="resources/img/dithered_foopee.png" alt="screenshot of foopee.com"></img>
 
