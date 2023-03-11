@@ -63,7 +63,11 @@ impl Validator for StandardMatcher {
     fn check(&self, c: &char) -> bool {
         return validate(
             c,
-            vec![&AlphanumericMatcher {}, &CharMatcher { character: '-' }],
+            vec![
+                &AlphanumericMatcher {},
+                &CharMatcher { character: '-' },
+                &CharMatcher { character: '&' },
+            ],
             vec![&WhitespaceMatcher {}, &EOLMatcher {}],
         );
     }

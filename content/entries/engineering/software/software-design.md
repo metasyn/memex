@@ -16,3 +16,4 @@ i enjoy learning about [[computer-science-history]], [[programming-languages]], 
 
 - [software disenchantment](https://tonsky.me/blog/disenchantment/) - a fabulous essay on the bloat, ridiculousness, and general depravity of modern software as well as the development process - and generally how bad things have become
 - [big ball of mud](http://www.laputan.org/mud/mud.html#BigBallOfMud) - this design pattern is kind of amazing. there is a tongue-in-cheek element to the essay but it is actually a pattern that you see in large companies and enterprise software more generally. its amazing to know that this pattern has continued to be witnessed since 1997. you can read the wikipedia page on this anti-pattern [here](https://en.wikipedia.org/wiki/Big_ball_of_mud)
+- [write posix shell](https://j3s.sh/thought/write-posix-shell.html) - an essay in praise, defense, and celebration of shell as a language. ALL HAIL POSIX SHELL! ALL SNAIL POSIX SHELL!
