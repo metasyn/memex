@@ -12,4 +12,5 @@
 its hard to imagine not using these now that i've started using them:
 
 - https://python-poetry.org/
+- https://github.com/charliermarsh/ruff
 - https://documen.tician.de/pudb/
