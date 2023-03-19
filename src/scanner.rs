@@ -347,9 +347,18 @@ impl Scanner {
 
     fn handle_ampersand(&mut self, c: char) {
         match self.take_if_until(&ImageMatcher {}, "&") {
-            Ok(val) => self
-                .output
-                .push_str(format!("<img src='resources/img/{}'/>", val).as_str()),
+            Ok(val) => match self.peek() {
+                // Its only valid if we're not in the middle of a URL
+                Some('\n') | Some(' ') => self
+                    .output
+                    .push_str(format!("<img src='resources/img/{}'/>", val).as_str()),
+                _ => {
+                    //  Invalid match - we need to just restore normal behavior
+                    self.output.push(c);
+                    self.output.push_str(val.as_str());
+                    self.output.push('&');
+                }
+            },
             _ => {
                 self.output.push(c);
             }
@@ -368,6 +377,7 @@ impl Scanner {
 
                 if more.is_ok() {
                     self.output.push_str(more.unwrap().as_str());
+                    self.output.push(' ')
                 }
 
                 let text = self.take_if_until(&AltTitleMatcher {}, "\n");
