@@ -14,36 +14,55 @@ Historically, the lows are in the 50's and the highs are in the 70's. Generally
 these months have 7-10 days worth of rain, so there is a reasonable chance it
 might rain on us, but if that is case, we'll just make the best of it.
 
-### traveling from portland
+## august 31st - day 1 - thursday - victoria - travel day
 
-- traveling from portland - 7h 30m
-- I5 all the way to Tsawwassen, BC - 5 hours
-- Ferry from Tsawassen to Swartz Bay - 2 hours
-  - I used the fare calculator to estimate for 3 people including standard sized car
-  - Roughly $150, leaves every hour throughout the day
-- Drive to Victoria - 30m
+### from portland
 
-## day 1 - thursday - victoria - travel day
+- drive to port angeles from portland
+- coho ferry times: 8:20am, 12:45pm, 5:15pm, 9:20pm
+- could stay in port angeles if we get there really late
+  - in which case, we'd take the earlier ferry the next day
 
-- arrive in victoria
+### from vancouver
 
-## day 2 - friday
+- you can take the ferry from tsawassen to swartz bay
+- swartz bay is right by the airport
+- roughly 20 miles to victoria
 
-- < 20 miles
-- lots of extra time to explore or hike!
+### flying
+
+- you can fly to victoria airport, just north of the town
+- roughly 20 miles to victoria
+
+## september 1st - day 2 - friday
+
+&goldstream.png&
+
+- ~20 miles
 - [Goldstream Campground](https://bcparks.ca/goldstream-park/)
+- Can reserve as soon as May 1st, 7:00am PDT
 
-## day 3 - saturday
+## september 2nd - day 3 - saturday
+
+&cowichan-river.png&
 
 - ~35 miles
 - [Cowichan River Campground](https://bcparks.ca/cowichan-river-park/)
+- Can reserve as soon as May 2nd, 7:00am PDT
 
-## day 4 - sunday
+## september 3rd - day 4 - sunday
+
+&bamberton.png&
 
 - ~45 miles
 - [Baberton Campground](https://bcparks.ca/bamberton-park/)
+- Can reserve as soon as May 3rd, 7:00am PDT
 
 ## day 5 - monday
 
 - ~20 miles to victoria
-- then go home!
+- plan to take the ferry across the bay
+- **mill bay** to **brentwood bay** ferry: [schedule](https://www.bcferries.com/routes-fares/schedules/daily/btw-mil)
+- once we're all the way back in victoria, we can then head to port angeles
+- coho ferry times: 6:10am, 10:30am, 3:00pm, 7:30pm
+- pick up cars in port angeles
